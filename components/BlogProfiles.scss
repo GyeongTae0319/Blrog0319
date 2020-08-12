@@ -1,0 +1,84 @@
+@import "~/assets/scss/_variables";
+
+.blog-profiles {
+	display: flex;
+
+	flex-direction: column;
+}
+
+.profiles-image {
+	display: block;
+
+	width: 100%;
+	margin-bottom: 16px;
+	padding-top: 100%;
+
+	border-radius: 100%;
+
+	background: {
+		color: #2d3649;
+		image: url("../assets/images/profiles.png");
+		position: center;
+		size: cover;
+	}
+}
+.name {
+	display: flex;
+
+	margin-bottom: 8px;
+
+	flex-direction: column;
+
+	.nick {
+		font: {
+			size: xx-large;
+			weight: bold;
+		}
+
+		line-height: 1em;
+	}
+	.origin {
+		color: $text-color-white-disable;
+		font: {
+			size: large;
+			weight: 100;
+		}
+	}
+}
+.description {
+	margin-bottom: 16px;
+
+	color: $text-color-white-desc;
+	font-size: 14px;
+	line-height: 1.3em;
+}
+.links {
+	$icon-size: 32px;
+
+	display: flex;
+
+	width: fit-content;
+	margin: 0 auto;
+	padding: {
+		top: 16px;
+		left: 16px;
+		right: 16px;
+	}
+
+	border-top: 2px solid $text-color-white-disable;
+
+	justify-content: center;
+	gap: 16px;
+
+	.link {
+		display: block;
+
+		width: $icon-size;
+		height: $icon-size;
+
+		.icon {
+			width: $icon-size;
+			font-size: $icon-size;
+		}
+	}
+}

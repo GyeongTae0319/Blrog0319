@@ -1,8 +1,12 @@
 <template>
-	<div id="blogHome">
-		<div class="banner">
-			<span class="title">Blrog: 블로의 블로그</span>
+	<div id="blogLayout">
+		<header>
+			HEADER
+		</header>
+		<div id="blogSidebar">
+			<blog-profiles />
 		</div>
+		<nuxt class="contents" />
 	</div>
 </template>
 
@@ -13,9 +17,9 @@ import BlogProfiles from "~/components/BlogProfiles.vue";
 @Component({
 	components: { BlogProfiles }
 })
-export default class BlogHome extends Vue {}
+export default class BlogLayout extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@import "./default";
 </style>

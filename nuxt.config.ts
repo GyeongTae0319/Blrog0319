@@ -23,7 +23,7 @@ const config: NuxtConfig = {
 			{
 				hid: "description",
 				name: "description",
-				content: "게임 개발과 웹 개발을 하는 마인크래프트 플레이어, 블로의 개발/게임 블로그입니다!"
+				content: "게임 개발과 웹 개발을 하는 마인크래프트 플레이어, 블로의 개발/게임 블로그입니다 :D"
 			},
 			// Opengraph //
 			{
@@ -35,7 +35,7 @@ const config: NuxtConfig = {
 			{
 				vmid: "og:description",
 				property: "og:description",
-				content: "게임 개발과 웹 개발을 하는 마인크래프트 플레이어, 블로의 개발/게임 블로그입니다!"
+				content: "게임 개발과 웹 개발을 하는 마인크래프트 플레이어, 블로의 개발/게임 블로그입니다 :D"
 			},
 			{
 				vmid: "og:image",
@@ -52,14 +52,21 @@ const config: NuxtConfig = {
 			{
 				rel: "stylesheet",
 				href: "https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;400;700&display=swap"
+			},
+			{
+				rel: "stylesheet",
+				href: "https://fonts.googleapis.com/icon?family=Material+Icons"
 			}
 		]
 	},
-	css: [],
+	css: ["~/assets/scss/blog.scss"],
 	plugins: [],
 	components: false,
 	buildModules: ["@nuxt/typescript-build"],
 	modules: [],
-	build: {}
+	build: {},
+	generate: {
+		routes() {}
+	}
 };
 export default config;
