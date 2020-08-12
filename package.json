@@ -12,16 +12,23 @@
   },
   "dependencies": {
     "@nuxt/typescript-runtime": "^1.0.0",
-    "nuxt": "^2.14.0"
+    "nuxt": "^2.14.0",
+    "nuxt-property-decorator": "^2.7.2"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.14.0",
+    "@nuxt/types": "^2.14.1",
     "@nuxt/typescript-build": "^2.0.2",
     "@nuxtjs/eslint-config": "^3.1.0",
     "@nuxtjs/eslint-config-typescript": "^3.0.0",
     "@nuxtjs/eslint-module": "^2.0.0",
     "babel-eslint": "^10.1.0",
+    "coffee-loader": "^1.0.0",
+    "coffeescript": "^2.5.1",
     "eslint": "^7.5.0",
-    "eslint-plugin-nuxt": "^1.0.0"
+    "eslint-plugin-nuxt": "^1.0.0",
+    "node-sass": "^4.14.1",
+    "pug": "^3.0.0",
+    "pug-loader": "^2.4.0",
+    "sass-loader": "^9.0.3"
   }
 }
