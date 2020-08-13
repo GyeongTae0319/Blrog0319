@@ -26,6 +26,7 @@ export default class App extends Vue {}
 	margin: 0;
 	padding: 0;
 
+	border: none;
 	outline: none;
 
 	background: none;

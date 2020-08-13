@@ -8,14 +8,26 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
+		<button class="login" @click="login()">로그인</button>
 	</header>
 </template>
 
 <script lang="ts">
 import { Vue, Options } from "vue-class-component";
+import * as firebase from "firebase/app";
+import { provider } from "@/main";
 
 @Options({})
-export default class BlogHeader extends Vue {}
+export default class BlogHeader extends Vue {
+	login = () => {
+		firebase.auth().signInWithPopup(provider)
+			.then((result) => {
+				console.log(result);
+			}).catch((error) => {
+				console.log(error);
+			});
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -32,6 +44,8 @@ header {
 	width: 100%;
 	height: $header-height;
 
+	justify-content: space-between;
+
 	background-color: $background-color-lv1;
 	box-shadow: 0 -8px 16px #000000;
 
@@ -47,9 +61,19 @@ header {
 			height: 100%;
 			margin-right: 16px;
 		}
-		.title {
-			font-weight: bold;
-		}
+	}
+	.login {
+		height: fit-content;
+		margin-right: 16px;
+		padding: 4px 8px;
+
+		border-radius: 4px;
+
+		background-color: $background-color-lv2;
+
+		align-self: center;
+
+		cursor: pointer;
 	}
 }
 </style>
