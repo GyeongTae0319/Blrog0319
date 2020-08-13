@@ -1,4 +1,23 @@
-@import "./variables";
+<template>
+	<blog-header id="blogHeader" />
+	<blog-sidebar id="blogSidebar" />
+	<router-view class="blog-contents" />
+</template>
+
+<script lang="ts">
+import { Options, Vue } from "vue-class-component";
+// Components //
+import BlogHeader from "@/components/BlogHeader.vue";
+import BlogSidebar from "@/components/BlogSidebar.vue";
+
+@Options({
+	components: { BlogHeader, BlogSidebar }
+})
+export default class App extends Vue {}
+</script>
+
+<style lang="scss">
+@import "@/assets/styles/variables";
 
 // Reset default properties
 *,
@@ -31,11 +50,7 @@
 
 // Set root element styles
 html {
-	height: 100%;
-
-	overflow: hidden;
-
-	background-color: #181e2a;
+	background-color: $background-color;
 
 	color: $text-color-white;
 	font: {
@@ -50,15 +65,23 @@ html {
 	     -moz-user-select: none;
 	      -ms-user-select: none;
 	          user-select: none;
+}
+html,
+body,
+#app {
+	height: 100%;
+	overflow: hidden;
+}
 
-	body {
-		height: 100%;
-		overflow: hidden;
+#app {
+	display: flex;
+	padding-top: $header-height;
 
-		#__nuxt,
-		#__layout {
-			height: 100%;
-			overflow: hidden;
-		}
+	#blogSidebar {
+		flex-shrink: 0;
+	}
+	> .blog-contents {
+		flex-grow: 1;
 	}
 }
+</style>

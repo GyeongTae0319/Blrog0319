@@ -1,3 +1,21 @@
+<template>
+	<div id="blogHome">
+		<div class="banner">
+			<span class="title">Blrog: 블로의 블로그</span>
+		</div>
+	</div>
+</template>
+
+<script lang="ts">
+import { Vue, Options } from "vue-class-component";
+
+@Options({})
+export default class BlogHome extends Vue {}
+</script>
+
+<style lang="scss" scoped>
+@import "@/assets/styles/variables";
+
 #blogHome {
 	.banner {
 		display: flex;
@@ -30,3 +48,4 @@
 		}
 	}
 }
+</style>
