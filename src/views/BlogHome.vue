@@ -7,17 +7,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
+import { Vue, Component } from "vue-property-decorator";
 
-@Options({})
+@Component
 export default class BlogHome extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/variables";
-
+@import "../assets/styles/variables";
+	
 #blogHome {
-	.banner {
+	> .banner {
 		display: flex;
 
 		width: 100%;

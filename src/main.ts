@@ -1,20 +1,14 @@
-// Vue init //
-import { createApp } from "vue";
-import App from "./App.vue";
+import Vue from "vue";
+import App from "./BlogApp.vue";
 import router from "./router";
 import store from "./store";
-
-createApp(App)
-	.use(store)
-	.use(router)
-	.mount("#app");
-
-// Firebase init //
+// Firebase //
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
 import "firebase/database";
 
+// Firebase init //
 const firebaseConfig = {
 	apiKey: "AIzaSyCz8z9oXKsouIFsm2k3tYDxdc_28Win-F8",
 	authDomain: "blrog0319.firebaseapp.com",
@@ -28,4 +22,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-export const provider = new firebase.auth.GoogleAuthProvider();
+// Vue init //
+Vue.config.productionTip = false;
+
+new Vue({
+	router,
+	store,
+	render: (h) => h(App)
+}).$mount("#app");

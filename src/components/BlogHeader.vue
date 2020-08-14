@@ -8,31 +8,25 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
-		<button class="login" @click="login()">로그인</button>
+		<blog-auth />
 	</header>
 </template>
 
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
-import * as firebase from "firebase/app";
-import { provider } from "@/main";
+import { Vue, Component } from "vue-property-decorator";
+// Components //
+import BlogAuth from "@/components/BlogAuth.vue";
 
-@Options({})
-export default class BlogHeader extends Vue {
-	login = () => {
-		firebase.auth().signInWithPopup(provider)
-			.then((result) => {
-				console.log(result);
-			}).catch((error) => {
-				console.log(error);
-			});
-	}
-}
+@Component({
+	components: { BlogAuth }
+})
+export default class BlogHeader extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/variables";
+@import "../assets/styles/variables";
 
+// Header styles
 header {
 	display: flex;
 
@@ -49,6 +43,7 @@ header {
 	background-color: $background-color-lv1;
 	box-shadow: 0 -8px 16px #000000;
 
+	// Home link title
 	.brand {
 		display: flex;
 
@@ -61,19 +56,6 @@ header {
 			height: 100%;
 			margin-right: 16px;
 		}
-	}
-	.login {
-		height: fit-content;
-		margin-right: 16px;
-		padding: 4px 8px;
-
-		border-radius: 4px;
-
-		background-color: $background-color-lv2;
-
-		align-self: center;
-
-		cursor: pointer;
 	}
 }
 </style>

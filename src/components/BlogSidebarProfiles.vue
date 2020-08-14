@@ -35,14 +35,14 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
+import { Vue, Component } from "vue-property-decorator";
 
-@Options({})
+@Component
 export default class BlogSidebarProfiles extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/variables";
+@import "../assets/styles/variables";
 
 .blog-profiles {
 	display: flex;

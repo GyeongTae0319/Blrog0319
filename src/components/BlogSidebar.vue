@@ -5,18 +5,18 @@
 </template>
 
 <script lang="ts">
-import { Vue, Options } from "vue-class-component";
+import { Vue, Component } from "vue-property-decorator";
 // Components //
 import BlogSidebarProfiles from "@/components/BlogSidebarProfiles.vue";
 
-@Options({
+@Component({
 	components: { BlogSidebarProfiles }
 })
 export default class BlogSidebar extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/styles/variables";
+@import "../assets/styles/variables";
 
 .blog-sidebar {
 	width: $sidebar-width;

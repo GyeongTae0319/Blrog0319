@@ -1,23 +1,25 @@
 <template>
-	<blog-header id="blogHeader" />
-	<blog-sidebar id="blogSidebar" />
-	<router-view class="blog-contents" />
+	<div id="blogApp">
+		<blog-header id="blogHeader" />
+		<blog-sidebar id="blogSidebar" />
+		<router-view class="blog-contents" />
+	</div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
+import { Vue, Component } from "vue-property-decorator";
 // Components //
 import BlogHeader from "@/components/BlogHeader.vue";
 import BlogSidebar from "@/components/BlogSidebar.vue";
 
-@Options({
+@Component({
 	components: { BlogHeader, BlogSidebar }
 })
-export default class App extends Vue {}
+export default class BlogApp extends Vue {}
 </script>
 
 <style lang="scss">
-@import "@/assets/styles/variables";
+@import "./assets/styles/variables";
 
 // Reset default properties
 *,
@@ -69,12 +71,12 @@ html {
 }
 html,
 body,
-#app {
+#blogApp {
 	height: 100%;
 	overflow: hidden;
 }
 
-#app {
+#blogApp {
 	display: flex;
 	padding-top: $header-height;
 
