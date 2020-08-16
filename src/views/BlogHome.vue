@@ -53,7 +53,7 @@ $link-icon-size: 32px;
 		align-items: flex-end;
 
 		background: {
-			image: url("../assets/images/banner.png"),
+			image: url("https://firebasestorage.googleapis.com/v0/b/blrog0319.appspot.com/o/images%2Fmain_banner.png?alt=media&token=feff9741-ae11-4228-a7d8-6f80792abb09"),
 				linear-gradient(
 					transparent 25%,
 					rgba(0, 0, 0, 0.5) 100%

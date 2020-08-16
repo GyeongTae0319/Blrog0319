@@ -1,21 +1,47 @@
 <template>
-	<div class="blog-sidebar-profiles">
+	<div
+		:class="{
+			'blog-sidebar-profiles': true,
+			'editable:': $store.getters.adminUser
+		}"
+	>
 		<span class="profiles-image"></span>
 		<div class="name">
-			<span class="nick">Blro</span>
-			<span class="origin">강경태</span>
+			<span class="nick">{{ info.nickname }}</span>
+			<span class="real">{{ info.realname }}</span>
 		</div>
-		<p class="description">
-			게임 개발과 웹 개발을 하는 마인크래프트 플레이어, 블로의 개발/게임 블로그입니다 :D
-		</p>
+		<p class="description">{{ info.description }}</p>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import firebase from "firebase/app";
+
+interface IBlogInfo {
+	description: string;
+	nickname: string;
+	realname: string;
+}
 
 @Component
-export default class BlogSidebarProfiles extends Vue {}
+export default class BlogSidebarProfiles extends Vue {
+	info: IBlogInfo = {
+		description: "...",
+		nickname: "불러오는 중...",
+		realname: "..."
+	};
+
+	beforeCreate() {
+		firebase.database().ref("info").on("value", (snapshot) => {
+			this.info = {
+				description: snapshot.child("description").val() as string,
+				nickname: snapshot.child("nickname").val() as string,
+				realname: snapshot.child("realname").val() as string
+			};
+		});
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -38,7 +64,7 @@ export default class BlogSidebarProfiles extends Vue {}
 
 	background: {
 		color: $background-color-lv2;
-		image: url("../assets/images/profiles.png");
+		image: url("https://firebasestorage.googleapis.com/v0/b/blrog0319.appspot.com/o/images%2Fprofile.png?alt=media&token=a5e3e575-cf6f-4c07-abe1-b42c177d0614");
 		position: center;
 		size: cover;
 	}
@@ -58,7 +84,7 @@ export default class BlogSidebarProfiles extends Vue {}
 
 		line-height: 1em;
 	}
-	.origin {
+	.real {
 		color: $text-color-white-disable;
 		font: {
 			size: large;

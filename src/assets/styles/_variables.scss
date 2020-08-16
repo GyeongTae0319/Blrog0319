@@ -1,7 +1,7 @@
 // Text colors
-$text-color-white: #ffffff;
-$text-color-white-desc: #cfd2d9;
-$text-color-white-disable: #a5aab6;
+$text-color-white: rgba(255, 255, 255, 1);
+$text-color-white-desc: rgba(255, 255, 255 ,0.75);
+$text-color-white-disable: rgba(255, 255, 255, 0.5);
 
 // Background colors
 $background-color: #181e2a;

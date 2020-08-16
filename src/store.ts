@@ -5,9 +5,37 @@ Vue.use(Vuex);
 
 var store = new Vuex.Store({
 	state: {
-		user: null
+		user: {
+			token: "",
+			info: {
+				uid: "",
+				photoUrl: "",
+				displayName: "",
+				email: ""
+			}
+		}
 	},
-	mutations: {},
+	getters: {
+		loggedIn: (state) => {
+			return state.user.token != "";
+		},
+		adminUser: (state) => {
+			return state.user.info.uid == "oCTauzu37UfHNkDKx5DAmwGAAzt1";
+		}
+	},
+	mutations: {
+		resetUser: (state) => {
+			state.user = {
+				token: "",
+				info: {
+					uid: "",
+					photoUrl: "",
+					displayName: "",
+					email: ""
+				}
+			}
+		}
+	},
 	actions: {},
 	modules: {}
 });

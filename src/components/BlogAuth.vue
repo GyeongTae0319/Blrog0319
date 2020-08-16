@@ -1,12 +1,13 @@
 <template>
-	<div v-if="loggedIn" class="user">
+	<div v-if="$store.getters.loggedIn" class="user">
 		<img
 			:src="user.photoUrl"
 			alt="프로필 사진"
+			referrerpolicy="no-referrer"
 			class="profiles-image"
-			@click="showInfo = !showInfo"
+			@click.stop="showInfo = !showInfo"
 		>
-		<div :class="`info ${showInfo ? 'show' : ''}`">
+		<div :class="`info ${showInfo ? 'show' : ''}`" @click.stop>
 			<img
 				:src="user.photoUrl"
 				alt="프로필 사진"
@@ -27,28 +28,28 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import firebase from "firebase/app";
+import { IAuthUser } from "@/assets/scripts/types";
 
-interface AuthCredential {
+interface IAuthCredential {
 	accessToken: string;
 	idToken: string;
 	providerId: string;
 	signInMethod: string;
-}
-interface AuthUser {
-	photoUrl: string;
-	displayName: string;
-	email: string;
 }
 
 @Component
 export default class BlogAuth extends Vue {
 	showInfo: boolean = false;
 
+	beforeCreate() {
+		document.addEventListener("click", () => this.showInfo = false);
+	}
+
 	signIn() {
 		let provider = new firebase.auth.GoogleAuthProvider();
 		firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
 			.then((result) => {
-				let credential: AuthCredential = result.credential as any;
+				let credential: IAuthCredential = result.credential as any;
 				this.$store.state["user"] = {
 					token: credential.accessToken,
 					info: result.user
@@ -58,7 +59,7 @@ export default class BlogAuth extends Vue {
 	signOut() {
 		firebase.auth().signOut()
 			.then((result) => {
-				this.$store.state["user"] = null;
+				this.$store.commit("resetUser");
 				this.showInfo = false;
 			}).catch();
 	}
@@ -66,12 +67,13 @@ export default class BlogAuth extends Vue {
 	get loggedIn(): boolean {
 		return this.$store.state["user"] != null;
 	}
-	get user(): AuthUser {
+	get user(): IAuthUser {
 		let user = this.$store.state["user"].info;
 		return {
 			photoUrl: user.photoURL,
 			displayName: user.displayName,
-			email: user.email
+			email: user.email,
+			uid: user.uid
 		};
 	}
 }
@@ -122,6 +124,7 @@ export default class BlogAuth extends Vue {
 		// Info
 		.photo {
 			width: 128px;
+			height: 128px;
 			margin: {
 				bottom: 16px;
 				left: auto;
