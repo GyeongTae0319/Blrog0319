@@ -1,21 +1,27 @@
 <template>
 	<div id="blogApp">
 		<blog-header id="blogHeader" />
-		<blog-sidebar id="blogSidebar" />
 		<router-view class="blog-contents" />
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import firebase from "firebase/app";
 // Components //
 import BlogHeader from "@/components/BlogHeader.vue";
-import BlogSidebar from "@/components/BlogSidebar.vue";
 
 @Component({
-	components: { BlogHeader, BlogSidebar }
+	components: { BlogHeader }
 })
-export default class BlogApp extends Vue {}
+export default class BlogApp extends Vue {
+	created() {
+		// Get blog infomations
+		firebase.database().ref("info").once("value", (snapshot) => {
+			this.$store.state.blog.info = snapshot.toJSON();
+		});
+	}
+}
 </script>
 
 <style lang="scss">
@@ -37,7 +43,17 @@ export default class BlogApp extends Vue {}
 
 	// Text styles
 	color: inherit;
-	font: inherit;
+	font: {
+		style: inherit;
+		variant-ligatures: inherit;
+		variant-caps: inherit;
+		variant-numeric: inherit;
+		variant-east-asian: inherit;
+		weight: inherit;
+		stretch: inherit;
+		size: inherit;
+		family: inherit;
+	}
 	text-decoration: none;
 
 	// Touch highlight disable
@@ -74,17 +90,5 @@ body,
 #blogApp {
 	height: 100%;
 	overflow: hidden;
-}
-
-#blogApp {
-	display: flex;
-	padding-top: $header-height;
-
-	#blogSidebar {
-		flex-shrink: 0;
-	}
-	> .blog-contents {
-		flex-grow: 1;
-	}
 }
 </style>

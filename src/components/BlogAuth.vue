@@ -1,5 +1,5 @@
 <template>
-	<div v-if="$store.getters.loggedIn" class="user">
+	<div v-if="$store.getters.isAuth" class="user">
 		<img
 			:src="user.photoUrl"
 			alt="프로필 사진"
@@ -152,16 +152,7 @@ export default class BlogAuth extends Vue {
 // Buttons
 .sign-in,
 .sign-out {
-	height: fit-content;
-	padding: 4px 12px;
-
-	border-radius: 4px;
-
-	background-color: $background-color-lv2;
-
-	align-self: center;
-
-	cursor: pointer;
+	@include button;
 }
 .sign-in {
 	margin-right: 16px;

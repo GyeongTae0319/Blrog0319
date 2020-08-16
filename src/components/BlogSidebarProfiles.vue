@@ -1,51 +1,46 @@
 <template>
-	<div
-		:class="{
-			'blog-sidebar-profiles': true,
-			'editable:': $store.getters.adminUser
-		}"
-	>
-		<span class="profiles-image"></span>
+	<div class="blog-sidebar-profiles">
+		<blog-image
+			src="https://firebasestorage.googleapis.com/v0/b/blrog0319.appspot.com/o/images%2Fprofile.png?alt=media&token=a5e3e575-cf6f-4c07-abe1-b42c177d0614"
+			alt="프로필 사진"
+			class="profile-image"
+		/>
+		<span class="profiles-image">
+			<router-link
+				v-if="$store.getters.isAdmin"
+				:to="{ name: 'BlogAdmin' }"
+				class="edit-profiles"
+			>
+				<i class="material-icons icon">edit</i>
+			</router-link>
+		</span>
 		<div class="name">
-			<span class="nick">{{ info.nickname }}</span>
-			<span class="real">{{ info.realname }}</span>
+			<blog-text type="word" class="nick">
+				{{ $store.state.blog.info.nickname }}
+			</blog-text>
+			<blog-text type="word" class="real">
+				{{ $store.state.blog.info.realname }}
+			</blog-text>
 		</div>
-		<p class="description">{{ info.description }}</p>
+		<blog-text type="line-multiple" class="desc">
+			{{ $store.state.blog.info.description }}
+		</blog-text>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import firebase from "firebase/app";
-
-interface IBlogInfo {
-	description: string;
-	nickname: string;
-	realname: string;
-}
 
 @Component
-export default class BlogSidebarProfiles extends Vue {
-	info: IBlogInfo = {
-		description: "...",
-		nickname: "불러오는 중...",
-		realname: "..."
-	};
-
-	beforeCreate() {
-		firebase.database().ref("info").on("value", (snapshot) => {
-			this.info = {
-				description: snapshot.child("description").val() as string,
-				nickname: snapshot.child("nickname").val() as string,
-				realname: snapshot.child("realname").val() as string
-			};
-		});
-	}
-}
+export default class BlogSidebarProfiles extends Vue {}
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
+
+$sidebar-profile-padding: 32px;
+
+$profile-image-size: $sidebar-width - $sidebar-profile-padding * 2;
 
 .blog-profiles {
 	display: flex;
@@ -53,21 +48,15 @@ export default class BlogSidebarProfiles extends Vue {
 	flex-direction: column;
 }
 
-.profiles-image {
+.profile-image {
 	display: block;
 
-	width: 100%;
+	width: $profile-image-size;
+	height: $profile-image-size;
 	margin-bottom: 16px;
-	padding-top: 100%;
-
 	border-radius: 100%;
 
-	background: {
-		color: $background-color-lv2;
-		image: url("https://firebasestorage.googleapis.com/v0/b/blrog0319.appspot.com/o/images%2Fprofile.png?alt=media&token=a5e3e575-cf6f-4c07-abe1-b42c177d0614");
-		position: center;
-		size: cover;
-	}
+	background-color: $background-color-lv2;
 }
 .name {
 	display: flex;
@@ -92,9 +81,8 @@ export default class BlogSidebarProfiles extends Vue {
 		}
 	}
 }
-.description {
+.desc {
 	color: $text-color-white-desc;
 	font-size: 14px;
-	line-height: 1.3em;
 }
 </style>

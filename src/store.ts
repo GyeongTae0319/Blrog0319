@@ -1,10 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import firebase from "firebase/app";
 
 Vue.use(Vuex);
 
 var store = new Vuex.Store({
 	state: {
+		blog: {
+			info: {
+				title: "",
+				nickname: "",
+				realname: "",
+				description: ""
+			}
+		},
 		user: {
 			token: "",
 			info: {
@@ -16,10 +25,10 @@ var store = new Vuex.Store({
 		}
 	},
 	getters: {
-		loggedIn: (state) => {
+		isAuth: (state) => {
 			return state.user.token != "";
 		},
-		adminUser: (state) => {
+		isAdmin: (state) => {
 			return state.user.info.uid == "oCTauzu37UfHNkDKx5DAmwGAAzt1";
 		}
 	},
@@ -39,4 +48,6 @@ var store = new Vuex.Store({
 	actions: {},
 	modules: {}
 });
+
+// Export vuex store
 export default store;

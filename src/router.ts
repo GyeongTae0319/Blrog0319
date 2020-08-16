@@ -1,15 +1,32 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 // Views //
-import BlogHome from "@/views/BlogHome.vue";
+import BlogFrame from "@/views/BlogFrame.vue";
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
 	{
 		path: "/",
-		name: "BlogHome",
-		component: BlogHome
+		component: BlogFrame,
+		children: [
+			{
+				path: "",
+				name: "BlogHome",
+				component: () => import(
+					/* webpackChunkName: "blog-admin" */
+					"@/views/BlogHome.vue"
+				)
+			}
+		]
+	},
+	{
+		"path": "/admin",
+		name: "BlogAdmin",
+		component: () => import(
+			/* webpackChunkName: "blog-admin" */
+			"@/views/BlogAdmin.vue"
+		)
 	}
 ];
 

@@ -26,6 +26,14 @@ firebase.analytics();
 // Vue init //
 Vue.config.productionTip = false;
 
+// Global components
+import BlogContentPlaceholder from "@/components/BlogContentPlaceholder.vue";
+import BlogImage from "@/components/BlogImage.vue";
+import BlogText from "@/components/BlogText.vue";
+Vue.component(BlogContentPlaceholder.name, BlogContentPlaceholder);
+Vue.component(BlogImage.name, BlogImage);
+Vue.component(BlogText.name, BlogText);
+
 new Vue({
 	router,
 	store,

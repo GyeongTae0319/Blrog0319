@@ -30,10 +30,8 @@ export default class BlogHeader extends Vue {}
 header {
 	display: flex;
 
-	position: absolute;
-	z-index: 128;
-	top: 0;
-	left: 0;
+	position: relative;
+	z-index: $z-index-header;
 
 	width: 100%;
 	height: $header-height;
