@@ -23,13 +23,37 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+// Auth user check
+firebase.auth().onAuthStateChanged((user) => {
+	console.log(user);
+	if (user) {
+		user.getIdToken().then((value) => {
+			store.state.user.token = value;
+		}).catch();
+		store.state.user.info = {
+			displayName: user.displayName || "",
+			email: user.email || "",
+			photoUrl: user.photoURL || "",
+			uid: user.uid || ""
+		}
+	} else {
+		store.state.user.token = "";
+		store.state.user.info = {
+			displayName: "",
+			email: "",
+			photoUrl: "",
+			uid: ""
+		}
+	}
+});
+
 // Vue init //
 Vue.config.productionTip = false;
 
 // Global components
-import BlogContentPlaceholder from "@/components/BlogContentPlaceholder.vue";
-import BlogImage from "@/components/BlogImage.vue";
-import BlogText from "@/components/BlogText.vue";
+import BlogContentPlaceholder from "@/components/global/BlogContentPlaceholder.vue";
+import BlogImage from "@/components/global/BlogImage.vue";
+import BlogText from "@/components/global/BlogText.vue";
 Vue.component(BlogContentPlaceholder.name, BlogContentPlaceholder);
 Vue.component(BlogImage.name, BlogImage);
 Vue.component(BlogText.name, BlogText);

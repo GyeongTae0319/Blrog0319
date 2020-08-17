@@ -8,17 +8,17 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
-		<blog-auth />
+		<blog-header-auth />
 	</header>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import BlogAuth from "@/components/BlogAuth.vue";
+import BlogHeaderAuth from "@/components/BlogHeaderAuth.vue";
 
 @Component({
-	components: { BlogAuth }
+	components: { BlogHeaderAuth }
 })
 export default class BlogHeader extends Vue {}
 </script>

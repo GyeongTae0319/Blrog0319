@@ -1,9 +1,10 @@
 <template>
-	<!-- Single lien text -->
+	<!-- Word -->
 	<span
 		v-if="type === 'word'"
 		class="blog-content-placeholder word"
 	></span>
+	<!-- Single lien text -->
 	<span
 		v-else-if="type === 'line-single'"
 		class="blog-content-placeholder line-single"
@@ -62,7 +63,7 @@ export default class BlogContentPlaceholder extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 @keyframes slide-background {
 	0%,

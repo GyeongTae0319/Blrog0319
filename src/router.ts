@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 // Views //
 import BlogFrame from "@/views/BlogFrame.vue";
+import store from './store';
 
 Vue.use(VueRouter);
 
@@ -37,5 +38,13 @@ const router = new VueRouter(
 		routes
 	}
 );
+router.beforeEach((to, from, next) => {
+	if (to.fullPath.startsWith("/admin")) {
+		if (!store.getters.isAdmin) {
+			if (from.fullPath.startsWith("/admin")) next({ name: "BlogHome" });
+			else next({ path: from.fullPath as string });
+		} else  next();
+	} else next();
+});
 
 export default router;

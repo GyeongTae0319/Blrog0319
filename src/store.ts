@@ -8,7 +8,6 @@ var store = new Vuex.Store({
 	state: {
 		blog: {
 			info: {
-				title: "",
 				nickname: "",
 				realname: "",
 				description: ""
@@ -17,10 +16,10 @@ var store = new Vuex.Store({
 		user: {
 			token: "",
 			info: {
-				uid: "",
-				photoUrl: "",
 				displayName: "",
-				email: ""
+				email: "",
+				photoUrl: "",
+				uid: ""
 			}
 		}
 	},
@@ -28,23 +27,11 @@ var store = new Vuex.Store({
 		isAuth: (state) => {
 			return state.user.token != "";
 		},
-		isAdmin: (state) => {
-			return state.user.info.uid == "oCTauzu37UfHNkDKx5DAmwGAAzt1";
+		isAdmin: (state, getters) => {
+			return getters.isAuth != "" && state.user.info.uid == "oCTauzu37UfHNkDKx5DAmwGAAzt1";
 		}
 	},
-	mutations: {
-		resetUser: (state) => {
-			state.user = {
-				token: "",
-				info: {
-					uid: "",
-					photoUrl: "",
-					displayName: "",
-					email: ""
-				}
-			}
-		}
-	},
+	mutations: {},
 	actions: {},
 	modules: {}
 });
