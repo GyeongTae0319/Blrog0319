@@ -11,21 +11,13 @@
 			</button>
 		</div>
 		<div class="list"></div>
-		<blog-category-edit-popup
-			v-if="showEditPopup"
-			@close="showEditPopup = false"
-		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-// Components //
-import BlogCategoryEditPopup from "@/components/BlogCategoryEditPopup.vue";
 
-@Component({
-	components: { BlogCategoryEditPopup }
-})
+@Component
 export default class BlogSidebarCategories extends Vue {
 	showEditPopup = false;
 

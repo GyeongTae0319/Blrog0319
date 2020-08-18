@@ -2,17 +2,17 @@
 	<!-- Word -->
 	<span
 		v-if="type === 'word'"
-		class="blog-content-placeholder word"
+		class="app-content-placeholder word"
 	></span>
 	<!-- Single lien text -->
 	<span
 		v-else-if="type === 'line-single'"
-		class="blog-content-placeholder line-single"
+		class="app-content-placeholder line-single"
 	></span>
 	<!-- Multiple line text -->
 	<span
 		v-else-if="type === 'line-multiple'"
-		class="blog-content-placeholder line-multiple"
+		class="app-content-placeholder line-multiple"
 	>
 		<span class="line"></span>
 		<span class="line"></span>
@@ -21,7 +21,7 @@
 	<!-- Code box -->
 	<span
 		v-else-if="type === 'code'"
-		class="blog-content-placeholder code"
+		class="app-content-placeholder code"
 	>
 		<span class="line">
 			<span class="block">#include</span>
@@ -46,7 +46,7 @@
 	</span>
 	<span
 		v-else
-		class="blog-content-placeholder block"
+		class="app-content-placeholder block"
 	></span>
 </template>
 
@@ -54,7 +54,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
-export default class BlogContentPlaceholder extends Vue {
+export default class AppContentPlaceholder extends Vue {
 	@Prop({
 		type: String,
 		default: "block"

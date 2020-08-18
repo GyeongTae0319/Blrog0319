@@ -1,6 +1,6 @@
 <template>
-	<div class="blog-admin">
-		ADMIN
+	<div class="admin-category">
+		CATEGORY
 	</div>
 </template>
 
@@ -8,7 +8,7 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class BlogFrame extends Vue {}
+export default class AdminCategory extends Vue {}
 </script>
 
 <style lang="scss" scoped>

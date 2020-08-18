@@ -1,39 +1,35 @@
 <template>
-	<div class="blog-frame">
-		<blog-sidebar />
-		<router-view class="blog-contents" />
+	<div v-if="$store.getters.isAdmin" class="admin-frame">
+		<admin-sidebar />
+		<router-view class="admin-contents" />
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import BlogSidebar from "@/components/BlogSidebar.vue";
+import AdminSidebar from "@/components/AdminSidebar.vue";
 
 @Component({
-	components: { BlogSidebar }
+	components: { AdminSidebar }
 })
-export default class BlogFrame extends Vue {}
+export default class AdminFrame extends Vue {}
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
 
-.blog-frame {
+.admin-frame {
 	display: flex;
 
 	height: 100%;
 	overflow: hidden;
 
-	.blog-sidebar {
+	.admin-sidebar {
 		flex-shrink: 0;
-
-		overflow: hidden auto;
 	}
-	.blog-contents {
+	.admin-contents {
 		flex-grow: 1;
-
-		overflow: hidden auto;
 	}
 }
 </style>

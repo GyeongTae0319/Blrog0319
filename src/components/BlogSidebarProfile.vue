@@ -1,24 +1,26 @@
 <template>
 	<div class="blog-sidebar-profile">
-		<blog-image
-			src="https://firebasestorage.googleapis.com/v0/b/blrog0319.appspot.com/o/images%2Fprofile.png?alt=media&token=a5e3e575-cf6f-4c07-abe1-b42c177d0614"
+		<app-image
+			:src="$store.state.blog.profile_image"
 			alt="프로필 사진"
+			objectfit="cover"
+			draggable="false"
 			class="profile-image"
 		/>
 		<div class="name">
-			<blog-text type="word" class="nick">
+			<app-text type="word" class="nick">
 				{{ $store.state.blog.info.nickname }}
-			</blog-text>
-			<blog-text type="word" class="real">
+			</app-text>
+			<app-text type="word" class="real">
 				{{ $store.state.blog.info.realname }}
-			</blog-text>
+			</app-text>
 		</div>
-		<blog-text type="line-multiple" class="desc">
+		<app-text type="line-multiple" class="desc">
 			{{ $store.state.blog.info.description }}
-		</blog-text>
+		</app-text>
 		<router-link
 			v-if="$store.getters.isAdmin"
-			:to="{ name: 'BlogAdmin' }"
+			:to="{ name: 'AdminBasic' }"
 			class="edit-profile"
 		>
 			<i class="material-icons icon">edit</i>
@@ -52,6 +54,13 @@ $profile-image-size: $sidebar-width - $sidebar-padding * 2;
 	border-radius: 100%;
 
 	background-color: $background-color-lv2;
+
+	.image {
+		width: 100%;
+		height: 100%;
+
+		border-radius: 100%;
+	}
 }
 .name {
 	display: flex;
@@ -81,85 +90,14 @@ $profile-image-size: $sidebar-width - $sidebar-padding * 2;
 	font-size: 14px;
 }
 .edit-profile {
-	$icon-size: 44px;
-	$border-width: 4px;
-	$badge-size: calc(#{$icon-size} + #{$border-width});
-
-	display: flex;
+	@include icon-button(
+		24px, 8px,
+		$background-color-lv2, $background-color-lv3,
+		4px, $background-color-lv1
+	);
 
 	position: absolute;
-	z-index: $z-index-popup;
-	top: calc(#{$profile-image-size} - #{$badge-size});
+	top: calc(#{$profile-image-size} - (24px + 8px * 2 + 4px * 2));
 	right: 0;
-
-	width: $badge-size;
-	height: $badge-size;
-
-	border: 4px solid $background-color-lv1;
-	border-radius: calc(#{$badge-size} / 2);
-
-	background-color: $background-color-lv2;
-
-	justify-content: center;
-	align-items: center;
-
-	transition: background-color 0.1s;
-
-	&:hover {
-		background-color: $background-color-lv3;
-
-		.tag {
-			--gap: 16px;
-
-			opacity: 1;
-
-			pointer-events: inherit;
-		}
-	}
-
-	.tag {
-		--gap: 12px;
-
-		display: flex;
-		opacity: 0;
-
-		position: absolute;
-		bottom: calc(100% + var(--gap));
-
-		width: max-content;
-		padding: 8px 12px;
-
-		border-radius: 8px;
-
-		background-color: $background-color-lv2;
-
-		filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.375));
-
-		justify-content: center;
-		align-items: center;
-
-		font-size: small;
-
-		pointer-events: none;
-
-		transition: bottom 0.1s, opacity 0.1s;
-
-		&::before {
-			content: "";
-
-			display: inline-block;
-
-			position: absolute;
-			z-index: -1;
-			bottom: -8px;
-
-			width: 16px;
-			height: 16px;
-
-			background-color: $background-color-lv2;
-
-			transform: rotate(45deg);
-		}
-	}
 }
 </style>

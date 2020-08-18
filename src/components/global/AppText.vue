@@ -1,12 +1,12 @@
 <template>
-	<span class="blog-text">
+	<span class="app-text">
 		<span
 			v-show="isLoadded"
 			ref="text"
 		>
 			<slot></slot>
 		</span>
-		<blog-content-placeholder v-if="!isLoadded" :type="type" />
+		<app-content-placeholder v-if="!isLoadded" :type="type" />
 	</span>
 </template>
 
@@ -15,7 +15,7 @@ import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { VNode } from 'vue';
 
 @Component
-export default class BlogText extends Vue {
+export default class AppText extends Vue {
 	@Prop({
 		type: String,
 		default: "line-single"
@@ -29,7 +29,7 @@ export default class BlogText extends Vue {
 				this.isLoadded = true;
 				clearInterval(interval);
 			}
-		}, 100);
+		});
 	}
 }
 </script>

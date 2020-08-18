@@ -1,14 +1,16 @@
 <template>
-	<span class="blog-image">
+	<span class="app-image">
 		<img
 			v-show="isLoaded"
 			:src="src"
 			:alt="alt"
+			:draggable="draggable"
 			:referrerpolicy="referrerpolicy"
 			class="image"
 			v-on="eventListeners"
+			:style="`object-fit: ${objectfit}`"
 		>
-		<blog-content-placeholder v-if="!isLoaded" class="holder" />
+		<app-content-placeholder v-if="!isLoaded" class="holder" />
 	</span>
 </template>
 
@@ -16,7 +18,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
-export default class BlogImage extends Vue {
+export default class AppImage extends Vue {
 	@Prop({
 		type: String,
 		required: true
@@ -25,6 +27,17 @@ export default class BlogImage extends Vue {
 		type: String,
 		default: ""
 	}) alt!: string;
+	@Prop({
+		type: String,
+		default: "fill",
+		validator: (value) => {
+			return ["fill", "contain", "cover", "none", "scale-down"].includes(value);
+		}
+	}) objectfit!: string;
+	@Prop({
+		type: String,
+		default: "true"
+	}) draggable!: "true" | "false";
 	@Prop({
 		type: String,
 		default: ""
@@ -37,6 +50,9 @@ export default class BlogImage extends Vue {
 			load: () => {
 				this.isLoaded = true;
 				this.$emit("load");
+			},
+			contextmenu: (event: MouseEvent) => {
+				if (this.draggable == "false") event.preventDefault();
 			}
 		});
 	}
@@ -44,7 +60,8 @@ export default class BlogImage extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.blog-image {
+.app-image {
+	display: inline-block;
 	overflow: hidden;
 
 	* {

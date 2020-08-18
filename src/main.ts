@@ -1,5 +1,5 @@
 import Vue from "vue";
-import App from "./BlogApp.vue";
+import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 // Firebase //
@@ -25,7 +25,6 @@ firebase.analytics();
 
 // Auth user check
 firebase.auth().onAuthStateChanged((user) => {
-	console.log(user);
 	if (user) {
 		user.getIdToken().then((value) => {
 			store.state.user.token = value;
@@ -51,12 +50,12 @@ firebase.auth().onAuthStateChanged((user) => {
 Vue.config.productionTip = false;
 
 // Global components
-import BlogContentPlaceholder from "@/components/global/BlogContentPlaceholder.vue";
-import BlogImage from "@/components/global/BlogImage.vue";
-import BlogText from "@/components/global/BlogText.vue";
-Vue.component(BlogContentPlaceholder.name, BlogContentPlaceholder);
-Vue.component(BlogImage.name, BlogImage);
-Vue.component(BlogText.name, BlogText);
+import AppContentPlaceholder from "@/components/global/AppContentPlaceholder.vue";
+import AppImage from "@/components/global/AppImage.vue";
+import AppText from "@/components/global/AppText.vue";
+Vue.component(AppContentPlaceholder.name, AppContentPlaceholder);
+Vue.component(AppImage.name, AppImage);
+Vue.component(AppText.name, AppText);
 
 new Vue({
 	router,

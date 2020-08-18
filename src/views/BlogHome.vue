@@ -1,5 +1,5 @@
 <template>
-	<div id="blogHome">
+	<div class="blog-home">
 		<div class="banner">
 			<span class="title">Blrog: 블로의 블로그</span>
 			<div class="links">
@@ -41,7 +41,7 @@ export default class BlogHome extends Vue {}
 
 $link-icon-size: 32px;
 
-#blogHome {
+.blog-home {
 	> .banner {
 		display: flex;
 

@@ -15,7 +15,7 @@ const routes: Array<RouteConfig> = [
 				path: "",
 				name: "BlogHome",
 				component: () => import(
-					/* webpackChunkName: "blog-admin" */
+					/* webpackChunkName: "blog-home" */
 					"@/views/BlogHome.vue"
 				)
 			}
@@ -23,11 +23,36 @@ const routes: Array<RouteConfig> = [
 	},
 	{
 		"path": "/admin",
-		name: "BlogAdmin",
 		component: () => import(
-			/* webpackChunkName: "blog-admin" */
-			"@/views/BlogAdmin.vue"
-		)
+			/* webpackChunkName: "admin-frame" */
+			"@/views/AdminFrame.vue"
+		),
+		children: [
+			{
+				path: "",
+				name: "AdminBasic",
+				component: () => import(
+					/* webpackChunkName: "admin-basic" */
+					"@/views/AdminBasic.vue"
+				)
+			},
+			{
+				path: "bloghome",
+				name: "AdminBlogHome",
+				component: () => import(
+					/* webpackChunkName: "admin-blog-home" */
+					"@/views/AdminBlogHome.vue"
+				)
+			},
+			{
+				path: "category",
+				name: "AdminCategory",
+				component: () => import(
+					/* webpackChunkName: "admin-category" */
+					"@/views/AdminCategory.vue"
+				)
+			}
+		]
 	}
 ];
 
@@ -40,10 +65,12 @@ const router = new VueRouter(
 );
 router.beforeEach((to, from, next) => {
 	if (to.fullPath.startsWith("/admin")) {
-		if (!store.getters.isAdmin) {
-			if (from.fullPath.startsWith("/admin")) next({ name: "BlogHome" });
-			else next({ path: from.fullPath as string });
-		} else  next();
+		setTimeout(() => {
+			if (!store.getters.isAdmin) {
+				if (from.fullPath.startsWith("/admin")) next({ name: "BlogHome" });
+				else next({ path: from.fullPath as string });
+			} else  next();
+		}, from.name == null ? 1000 : 0);
 	} else next();
 });
 

@@ -1,5 +1,5 @@
 <template>
-	<header class="blog-header">
+	<header class="app-header">
 		<router-link :to="{ name: 'BlogHome' }" class="brand">
 			<img
 				src="@/assets/icons/blrog_logo.svg"
@@ -8,26 +8,26 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
-		<blog-header-auth />
+		<app-header-auth />
 	</header>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import BlogHeaderAuth from "@/components/BlogHeaderAuth.vue";
+import AppHeaderAuth from "@/components/AppHeaderAuth.vue";
 
 @Component({
-	components: { BlogHeaderAuth }
+	components: { AppHeaderAuth }
 })
-export default class BlogHeader extends Vue {}
+export default class AppHeader extends Vue {}
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
 
 // Header styles
-header {
+.app-header {
 	display: flex;
 
 	position: relative;

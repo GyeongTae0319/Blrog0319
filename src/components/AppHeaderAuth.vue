@@ -1,8 +1,5 @@
 <template>
-	<div v-if="$store.getters.isAuth" :class="{
-		'user': true,
-		'is-auth': $store.getters.isAuth
-	}">
+	<div v-if="$store.getters.isAuth" class="app-header-auth user">
 		<img
 			:src="$store.state.user.info.photoUrl"
 			alt="프로필 사진"
@@ -29,7 +26,7 @@
 	</div>
 	<button
 		v-else
-		class="sign-in"
+		class="app-header-auth sign-in"
 		@click="signIn()"
 	>로그인</button>
 </template>
@@ -39,7 +36,7 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
 
 @Component
-export default class BlogAuth extends Vue {
+export default class AppHeaderAuth extends Vue {
 	showInfo: boolean = false;
 
 	created() {
@@ -49,12 +46,10 @@ export default class BlogAuth extends Vue {
 	signIn() {
 		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
 			.then(() => {
-				firebase.auth().onAuthStateChanged((user) => {
-					if (!user) {
-						firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-							.then(() => {}).catch();
-					}
-				});
+				if (!firebase.auth().currentUser) {
+					firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
+						.then(() => {}).catch();
+				}
 			}).catch();
 	}
 	signOut() {

@@ -1,6 +1,6 @@
 <template>
-	<div id="blogApp">
-		<blog-header id="blogHeader" />
+	<div id="app">
+		<app-header id="blogHeader" />
 		<router-view class="blog-contents" />
 	</div>
 </template>
@@ -9,12 +9,12 @@
 import { Vue, Component } from "vue-property-decorator";
 import firebase from "firebase/app";
 // Components //
-import BlogHeader from "@/components/BlogHeader.vue";
+import AppHeader from "@/components/AppHeader.vue";
 
 @Component({
-	components: { BlogHeader }
+	components: { AppHeader }
 })
-export default class BlogApp extends Vue {
+export default class App extends Vue {
 	created() {
 		// Get blog infomations
 		firebase.database().ref("info").once("value", (snapshot) => {
@@ -28,9 +28,7 @@ export default class BlogApp extends Vue {
 @import "./assets/styles/variables";
 
 // Reset default properties
-*,
-*::before,
-*::after {
+* {
 	margin: 0;
 	padding: 0;
 
@@ -65,6 +63,24 @@ export default class BlogApp extends Vue {
 	     -moz-user-select: inherit;
 	      -ms-user-select: inherit;
 	          user-select: inherit;
+
+	// Scrollbar style
+	&::-webkit-scrollbar {
+		width: 12px;
+	}
+	&::-webkit-scrollbar-thumb {
+		background-color: $background-color-lv3;
+		border-radius: 6px;
+		background-clip: padding-box;
+		border: 4px solid transparent;
+	}
+	&::-webkit-scrollbar-track {
+		background-color: transparent;
+	}
+
+	::placeholder {
+		color: $text-color-white-disable;
+	}
 }
 
 // Set root element styles
@@ -84,11 +100,31 @@ html {
 	     -moz-user-select: none;
 	      -ms-user-select: none;
 	          user-select: none;
+
+	// Drag disable
+	-webkit-user-drag: none;
+	 -khtml-user-drag: none;
+	   -moz-user-drag: none;
+	     -o-user-drag: none;
 }
 html,
 body,
-#blogApp {
+#app {
 	height: 100%;
 	overflow: hidden;
+}
+
+#app {
+	display: flex;
+
+	flex-direction: column;
+
+	> #blogHeader {
+		flex-shrink: 0;
+	}
+	> .blog-contents {
+		height: 0;
+		flex-grow: 1;
+	}
 }
 </style>
