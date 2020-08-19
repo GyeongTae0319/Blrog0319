@@ -17,7 +17,7 @@ import AppHeader from "@/components/AppHeader.vue";
 export default class App extends Vue {
 	created() {
 		// Get blog infomations
-		firebase.database().ref("info").once("value", (snapshot) => {
+		firebase.database().ref("info").on("value", (snapshot) => {
 			this.$store.state.blog.info = snapshot.toJSON();
 		});
 	}
@@ -73,6 +73,10 @@ export default class App extends Vue {
 		border-radius: 6px;
 		background-clip: padding-box;
 		border: 4px solid transparent;
+
+		&:hover {
+			background-color: $background-color-lv4;
+		}
 	}
 	&::-webkit-scrollbar-track {
 		background-color: transparent;
