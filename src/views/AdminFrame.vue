@@ -30,6 +30,21 @@ export default class AdminFrame extends Vue {}
 	}
 	.admin-contents {
 		flex-grow: 1;
+		padding: 32px;
+
+		&::v-deep > .title {
+			display: block;
+
+			margin-bottom: 16px;
+			padding-bottom: 4px;
+
+			border-bottom: 2px solid $background-color-lv2;
+
+			font: {
+				size: xx-large;
+				weight: bold;
+			}
+		}
 	}
 }
 </style>

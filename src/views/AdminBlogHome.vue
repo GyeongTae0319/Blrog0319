@@ -1,6 +1,6 @@
 <template>
 	<div class="admin-category">
-		BLOG HOME
+		<span class="title">블로그 홈</span>
 	</div>
 </template>
 

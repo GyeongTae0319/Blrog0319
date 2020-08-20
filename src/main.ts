@@ -27,17 +27,17 @@ firebase.analytics();
 firebase.auth().onAuthStateChanged((user) => {
 	if (user) {
 		user.getIdToken().then((value) => {
-			store.state.user.token = value;
+			store.state.auth.token = value;
 		}).catch();
-		store.state.user.info = {
+		store.state.auth.info = {
 			displayName: user.displayName || "",
 			email: user.email || "",
 			photoUrl: user.photoURL || "",
 			uid: user.uid || ""
 		}
 	} else {
-		store.state.user.token = "";
-		store.state.user.info = {
+		store.state.auth.token = "";
+		store.state.auth.info = {
 			displayName: "",
 			email: "",
 			photoUrl: "",

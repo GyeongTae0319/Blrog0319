@@ -1,7 +1,7 @@
 <template>
 	<div v-if="$store.getters.isAuth" class="app-header-auth user">
 		<img
-			:src="$store.state.user.info.photoUrl"
+			:src="$store.state.auth.info.photoUrl"
 			alt="프로필 사진"
 			referrerpolicy="no-referrer"
 			class="profiles-image"
@@ -15,12 +15,12 @@
 			@click.stop
 		>
 			<img
-				:src="$store.state.user.info.photoUrl"
+				:src="$store.state.auth.info.photoUrl"
 				alt="프로필 사진"
 				class="photo"
 			>
-			<span class="name">{{ $store.state.user.info.displayName }}</span>
-			<span class="email">{{ $store.state.user.info.email }}</span>
+			<span class="name">{{ $store.state.auth.info.displayName }}</span>
+			<span class="email">{{ $store.state.auth.info.email }}</span>
 			<button class="sign-out" @click="signOut()">로그아웃</button>
 		</div>
 	</div>

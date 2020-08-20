@@ -1,7 +1,7 @@
 <template>
 	<div class="blog-sidebar-profile">
 		<app-image
-			:src="$store.state.blog.profile_image"
+			:src="$store.state.blog.profileImage"
 			alt="프로필 사진"
 			objectfit="cover"
 			draggable="false"

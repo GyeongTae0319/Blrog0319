@@ -82,7 +82,7 @@ export default class AdminHome extends Vue {
 	nowUploading = false;
 
 	created() {
-		this.profileImage = this.$store.state.blog.profile_image;
+		this.profileImage = this.$store.state.blog.profileImage;
 		this.profileInput = Object.assign({}, this.$store.state.blog.info);
 	}
 
@@ -131,24 +131,6 @@ export default class AdminHome extends Vue {
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
-
-.admin-home {
-	padding: 32px;
-
-	> .title {
-		display: block;
-
-		margin-bottom: 16px;
-		padding-bottom: 4px;
-
-		border-bottom: 2px solid $background-color-lv2;
-
-		font: {
-			size: xx-large;
-			weight: bold;
-		}
-	}
-}
 
 .profile {
 	display: flex;

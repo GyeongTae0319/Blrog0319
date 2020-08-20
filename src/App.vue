@@ -7,6 +7,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { Getter, State } from "vuex-class";
 import firebase from "firebase/app";
 // Components //
 import AppHeader from "@/components/AppHeader.vue";
@@ -19,6 +20,10 @@ export default class App extends Vue {
 		// Get blog infomations
 		firebase.database().ref("info").on("value", (snapshot) => {
 			this.$store.state.blog.info = snapshot.toJSON();
+		});
+		// Get blog categories
+		firebase.database().ref("category/root").on("value", (snapshot) => {
+			this.$store.state.blog.category = snapshot.val();
 		});
 	}
 }

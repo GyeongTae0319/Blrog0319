@@ -32,7 +32,11 @@ $z-index-popup: 512;
 	cursor: pointer;
 }
 
-@mixin icon-button($icon-size, $padding-size, $background-color, $background-color-highlight, $border-width, $border-color) {
+@mixin icon-button(
+	$icon-size, $padding-size: 0px,
+	$background-color: transparent, $background-color-highlight: transparent,
+	$border-width: 0px, $border-color: transparent
+) {
 	$full-size: calc(#{$icon-size} + #{$padding-size} * 2 + #{$border-width} * 2);
 
 	display: flex;
