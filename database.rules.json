@@ -1,0 +1,18 @@
+{
+	"rules": {
+		".read": false,
+		".write": false,
+		"info": {
+			".read": true,
+			".write": "auth.uid == 'oCTauzu37UfHNkDKx5DAmwGAAzt1'"
+		},
+		"posts": {
+			".read": true,
+			".write": "auth.uid == 'oCTauzu37UfHNkDKx5DAmwGAAzt1'"
+		},
+		"category": {
+			".read": true,
+			".write": "auth.uid == 'oCTauzu37UfHNkDKx5DAmwGAAzt1'"
+		}
+	}
+}

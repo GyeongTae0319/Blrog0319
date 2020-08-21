@@ -11,14 +11,14 @@ import "firebase/storage";
 
 // Firebase init //
 const firebaseConfig = {
-	apiKey: "AIzaSyCz8z9oXKsouIFsm2k3tYDxdc_28Win-F8",
-	authDomain: "blrog0319.firebaseapp.com",
-	databaseURL: "https://blrog0319.firebaseio.com",
-	projectId: "blrog0319",
-	storageBucket: "blrog0319.appspot.com",
-	messagingSenderId: "474514678521",
-	appId: "1:474514678521:web:a417a2434cc05144373828",
-	measurementId: "G-98Z9BM25VD"
+	apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+	authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+	databaseURL: process.env.VUE_APP_DATABASE_URL,
+	projectId: process.env.VUE_APP_PROJECT_ID,
+	storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+	messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+	appId: process.env.VUE_APP_APP_ID,
+	measurementId: process.env.VUE_APP_MEASUREMENT_ID
 };
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();

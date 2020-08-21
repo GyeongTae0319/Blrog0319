@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { StoreOptions } from "vuex";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
@@ -34,7 +34,7 @@ export interface State {
 	}
 }
 
-const store: StoreOptions<State> = {
+var store = new Vuex.Store({
 	state: {
 		auth: {
 			token: "",
@@ -63,6 +63,10 @@ const store: StoreOptions<State> = {
 		isAdmin: (state) => {
 			return state.auth.info.uid === "oCTauzu37UfHNkDKx5DAmwGAAzt1";
 		}
-	}
-};
-export default new Vuex.Store(store);
+	},
+	mutations: {},
+	actions: {},
+	modules: {}
+});
+
+export default store;
