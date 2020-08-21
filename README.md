@@ -1,19 +1,10 @@
-# blrog0319
+# Blrog: 블로의 블로그
 
-## Project setup
-```
-npm install
-```
+## TODO
+### ADMIN
+- 블로그 홈 수정
+- 카테고리 그래드 & 드랍
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### BLOG
+- 게시글 뷰어 (데이터 -> 문서)
+- 게시글 에디터
