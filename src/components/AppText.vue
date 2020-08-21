@@ -13,8 +13,14 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import { VNode } from 'vue';
+// Components //
+import AppContentPlaceholder from "@/components/AppContentPlaceholder.vue";
 
-@Component
+@Component({
+	components: {
+		AppContentPlaceholder
+	}
+})
 export default class AppText extends Vue {
 	@Prop({
 		type: String,

@@ -2,6 +2,10 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+// Global components
+import AppContentPlaceholder from "@/components/global/AppContentPlaceholder.vue";
+import AppImage from "@/components/global/AppImage.vue";
+import AppText from "@/components/global/AppText.vue";
 // Firebase //
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -48,14 +52,6 @@ firebase.auth().onAuthStateChanged((user) => {
 
 // Vue init //
 Vue.config.productionTip = false;
-
-// Global components
-import AppContentPlaceholder from "@/components/global/AppContentPlaceholder.vue";
-import AppImage from "@/components/global/AppImage.vue";
-import AppText from "@/components/global/AppText.vue";
-Vue.component(AppContentPlaceholder.name, AppContentPlaceholder);
-Vue.component(AppImage.name, AppImage);
-Vue.component(AppText.name, AppText);
 
 new Vue({
 	router,

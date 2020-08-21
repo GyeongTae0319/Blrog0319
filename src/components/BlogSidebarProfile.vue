@@ -31,8 +31,15 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+// Components //
+import AppImage from "@/components/AppImage.vue";
+import AppText from "@/components/AppText.vue";
 
-@Component
+@Component({
+	components: {
+		AppImage, AppText
+	}
+})
 export default class BlogSidebarProfile extends Vue {}
 </script>
 

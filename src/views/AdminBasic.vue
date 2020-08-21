@@ -69,8 +69,14 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
+// Components //
+import AppImage from "@/components/AppImage.vue";
 
-@Component
+@Component({
+	components: {
+		AppImage
+	}
+})
 export default class AdminHome extends Vue {
 	profileImageChanged = false;
 	profileImage: string = "";

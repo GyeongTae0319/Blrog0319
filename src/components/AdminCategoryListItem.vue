@@ -24,7 +24,7 @@
 				@click.stop.prevent
 				@input="onInputCategoryName"
 				@keydown="onKeyDownCategoryName"
-			>{{ name }}</div>
+			>{{ categoryName }}</div>
 			<span class="post-count">{{ getPostCount }}</span>
 			<div class="buttons">
 				<button class="button add" @click="addNewChild">
@@ -43,13 +43,16 @@
 			v-show="showChild"
 			class="child"
 		>
-			<admin-category-list-item
+			<template
 				v-for="(child, index) in item.child"
-				:key="`${changeChild}_${index}`"
-				:item="child"
-				:path="path.concat([index])"
-				@remove="removeChild"
-			/>
+			>
+				<admin-category-list-item
+					:key="`${changeChild}_${index}`"
+					:item="child"
+					:path="path.concat([index])"
+					@remove="removeChild"
+				/>
+			</template>
 		</div>
 		<div :class="{
 			'popup': true,
@@ -74,7 +77,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 // Components //
-import This from "./AdminCategoryListItem.vue";
+import ComponentAdminCategoryListItem from "@/components/AdminCategoryListItem.vue";
 import { ICategory } from '@/store';
 
 export class CategoryRemoveEvent {
@@ -84,7 +87,8 @@ export class CategoryRemoveEvent {
 }
 
 @Component({
-	components: { AdminCategoryListItem: This } 
+	name: "AdminCategoryListItem",
+	components: { ComponentAdminCategoryListItem } 
 })
 export default class AdminCategoryListItem extends Vue {
 	@Prop({
@@ -98,11 +102,11 @@ export default class AdminCategoryListItem extends Vue {
 
 	showChild = false;
 	showRemovePopup = false;
-	name = "";
+	categoryName = "";
 	changeChild = 0;
 
 	created() {
-		this.name = "" + this.item.name;
+		this.categoryName = "" + this.item.name;
 		this.showRemovePopup = false;
 		this.item.child = this.item.child || [];
 		this.item.posts = this.item.posts || [];

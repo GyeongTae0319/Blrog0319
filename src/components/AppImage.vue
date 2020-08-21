@@ -16,8 +16,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+// Components //
+import AppContentPlaceholder from "@/components/AppContentPlaceholder.vue";
 
-@Component
+@Component({
+	components: {
+		AppContentPlaceholder
+	}
+})
 export default class AppImage extends Vue {
 	@Prop({
 		type: String,
