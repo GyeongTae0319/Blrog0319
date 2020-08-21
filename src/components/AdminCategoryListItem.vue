@@ -1,39 +1,87 @@
 <template>
-	<div :class="{
-		'admin-category-list-item': true,
-		'root': !(path && path.length > 0),
-		'lock': item.lock || false
-	}">
-		<div class="title" @click="toggleShowChild">
-			<button class="extend">
-				<i class="material-icons icon">
+	<div
+		:class="{
+			'admin-category-list-item': true,
+			'root': !(path && path.length > 0),
+			'lock': item.lock || false
+		}"
+	>
+		<div class="title">
+			<button :class="{
+				'extend': true,
+				'no-child': !(item.child != undefined && item.child.length > 0)
+			}" @click="toggleShowChild">
+				<i v-if="item.child != undefined && item.child.length > 0" class="material-icons icon">
 					{{ showChild ? "indeterminate_check_box" : "add_box" }}
 				</i>
+				<i v-else class="material-icons icon">list</i>
 			</button>
 			<div
 				type="text"
+				:contenteditable="!item.lock"
+				spellcheck="false"
 				class="name"
 				@click.stop.prevent
-				:contenteditable="!item.lock"
-			>{{ item.name }}</div>
+				@input="onInputCategoryName"
+				@keydown="onKeyDownCategoryName"
+			>{{ name }}</div>
 			<span class="post-count">{{ getPostCount }}</span>
+			<div class="buttons">
+				<button class="button add" @click="addNewChild">
+					<i class="material-icons icon">add</i>
+				</button>
+				<button class="button remove" @click="showRemovePopup = true">
+					<i class="material-icons icon">close</i>
+				</button>
+				<button class="button move">
+					<i class="material-icons icon">drag_indicator</i>
+				</button>
+			</div>
 		</div>
-		<div v-if="hasChild" v-show="showChild" class="child">
+		<div
+			v-if="item.child != undefined && item.child.length > 0"
+			v-show="showChild"
+			class="child"
+		>
 			<admin-category-list-item
 				v-for="(child, index) in item.child"
-				:key="`${index} ${child}`"
+				:key="`${changeChild}_${index}`"
 				:item="child"
 				:path="path.concat([index])"
+				@remove="removeChild"
 			/>
+		</div>
+		<div :class="{
+			'popup': true,
+			'remove-category': true,
+			'show': showRemovePopup
+		}">
+			<div class="window">
+				<div class="header">{{ item.name }} 카테고리 삭제</div>
+				<div class="contents">
+					<span class="message">정말로 삭제하시겠습니까?</span>
+					<span class="desc">해당 카테고리의 글은 상위 카테고리로 이동합니다.</span>
+				</div>
+				<div class="footer">
+					<button class="button y" @click="removeItem">네</button>
+					<button class="button n" @click="showRemovePopup = false">아니요</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 // Components //
 import This from "./AdminCategoryListItem.vue";
 import { ICategory } from '@/store';
+
+export class CategoryRemoveEvent {
+	posts: string[] = [];
+	child: ICategory[] = [];
+	index!: number;
+}
 
 @Component({
 	components: { AdminCategoryListItem: This } 
@@ -49,14 +97,58 @@ export default class AdminCategoryListItem extends Vue {
 	}) path!: number[];
 
 	showChild = false;
+	showRemovePopup = false;
+	name = "";
+	changeChild = 0;
 
 	created() {
+		this.name = "" + this.item.name;
+		this.showRemovePopup = false;
+		this.item.child = this.item.child || [];
+		this.item.posts = this.item.posts || [];
 		this.showChild = this.item.lock || false;
 	}
 
+	removeItem() {
+		this.showRemovePopup = false;
+		let event = new CategoryRemoveEvent;
+		if (this.item.posts) event.posts = event.posts.concat(this.item.posts);
+		if (this.item.child) event.child = event.child.concat(this.item.child);
+		event.index = this.path.pop() || 0;
+		this.$emit("remove", event);
+		this.$forceUpdate();
+	}
+
+	// Child visibility
 	toggleShowChild() {
-		if (this.item.lock) return;
-		this.showChild = !this.showChild
+		if (!this.item.child.length) return;
+		this.showChild = !this.showChild;
+	}
+
+	// Input events
+	onInputCategoryName(event: InputEvent) {
+		let target = event.target as HTMLDivElement;
+		this.item.name = target.innerText;
+	}
+	onKeyDownCategoryName(event: KeyboardEvent) {
+		if (event.keyCode === 13) event.preventDefault();
+	}
+
+	// Child change
+	addNewChild() {
+		this.item.child?.push({
+			name: "새로운 카테고리",
+			child: []
+		});
+		this.$forceUpdate();
+		this.showChild = true;
+	}
+	removeChild(event: CategoryRemoveEvent) {
+		this.item.posts = this.item.posts?.concat(event.posts);
+		this.item.child.splice(event.index, 1);
+		this.item.child = this.item.child.concat(event.child);
+		this.changeChild++;
+		this.$forceUpdate();
 	}
 
 	get getPostCount() {
@@ -65,9 +157,6 @@ export default class AdminCategoryListItem extends Vue {
 			if (value.posts) childPost += value.posts.length;
 		});
 		return (this.item.posts ? this.item.posts.length : 0) + childPost;
-	}
-	get hasChild() {
-		return this.item.child && this.item.child.length > 0;
 	}
 }
 </script>
@@ -79,98 +168,64 @@ export default class AdminCategoryListItem extends Vue {
 	display: flex;
 	flex-direction: column;
 
-	&:not(.root) .title::before {
-		content: "";
-
-		display: block;
-		position: absolute;
-		bottom: 12px;
-		left: -20px;
-
-		width: 20px;
-		height: 20px;
-
-		border: 2px dotted $text-color-white-disable;
-		border-width: 0 0 2px 2px;
-
-		box-sizing: border-box;
-	}
-	&:not(:first-child):not(.root) .title::before {
-		height: 30px;
-	}
-
-	&:not(.root):not(:last-child) .child::before {
-		content: "";
-
-		display: block;
-		position: absolute;
-		bottom: 20px;
-		left: -52px;
-
-		height: calc(100% - 2px);
-
-		border-left: 2px dotted $text-color-white-disable;
-	}
-
-	&.lock {
-		cursor: not-allowed;
-
-		.extend {
-			color: $text-color-white-disable;
-		}
-	}
-	&:not(.lock) {
-		cursor: pointer;
-
-		.extend {
-			color: $text-color-white;
-		}
-		.name {
-			cursor: text;
-		}
-	}
-
 	.title {
 		display: flex;
 		position: relative;
 
-		margin-bottom: 8px;
+		width: 100%;
+		height: 32px;
 
-		&:hover {
-			background-color: $background-color-lv2;
-		}
+		align-items: center;
 
 		.extend {
-			@include icon-button(24px);
+			display: flex;
+			align-items: center;
 
 			position: relative;
+			margin-right: 18px;
 
-			margin-right: 16px;
+			flex-shrink: 0;
+
+			cursor: pointer;
 
 			&::after {
 				content: "";
 
 				display: block;
-
 				position: absolute;
-				left: 24px;
+				right: -10px;
 
-				width: 8px;
-
+				width: 10px;
 				border-top: 2px dotted $text-color-white-disable;
+
+				pointer-events: none;
+			}
+			&.no-child {
+				cursor: default;
 			}
 		}
 		.name {
-			display: block;
-
-			min-width: 32px;
+			flex-grow: 1;
+			width: 0;
+			height: 26px;
 			margin-right: 16px;
 
+			white-space: nowrap;
 			overflow: hidden;
 
-			white-space: nowrap;
+			&[contenteditable=true] {
+				border-bottom: 2px solid rgba($background-color-lv2, 0.5);
+				transition: border-color 0.1s;
+
+				&:focus {
+					border-color: $background-color-lv3;
+				}
+			}
 		}
 		.post-count {
+			flex-shrink: 0;
+			margin-right: 16px;
+
 			color: $text-color-white-desc;
 
 			&::before {
@@ -180,11 +235,111 @@ export default class AdminCategoryListItem extends Vue {
 				content: "개";
 			}
 		}
+		.buttons {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+
+			flex-shrink: 0;
+
+			.button {
+				height: 24px;
+
+				cursor: pointer;
+			}
+			.add {
+				color: rgb(170, 226, 65);
+			}
+			.remove {
+				color: rgb(226, 64, 59);
+			}
+			.move {
+				cursor: move;
+			}
+		}
 	}
+	&:not(.root) {
+		.title::before {
+			content: "";
+
+			display: block;
+
+			position: absolute;
+			bottom: 15px;
+			left: -20px;
+
+			height: 20px;
+			width: 20px;
+
+			border: {
+				bottom: 2px dotted $text-color-white-disable;
+				left: 2px dotted $text-color-white-disable;
+			}
+
+			box-sizing: border-box;
+
+			pointer-events: none;
+		}
+		&:not(:first-child) .title::before {
+			height: 30px;
+		}
+	}
+	&.lock > .title {
+		.buttons {
+			.remove,
+			.move {
+				color: $text-color-white-disable;
+				cursor: not-allowed;
+			}
+		}
+	}
+
 	.child {
 		position: relative;
-
 		margin-left: 32px;
+	}
+	&:not(:last-child) > .child::before {
+		content: "";
+
+		display: block;
+
+		position: absolute;
+		bottom: 15px;
+		left: -52px;
+
+		height: calc(100% - 2px);
+
+		border-left: 2px dotted $text-color-white-disable;
+
+		pointer-events: none;
+	}
+}
+
+.popup {
+	@include popup;
+
+	opacity: 0;
+	pointer-events: none;
+
+	transition: opacity 0.15s;
+
+	.window {
+		transform: translateY(-12px);
+
+		transition: transform 0.15s;
+
+		.footer  .button {
+			cursor: pointer;
+		}
+	}
+
+	&.show {
+		opacity: 1;
+		pointer-events: all;
+
+		.window {
+			transform:  translateY(0px);
+		}
 	}
 }
 </style>

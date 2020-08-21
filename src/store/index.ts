@@ -17,7 +17,7 @@ export interface IBlogInfo {
 export interface ICategory {
 	name: string;
 	posts?: string[];
-	child?: ICategory[];
+	child: ICategory[];
 	lock?: boolean;
 }
 
