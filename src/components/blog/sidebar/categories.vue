@@ -2,32 +2,31 @@
 	<div class="blog-sidebar-categories">
 		<div class="header">
 			<span class="title">📄 카테고리 목록</span>
-			<button
-				v-if="$store.getters.adminUser"
-				class="add"
+			<router-link
+				v-if="$store.getters.isAdmin"
+				:to="{ name: 'AdminCategory' }"
+				class="edit"
 				@click="addCategory()"
 			>
-				<i class="material-icons icon">add</i>
-			</button>
+				<i class="material-icons icon">edit</i>
+				<span class="tag">목록 편집</span>
+			</router-link>
 		</div>
-		<div class="list"></div>
+		<div class="list">
+			<blog-sidebar-category-list-item :item="$store.state.blog.category" />
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
+// Components //
+import BlogSidebarCategoryListItem from "@/components/blog/sidebar/category-list-item.vue";
 
-@Component
-export default class BlogSidebarCategories extends Vue {
-	showEditPopup = false;
-
-	addCategory() {
-		this.showEditPopup = true;
-	}
-	closePopup() {
-		console.log("CLOSE");
-	}
-}
+@Component({
+	components: { BlogSidebarCategoryListItem }
+})
+export default class BlogSidebarCategories extends Vue {}
 </script>
 
 <style lang="scss" scoped>
@@ -48,13 +47,10 @@ export default class BlogSidebarCategories extends Vue {
 
 		justify-content: space-between;
 
-		.title {
-			font-weight: bold;
-		}
-		.add {
-			color: $text-color-white-desc;
+		.edit {
+			@include icon-button(24px);
 
-			cursor: pointer;
+			color: $text-color-white-desc;
 		}
 	}
 }

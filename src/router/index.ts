@@ -18,6 +18,22 @@ const routes: Array<RouteConfig> = [
 					/* webpackChunkName: "blog-home" */
 					"@/views/blog/home.vue"
 				)
+			},
+			{
+				path: "category/:index(\\d+)*",
+				name: "BlogCategory",
+				component: () => import(
+					/* webpackChunkName: "blog-category" */
+					"@/views/blog/category.vue"
+				)
+			},
+			{
+				path: "post/:index(\\d+)",
+				name: "BlogPost",
+				component: () => import(
+					/* webpackChunkName: "blog-post" */
+					"@/views/blog/post.vue"
+				)
 			}
 		]
 	},

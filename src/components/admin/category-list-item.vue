@@ -2,7 +2,7 @@
 	<div
 		:class="{
 			'admin-category-list-item': true,
-			'root': !(path && path.length > 0),
+			'root': !(path != undefined && path.length > 0),
 			'lock': item.lock || false
 		}"
 	>
@@ -47,7 +47,7 @@
 				v-for="(child, index) in item.child"
 			>
 				<admin-category-list-item
-					:key="`${changeChild}_${index}`"
+					:key="`${childUpdated}_${index}`"
 					:item="child"
 					:path="path.concat([index])"
 					@remove="removeChild"
@@ -76,13 +76,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { BlogCategory } from '@/store';
+import { StateBlogCategory } from '@/store';
 // Components //
 import ComponentAdminCategoryListItem from "@/components/admin/category-list-item.vue";
 
 export class CategoryRemoveEvent {
 	posts: string[] = [];
-	child: BlogCategory[] = [];
+	child: StateBlogCategory[] = [];
 	index!: number;
 }
 
@@ -94,16 +94,16 @@ export default class AdminCategoryListItem extends Vue {
 	@Prop({
 		type: Object,
 		required: true
-	}) item!: BlogCategory;
+	}) item!: StateBlogCategory;
 	@Prop({
 		type: Array,
 		default: () => { return []; }
 	}) path!: number[];
 
-	showChild = false;
-	showRemovePopup = false;
-	categoryName = "";
-	changeChild = 0;
+	showChild: boolean = false;
+	showRemovePopup: boolean = false;
+	categoryName: string = "";
+	childUpdated: number = 0;
 
 	created() {
 		this.categoryName = "" + this.item.name;
@@ -120,7 +120,6 @@ export default class AdminCategoryListItem extends Vue {
 		if (this.item.child) event.child = event.child.concat(this.item.child);
 		event.index = this.path.pop() || 0;
 		this.$emit("remove", event);
-		this.$forceUpdate();
 	}
 
 	// Child visibility
@@ -140,7 +139,7 @@ export default class AdminCategoryListItem extends Vue {
 
 	// Child change
 	addNewChild() {
-		this.item.child?.push({
+		this.item.child.push({
 			name: "새로운 카테고리",
 			lock: false,
 			posts: [],
@@ -150,10 +149,10 @@ export default class AdminCategoryListItem extends Vue {
 		this.showChild = true;
 	}
 	removeChild(event: CategoryRemoveEvent) {
-		this.item.posts = this.item.posts?.concat(event.posts);
+		this.item.posts = this.item.posts.concat(event.posts);
 		this.item.child.splice(event.index, 1);
 		this.item.child = this.item.child.concat(event.child);
-		this.changeChild++;
+		this.childUpdated++;
 		this.$forceUpdate();
 	}
 

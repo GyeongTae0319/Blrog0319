@@ -61,6 +61,7 @@ export default class App extends Vue {}
 	// Scrollbar style
 	&::-webkit-scrollbar {
 		width: 12px;
+		height: 12px;
 	}
 	&::-webkit-scrollbar-thumb {
 		background-color: $background-color-lv3;

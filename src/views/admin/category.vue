@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
-import { BlogCategory } from '@/store';
+import { StateBlogCategory } from '@/store';
 // Components //
 import AppLoadingSpinner from "@/components/app/loading-spinner.vue";
 import AdminCategoryListItem from "@/components/admin/category-list-item.vue";
@@ -29,7 +29,7 @@ import AdminCategoryListItem from "@/components/admin/category-list-item.vue";
 	}
 })
 export default class AdminCategory extends Vue {
-	list: BlogCategory | null = Object.assign({}, this.$store.state.blog.category);
+	list: StateBlogCategory | null = Object.assign({}, this.$store.state.blog.category);
 	nowUploading = false;
 
 	saveCategories() {

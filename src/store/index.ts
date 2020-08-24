@@ -17,18 +17,18 @@ interface BlogOwner {
 	nickname: string;
 	realname: string;
 }
-export interface BlogCategory {
+export interface StateBlogCategory {
 	name: string;
 	lock: boolean;
 	posts: string[];
-	child: BlogCategory[];
+	child: StateBlogCategory[];
 }
 interface StateBlog {
 	mainIconImage: string;
 	mainBannerImage: string;
 	description: string;
 	owner: BlogOwner;
-	category: BlogCategory;
+	category: StateBlogCategory;
 }
 interface DatabaseBlogInfo {
 	description: string;
@@ -106,7 +106,7 @@ const store: StoreOptions<StoreState> = {
 			state.blog.owner.nickname = info.nickname || "";
 			state.blog.owner.realname = info.realname || "";
 		},
-		setCategory(state, root: BlogCategory) {
+		setCategory(state, root: StateBlogCategory) {
 			state.blog.category.child = root.child || [];
 			state.blog.category.posts = root.posts || [];
 		}

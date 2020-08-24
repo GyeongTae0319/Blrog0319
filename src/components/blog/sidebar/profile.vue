@@ -24,7 +24,7 @@
 			class="edit-profile"
 		>
 			<i class="material-icons icon">edit</i>
-			<span class="tag">프로필 수정</span>
+			<span class="tag">프로필 편집</span>
 		</router-link>
 	</div>
 </template>
