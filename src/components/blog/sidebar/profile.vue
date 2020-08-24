@@ -1,7 +1,7 @@
 <template>
 	<div class="blog-sidebar-profile">
 		<app-image
-			:src="$store.state.blog.profileImage"
+			:src="$store.state.blog.owner.profileImage"
 			alt="프로필 사진"
 			objectfit="cover"
 			draggable="false"
@@ -9,14 +9,14 @@
 		/>
 		<div class="name">
 			<app-text type="word" class="nick">
-				{{ $store.state.blog.info.nickname }}
+				{{ $store.state.blog.owner.nickname }}
 			</app-text>
 			<app-text type="word" class="real">
-				{{ $store.state.blog.info.realname }}
+				{{ $store.state.blog.owner.realname }}
 			</app-text>
 		</div>
 		<app-text type="line-multiple" class="desc">
-			{{ $store.state.blog.info.description }}
+			{{ $store.state.blog.description }}
 		</app-text>
 		<router-link
 			v-if="$store.getters.isAdmin"
@@ -32,19 +32,17 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import AppImage from "@/components/AppImage.vue";
-import AppText from "@/components/AppText.vue";
+import AppImage from "@/components/app/image.vue";
+import AppText from "@/components/app/text.vue";
 
 @Component({
-	components: {
-		AppImage, AppText
-	}
+	components: { AppImage, AppText }
 })
 export default class BlogSidebarProfile extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 $profile-image-size: $sidebar-width - $sidebar-padding * 2;
 

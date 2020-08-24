@@ -10,23 +10,12 @@ import { Vue, Component } from "vue-property-decorator";
 import { Getter, State } from "vuex-class";
 import firebase from "firebase/app";
 // Components //
-import AppHeader from "@/components/AppHeader.vue";
+import AppHeader from "@/components/app/header/header.vue";
 
 @Component({
 	components: { AppHeader }
 })
-export default class App extends Vue {
-	created() {
-		// Get blog infomations
-		firebase.database().ref("info").on("value", (snapshot) => {
-			this.$store.state.blog.info = snapshot.toJSON();
-		});
-		// Get blog categories
-		firebase.database().ref("category/root").on("value", (snapshot) => {
-			this.$store.state.blog.category = snapshot.val();
-		});
-	}
-}
+export default class App extends Vue {}
 </script>
 
 <style lang="scss">

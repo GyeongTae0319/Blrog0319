@@ -63,7 +63,7 @@ export default class AppContentPlaceholder extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 @keyframes slide-background {
 	0%,

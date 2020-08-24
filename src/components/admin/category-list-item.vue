@@ -76,13 +76,13 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import { BlogCategory } from '@/store';
 // Components //
-import ComponentAdminCategoryListItem from "@/components/AdminCategoryListItem.vue";
-import { ICategory } from '@/store';
+import ComponentAdminCategoryListItem from "@/components/admin/category-list-item.vue";
 
 export class CategoryRemoveEvent {
 	posts: string[] = [];
-	child: ICategory[] = [];
+	child: BlogCategory[] = [];
 	index!: number;
 }
 
@@ -94,7 +94,7 @@ export default class AdminCategoryListItem extends Vue {
 	@Prop({
 		type: Object,
 		required: true
-	}) item!: ICategory;
+	}) item!: BlogCategory;
 	@Prop({
 		type: Array,
 		default: () => { return []; }
@@ -142,6 +142,8 @@ export default class AdminCategoryListItem extends Vue {
 	addNewChild() {
 		this.item.child?.push({
 			name: "새로운 카테고리",
+			lock: false,
+			posts: [],
 			child: []
 		});
 		this.$forceUpdate();
@@ -166,7 +168,7 @@ export default class AdminCategoryListItem extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .admin-category-list-item {
 	display: flex;

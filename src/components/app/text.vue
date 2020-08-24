@@ -12,9 +12,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
-import { VNode } from 'vue';
 // Components //
-import AppContentPlaceholder from "@/components/AppContentPlaceholder.vue";
+import AppContentPlaceholder from "@/components/app/content-placeholder.vue";
 
 @Component({
 	components: {

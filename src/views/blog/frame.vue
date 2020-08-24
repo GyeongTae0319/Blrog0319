@@ -8,7 +8,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import BlogSidebar from "@/components/BlogSidebar.vue";
+import BlogSidebar from "@/components/blog/sidebar/sidebar.vue";
 
 @Component({
 	components: { BlogSidebar }
@@ -17,7 +17,7 @@ export default class BlogFrame extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .blog-frame {
 	display: flex;
@@ -27,12 +27,10 @@ export default class BlogFrame extends Vue {}
 
 	.blog-sidebar {
 		flex-shrink: 0;
-
 		overflow: hidden auto;
 	}
 	.blog-contents {
 		flex-grow: 1;
-
 		overflow: hidden auto;
 	}
 }

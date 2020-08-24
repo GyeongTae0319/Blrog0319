@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 // Views //
-import BlogFrame from "@/views/BlogFrame.vue";
+import BlogFrame from "@/views/blog/frame.vue";
 import store from '@/store';
 
 Vue.use(VueRouter);
@@ -16,7 +16,7 @@ const routes: Array<RouteConfig> = [
 				name: "BlogHome",
 				component: () => import(
 					/* webpackChunkName: "blog-home" */
-					"@/views/BlogHome.vue"
+					"@/views/blog/home.vue"
 				)
 			}
 		]
@@ -25,7 +25,7 @@ const routes: Array<RouteConfig> = [
 		"path": "/admin",
 		component: () => import(
 			/* webpackChunkName: "admin-frame" */
-			"@/views/AdminFrame.vue"
+			"@/views/admin/frame.vue"
 		),
 		children: [
 			{
@@ -33,7 +33,7 @@ const routes: Array<RouteConfig> = [
 				name: "AdminBasic",
 				component: () => import(
 					/* webpackChunkName: "admin-basic" */
-					"@/views/AdminBasic.vue"
+					"@/views/admin/basic.vue"
 				)
 			},
 			{
@@ -41,7 +41,7 @@ const routes: Array<RouteConfig> = [
 				name: "AdminBlogHome",
 				component: () => import(
 					/* webpackChunkName: "admin-blog-home" */
-					"@/views/AdminBlogHome.vue"
+					"@/views/admin/blog-home.vue"
 				)
 			},
 			{
@@ -49,7 +49,7 @@ const routes: Array<RouteConfig> = [
 				name: "AdminCategory",
 				component: () => import(
 					/* webpackChunkName: "admin-category" */
-					"@/views/AdminCategory.vue"
+					"@/views/admin/category.vue"
 				)
 			}
 		]
@@ -66,7 +66,7 @@ const router = new VueRouter(
 router.beforeEach((to, from, next) => {
 	if (to.fullPath.startsWith("/admin")) {
 		setTimeout(() => {
-			if (!store.getters["auth/isAdmin"]) {
+			if (!store.getters["isAdmin"]) {
 				if (from.fullPath.startsWith("/admin")) next({ name: "BlogHome" });
 				else next({ path: from.fullPath as string });
 			} else  next();

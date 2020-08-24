@@ -1,7 +1,7 @@
 <template>
 	<div v-if="$store.getters.isAuth" class="app-header-auth user">
 		<img
-			:src="$store.state.auth.info.photoUrl"
+			:src="$store.state.auth.photo"
 			alt="프로필 사진"
 			referrerpolicy="no-referrer"
 			class="profiles-image"
@@ -15,12 +15,12 @@
 			@click.stop
 		>
 			<img
-				:src="$store.state.auth.info.photoUrl"
+				:src="$store.state.auth.photo"
 				alt="프로필 사진"
 				class="photo"
 			>
-			<span class="name">{{ $store.state.auth.info.displayName }}</span>
-			<span class="email">{{ $store.state.auth.info.email }}</span>
+			<span class="name">{{ $store.state.auth.name }}</span>
+			<span class="email">{{ $store.state.auth.email }}</span>
 			<button class="sign-out" @click="signOut()">로그아웃</button>
 		</div>
 	</div>
@@ -44,28 +44,24 @@ export default class AppHeaderAuth extends Vue {
 	}
 
 	signIn() {
-		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-			.then(() => {
-				if (!firebase.auth().currentUser) {
-					firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-						.then(() => {})
-						.catch();
-				}
-			}).catch();
+		firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(() => {
+			if (!firebase.auth().currentUser) {
+				firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).then(() => {}).catch();
+			}
+		}).catch();
 	}
 	signOut() {
-		firebase.auth().signOut()
-			.then(() => {
-				if (this.$route.fullPath.startsWith("/admin")) {
-					this.$router.push({ name: "BlogHome" });
-				}
-			}).catch();
+		firebase.auth().signOut().then(() => {
+			if (this.$route.fullPath.startsWith("/admin")) {
+				this.$router.push({ name: "BlogHome" });
+			}
+		}).catch();
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 // User info
 .user {

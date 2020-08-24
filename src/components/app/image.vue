@@ -17,7 +17,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 // Components //
-import AppContentPlaceholder from "@/components/AppContentPlaceholder.vue";
+import AppContentPlaceholder from "@/components/app/content-placeholder.vue";
 
 @Component({
 	components: {

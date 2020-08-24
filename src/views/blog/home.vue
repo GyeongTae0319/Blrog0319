@@ -37,7 +37,7 @@ export default class BlogHome extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 $link-icon-size: 32px;
 

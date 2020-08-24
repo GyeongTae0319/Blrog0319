@@ -8,19 +8,7 @@
 			/>
 		</div>
 		<div class="save-group">
-			<svg viewBox="0 0 50 50" :class="{
-				progress: true,
-				show: nowUploading
-			}">
-				<circle
-					cx="25"
-					cy="25"
-					r="20"
-					fill="none"
-					stroke-width="5"
-					class="circle"
-				/>
-			</svg>
+			<app-loading-spinner :show="nowUploading" />
 			<button class="save" @click="saveCategories">저장하기</button>
 		</div>
 	</div>
@@ -29,15 +17,19 @@
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
+import { BlogCategory } from '@/store';
 // Components //
-import AdminCategoryListItem from "@/components/AdminCategoryListItem.vue";
-import { ICategory } from '@/store';
+import AppLoadingSpinner from "@/components/app/loading-spinner.vue";
+import AdminCategoryListItem from "@/components/admin/category-list-item.vue";
 
 @Component({
-	components: { AdminCategoryListItem }
+	components: {
+		AppLoadingSpinner,
+		AdminCategoryListItem
+	}
 })
 export default class AdminCategory extends Vue {
-	list: ICategory | null = Object.assign({}, this.$store.state.blog.category);
+	list: BlogCategory | null = Object.assign({}, this.$store.state.blog.category);
 	nowUploading = false;
 
 	saveCategories() {
@@ -51,13 +43,13 @@ export default class AdminCategory extends Vue {
 		deep: true,
 		immediate: true
 	}) onChangeCategory() {
-		this.list = this.$store.state.blog.category;
+		this.list = Object.assign({}, this.$store.state.blog.category);
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .admin-category {
 	overflow: hidden auto;
@@ -93,26 +85,6 @@ export default class AdminCategory extends Vue {
 
 	justify-content: flex-end;
 	align-items: center;
-}
-.progress {
-	display: inline-block;
-
-	width: 32px;
-	height: 32px;
-
-	overflow: visible;
-
-	animation: rotate 2s linear infinite;
-
-	.circle {
-		stroke: transparent;
-		stroke-linecap: round;
-
-		animation: stretching 1.5s ease-in-out infinite;
-	}
-	&.show .circle {
-		stroke: $background-color-lv3;
-	}
 }
 .save {
 	@include button;

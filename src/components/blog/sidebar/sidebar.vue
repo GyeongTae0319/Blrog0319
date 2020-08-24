@@ -9,8 +9,8 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import BlogSidebarProfile from "@/components/BlogSidebarProfile.vue";
-import BlogSidebarCategories from "@/components/BlogSidebarCategories.vue";
+import BlogSidebarProfile from "@/components/blog/sidebar/profile.vue";
+import BlogSidebarCategories from "@/components/blog/sidebar/categories.vue";
 
 @Component({
 	components: {
@@ -22,7 +22,7 @@ export default class BlogSidebar extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 .blog-sidebar {
 	width: $sidebar-width;

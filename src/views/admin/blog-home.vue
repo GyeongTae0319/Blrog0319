@@ -11,6 +11,4 @@ import { Vue, Component } from "vue-property-decorator";
 export default class AdminBlogHome extends Vue {}
 </script>
 
-<style lang="scss" scoped>
-@import "../assets/styles/variables";
-</style>
+<style lang="scss" scoped></style>

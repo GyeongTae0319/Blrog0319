@@ -52,7 +52,7 @@ export default class AdminSidebar extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .admin-sidebar {
 	width: $sidebar-width;

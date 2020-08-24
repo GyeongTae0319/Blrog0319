@@ -48,19 +48,7 @@
 			</div>
 		</div>
 		<div class="save-group">
-			<svg viewBox="0 0 50 50" :class="{
-				progress: true,
-				show: nowUploading
-			}">
-				<circle
-					cx="25"
-					cy="25"
-					r="20"
-					fill="none"
-					stroke-width="5"
-					class="circle"
-				/>
-			</svg>
+			<app-loading-spinner :show="nowUploading" />
 			<button class="save" @click="saveProfile">저장하기</button>
 		</div>
 	</div>
@@ -70,11 +58,13 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
 // Components //
-import AppImage from "@/components/AppImage.vue";
+import AppImage from "@/components/app/image.vue";
+import AppLoadingSpinner from "@/components/app/loading-spinner.vue";
 
 @Component({
 	components: {
-		AppImage
+		AppImage,
+		AppLoadingSpinner
 	}
 })
 export default class AdminHome extends Vue {
@@ -88,8 +78,12 @@ export default class AdminHome extends Vue {
 	nowUploading = false;
 
 	created() {
-		this.profileImage = this.$store.state.blog.profileImage;
-		this.profileInput = Object.assign({}, this.$store.state.blog.info);
+		this.profileImage = this.$store.state.blog.owner.profileImage;
+		this.profileInput = {
+			nickname: this.$store.state.blog.owner.nickname,
+			realname: this.$store.state.blog.owner.realname,
+			description: this.$store.state.blog.description,
+		};
 	}
 
 	onChangeProfileImageImage(event: InputEvent) {
@@ -118,7 +112,11 @@ export default class AdminHome extends Vue {
 				if (!this.nowUploading) location.reload();
 			});
 		} else image = true;
-		firebase.database().ref("info").set(this.profileInput, () => {
+		firebase.database().ref("info").set({
+			description: this.profileInput.description,
+			nickname: this.profileInput.nickname,
+			realname: this.profileInput.realname
+		}, () => {
 			info = true;
 			this.nowUploading = !image;
 
@@ -126,17 +124,21 @@ export default class AdminHome extends Vue {
 		});
 	}
 
-	@Watch("$store.state.blog.info", {
+	@Watch("$store.state.blog", {
 		deep: true,
 		immediate: true
 	}) onChangeBlogInfoDescription(value: string) {
-		this.profileInput = this.$store.state.blog.info;
+		this.profileInput = {
+			nickname: this.$store.state.blog.owner.nickname,
+			realname: this.$store.state.blog.owner.realname,
+			description: this.$store.state.blog.description,
+		};
 	}
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../assets/styles/variables";
 
 .profile {
 	display: flex;
@@ -229,52 +231,12 @@ export default class AdminHome extends Vue {
 	}
 }
 
-@keyframes rotate {
-	100% {
-		transform: rotate(360deg);
-	}
-}
-@keyframes stretching {
-	0% {
-		stroke-dasharray: 1, 150;
-		stroke-dashoffset: 0;
-	}
-	50% {
-		stroke-dasharray: 90, 150;
-		stroke-dashoffset: -35;
-	}
-	100% {
-		stroke-dasharray: 90, 150;
-		stroke-dashoffset: -124;
-	}
-}
-
 .save-group {
 	display: flex;
 	gap: 16px;
 
 	justify-content: flex-end;
 	align-items: center;
-}
-.progress {
-	display: inline-block;
-
-	width: 32px;
-	height: 32px;
-
-	overflow: visible;
-
-	animation: rotate 2s linear infinite;
-
-	.circle {
-		stroke: transparent;
-		stroke-linecap: round;
-
-		animation: stretching 1.5s ease-in-out infinite;
-	}
-	&.show .circle {
-		stroke: $background-color-lv3;
-	}
 }
 .save {
 	@include button;

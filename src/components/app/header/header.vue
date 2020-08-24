@@ -15,7 +15,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import AppHeaderAuth from "@/components/AppHeaderAuth.vue";
+import AppHeaderAuth from "@/components/app/header/auth.vue";
 
 @Component({
 	components: { AppHeaderAuth }
@@ -24,7 +24,7 @@ export default class AppHeader extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 // Header styles
 .app-header {

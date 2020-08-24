@@ -23,9 +23,18 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
-// Auth user check
+// Auth check
 firebase.auth().onAuthStateChanged((user) => {
-	store.commit("auth/setAuth", user);
+	store.commit("setAuth", user);
+});
+
+// Informations
+firebase.database().ref("info").on("value", (snapshot) => {
+	store.commit("setInfo", snapshot.val());
+});
+// Categories
+firebase.database().ref("category/root").on("value", (snapshot) => {
+	store.commit("setCategory", snapshot.val());
 });
 
 // Vue init //

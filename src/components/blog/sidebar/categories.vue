@@ -31,7 +31,7 @@ export default class BlogSidebarCategories extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 .blog-sidebar-categories {
 	display: flex;
