@@ -48,7 +48,8 @@ export default class AppHeaderAuth extends Vue {
 			.then(() => {
 				if (!firebase.auth().currentUser) {
 					firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-						.then(() => {}).catch();
+						.then(() => {})
+						.catch();
 				}
 			}).catch();
 	}

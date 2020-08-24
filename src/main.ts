@@ -1,11 +1,7 @@
 import Vue from "vue";
-import App from "./App.vue";
+import App from "./app.vue";
 import router from "./router";
 import store from "./store";
-// Global components
-import AppContentPlaceholder from "@/components/global/AppContentPlaceholder.vue";
-import AppImage from "@/components/global/AppImage.vue";
-import AppText from "@/components/global/AppText.vue";
 // Firebase //
 import firebase from "firebase/app";
 import "firebase/analytics";
@@ -29,25 +25,7 @@ firebase.analytics();
 
 // Auth user check
 firebase.auth().onAuthStateChanged((user) => {
-	if (user) {
-		user.getIdToken().then((value) => {
-			store.state.auth.token = value;
-		}).catch();
-		store.state.auth.info = {
-			displayName: user.displayName || "",
-			email: user.email || "",
-			photoUrl: user.photoURL || "",
-			uid: user.uid || ""
-		}
-	} else {
-		store.state.auth.token = "";
-		store.state.auth.info = {
-			displayName: "",
-			email: "",
-			photoUrl: "",
-			uid: ""
-		}
-	}
+	store.commit("auth/setAuth", user);
 });
 
 // Vue init //
