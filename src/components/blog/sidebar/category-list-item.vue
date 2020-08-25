@@ -1,6 +1,6 @@
 <template>
 	<div class="blog-sidebar-category-list-item">
-		<div class="name">
+		<div class="name" @click.stop="showChild = !showChild">
 			<i
 				v-if="item.child != undefined && item.child.length > 0"
 				:class="{
@@ -14,9 +14,24 @@
 				class="material-icons icon"
 			>list</i>
 			<router-link
-				:to="{ name: 'BlogHome' }"
+				:to="{
+					name: 'BlogCategory',
+					params: {
+						index: path
+					}
+				}"
 				class="name"
+				@click.native.stop
 			>{{ item.name }}</router-link>
+			<span class="post-count">{{ getPostCount }}</span>
+		</div>
+		<div v-show="showChild" class="child">
+			<blog-sidebar-category-list-item
+				v-for="(item, index) in item.child"
+				:key="index"
+				:item="item"
+				:path="path.concat([index])"
+			/>
 		</div>
 	</div>
 </template>
@@ -65,14 +80,34 @@ export default class BlogSidebarCategoryListItem extends Vue {
 .blog-sidebar-category-list-item {
 	.name {
 		display: flex;
+		margin-bottom: 2px;
+		cursor: pointer;
+
+		&:hover {
+			background-color: $background-color-lv2;
+		}
 
 		.icon {
-			transition: transfrom 0.1s;
+			margin-right: 8px;
+			transition: transform 0.1s;
 
 			&.open {
 				transform: rotate(90deg);
 			}
 		}
+		.post-count {
+			margin: {
+				left: auto;
+				right: 8px;
+			}
+		}
+	}
+	.child {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+
+		padding-left: 16px;
 	}
 }
 </style>
