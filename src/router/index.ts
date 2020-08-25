@@ -28,7 +28,7 @@ const routes: Array<RouteConfig> = [
 				)
 			},
 			{
-				path: "post/:index(\\d+)",
+				path: "post/:index",
 				name: "BlogPost",
 				component: () => import(
 					/* webpackChunkName: "blog-post" */
@@ -69,6 +69,14 @@ const routes: Array<RouteConfig> = [
 				)
 			}
 		]
+	},
+	{
+		path: "/writepost",
+		name: "BlogWritePost",
+		component: () => import(
+			/* webpackChunkName: "blog-write-post" */
+			"@/views/blog/write-post.vue"
+		)
 	}
 ];
 

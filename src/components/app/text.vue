@@ -30,10 +30,12 @@ export default class AppText extends Vue {
 
 	created() {
 		var interval = setInterval(() => {
-			if ((this.$refs.text as Element).innerHTML.replace(/\s/g, "") != "") {
-				this.isLoadded = true;
-				clearInterval(interval);
-			}
+			if (this.$refs.text) {
+				if ((this.$refs.text as Element).innerHTML.replace(/\s/g, "") != "") {
+					this.isLoadded = true;
+					clearInterval(interval);
+				}
+			} else clearInterval(interval);
 		});
 	}
 }

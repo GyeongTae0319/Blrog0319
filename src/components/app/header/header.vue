@@ -8,6 +8,11 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
+		<router-link
+			v-if="$store.getters.isAdmin"
+			:to="{ name: 'BlogWritePost' }"
+			class="write-post"
+		>글쓰기</router-link>
 		<app-header-auth />
 	</header>
 </template>
@@ -36,8 +41,6 @@ export default class AppHeader extends Vue {}
 	width: 100%;
 	height: $header-height;
 
-	justify-content: space-between;
-
 	background-color: $background-color-lv1;
 	box-shadow: 0 -8px 16px #000000;
 
@@ -46,6 +49,7 @@ export default class AppHeader extends Vue {}
 		display: flex;
 
 		height: 100%;
+		margin-right: auto;
 		padding: 12px;
 
 		align-items: center;
@@ -54,6 +58,23 @@ export default class AppHeader extends Vue {}
 			height: 100%;
 			margin-right: 16px;
 		}
+	}
+	.write-post {
+		@include button;
+
+		height: fit-content;
+		margin-right: 8px;
+		padding: {
+			top: 3px;
+			bottom: 5px;
+			left: 12px;
+			right: 12px;
+		}
+
+		border: 1px solid $background-color-lv3;
+		border-radius: 4px;
+
+		align-self: center;
 	}
 }
 </style>

@@ -1,8 +1,20 @@
 <template>
-	<div class="category">
+	<div
+		v-if="!$store.state.blog.loadCategory || category.name != ''"
+		class="blog-category"
+	>
 		<div class="title">
 			<app-text type="word" class="name">{{ category.name }}</app-text>
 			<span class="post-count">{{ getPostCount }}</span>
+		</div>
+		<div v-if="category.posts.length > 0" class="post-list"></div>
+		<div v-else class="no-post">
+			작성된 포스트가 없습니다 :(
+		</div>
+	</div>
+	<div v-else class="blog-category">
+		<div class="title">
+			<span class="name">존재하지 않는 카테고리입니다 :(</span>
 		</div>
 	</div>
 </template>
@@ -79,7 +91,7 @@ export default class BlogCategory extends Vue {
 <style lang="scss" scoped>
 @import "../../assets/styles/variables";
 
-.category {
+.blog-category {
 	padding: 32px;
 
 	.title {
@@ -108,6 +120,19 @@ export default class BlogCategory extends Vue {
 				content: "개";
 			}
 		}
+	}
+
+	.no-post {
+		display: flex;
+
+		width: 100%;
+		height: 256px;
+
+		justify-content: center;
+		align-items: center;
+
+		color: $text-color-white-disable;
+		font-size: large;
 	}
 }
 </style>
