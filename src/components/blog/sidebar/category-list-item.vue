@@ -1,6 +1,6 @@
 <template>
 	<div class="blog-sidebar-category-list-item">
-		<div class="name" @click.stop="showChild = !showChild">
+		<div class="title" @click.stop="showChild = !showChild">
 			<i
 				v-if="item.child != undefined && item.child.length > 0"
 				:class="{
@@ -78,9 +78,10 @@ export default class BlogSidebarCategoryListItem extends Vue {
 @import "../../../assets/styles/variables";
 
 .blog-sidebar-category-list-item {
-	.name {
+	.title {
 		display: flex;
 		margin-bottom: 2px;
+
 		cursor: pointer;
 
 		&:hover {
@@ -95,11 +96,19 @@ export default class BlogSidebarCategoryListItem extends Vue {
 				transform: rotate(90deg);
 			}
 		}
+		.name {
+			text-decoration: underline transparent;
+
+			&:hover {
+				text-decoration-color: $text-color-white;
+			}
+		}
 		.post-count {
 			margin: {
 				left: auto;
 				right: 8px;
 			}
+			color: $text-color-white-desc;
 		}
 	}
 	.child {

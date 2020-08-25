@@ -35,6 +35,7 @@ firebase.database().ref("info").on("value", (snapshot) => {
 // Categories
 firebase.database().ref("category/root").on("value", (snapshot) => {
 	store.commit("setCategory", snapshot.val());
+	store.state.blog.loadCategory = true;
 });
 
 // Vue init //

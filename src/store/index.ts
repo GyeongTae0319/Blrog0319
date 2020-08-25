@@ -29,6 +29,7 @@ interface StateBlog {
 	description: string;
 	owner: BlogOwner;
 	category: StateBlogCategory;
+	loadCategory: boolean;
 }
 interface DatabaseBlogInfo {
 	description: string;
@@ -65,7 +66,8 @@ const store: StoreOptions<StoreState> = {
 				lock: true,
 				posts: [],
 				child: []
-			}
+			},
+			loadCategory: false
 		}
 	},
 	getters: {

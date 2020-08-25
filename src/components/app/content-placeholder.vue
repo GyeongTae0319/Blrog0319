@@ -94,6 +94,7 @@ export default class AppContentPlaceholder extends Vue {
 	@include loader;
 
 	width: 40%;
+	min-width: 96px;
 	height: 0.5em;
 	margin: 0.25em 0;
 
