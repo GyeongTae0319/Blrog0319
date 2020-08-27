@@ -21,14 +21,14 @@ export interface StateBlogCategory {
 	name: string;
 	lock: boolean;
 	posts: string[];
-	child: StateBlogCategory[];
+	childs: StateBlogCategory[];
 }
 interface StateBlog {
 	mainIconImage: string;
 	mainBannerImage: string;
 	description: string;
 	owner: BlogOwner;
-	category: StateBlogCategory;
+	category: { [key: string]: StateBlogCategory };
 	loadCategory: boolean;
 }
 interface DatabaseBlogInfo {
@@ -61,12 +61,7 @@ const store: StoreOptions<StoreState> = {
 				nickname: "",
 				realname: ""
 			},
-			category: {
-				name: "전체 글 보기",
-				lock: true,
-				posts: [],
-				child: []
-			},
+			category: {},
 			loadCategory: false
 		}
 	},
@@ -108,9 +103,8 @@ const store: StoreOptions<StoreState> = {
 			state.blog.owner.nickname = info.nickname || "";
 			state.blog.owner.realname = info.realname || "";
 		},
-		setCategory(state, root: StateBlogCategory) {
-			state.blog.category.child = root.child || [];
-			state.blog.category.posts = root.posts || [];
+		setCategory(state, category: { [key: string]: StateBlogCategory }) {
+			state.blog.category = category;
 		}
 	}
 };

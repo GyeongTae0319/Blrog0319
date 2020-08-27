@@ -33,7 +33,7 @@ firebase.database().ref("info").on("value", (snapshot) => {
 	store.commit("setInfo", snapshot.val());
 });
 // Categories
-firebase.database().ref("category/root").on("value", (snapshot) => {
+firebase.database().ref("category").on("value", (snapshot) => {
 	store.commit("setCategory", snapshot.val());
 	store.state.blog.loadCategory = true;
 });
