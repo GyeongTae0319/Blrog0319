@@ -1,12 +1,14 @@
 <template>
 	<div v-if="$store.getters.isAuth" class="app-header-auth user">
-		<img
-			:src="$store.state.auth.photo"
-			alt="프로필 사진"
-			referrerpolicy="no-referrer"
-			class="profiles-image"
-			@click.stop="showInfo = !showInfo"
+		<app-button
+			class="user-profile"
+			@click.stop="toggleShowInfo"
 		>
+			<app-image-profile
+				:src="$store.state.auth.photo"
+				class="profile-image"
+			/>
+		</app-button>
 		<div
 			:class="{
 				'info': true,
@@ -14,33 +16,45 @@
 			}"
 			@click.stop
 		>
-			<img
+			<app-image-profile
 				:src="$store.state.auth.photo"
-				alt="프로필 사진"
 				class="photo"
-			>
+			/>
 			<span class="name">{{ $store.state.auth.name }}</span>
 			<span class="email">{{ $store.state.auth.email }}</span>
-			<button class="sign-out" @click="signOut()">로그아웃</button>
+			<app-button
+				class="sign-out"
+				:disabled="!showInfo"
+				@click="signOut"
+			>로그아웃</app-button>
 		</div>
 	</div>
-	<button
+	<app-button
 		v-else
 		class="app-header-auth sign-in"
-		@click="signIn()"
-	>로그인</button>
+		@click="signIn"
+	>로그인</app-button>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
+// Components //
+import AppButton from "@/components/app/button.vue";
+import AppImageProfile from "@/components/app/image-profile.vue";
 
-@Component
+@Component({
+	components: { AppButton, AppImageProfile }
+})
 export default class AppHeaderAuth extends Vue {
 	showInfo: boolean = false;
 
 	created() {
 		document.addEventListener("click", () => this.showInfo = false);
+	}
+
+	toggleShowInfo() {
+		this.showInfo = !this.showInfo;
 	}
 
 	signIn() {
@@ -70,14 +84,18 @@ export default class AppHeaderAuth extends Vue {
 	height: 100%;
 	padding: 8px;
 
-	.profiles-image {
-		height: 100%;
+	.user-profile {
+		width: 32px;
+		height: 32px;
 
 		border-radius: 100%;
-
 		background-color: $background-color-lv2;
 
-		cursor: pointer;
+		overflow: hidden;
+
+		.profile-image {
+			height: 100%;
+		}
 	}
 	// Popup
 	.info {
@@ -142,22 +160,16 @@ export default class AppHeaderAuth extends Vue {
 
 // Buttons
 .sign-out {
-	@include button;
-
 	width: 100%;
 	height: 38px;
-	padding: {
-		bottom: 4px;
-		left: 12px;
-		right: 12px;
-	};
 
 	border: 1px solid $background-color-lv3;
 	border-radius: 8px;
 
 	transition: border-color 0.1s, background-color 0.1s;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		$hover-color: rgba($background-color-lv2, 0.5);
 
 		border-color: $hover-color;
@@ -165,12 +177,8 @@ export default class AppHeaderAuth extends Vue {
 	}
 }
 .sign-in {
-	@include button;
-
-	width: 64px;
-	height: 32px;
-	margin: 8px;
-	padding-bottom: 4px;
+	margin-right: 8px;
+	padding: 4px 10px;
 
 	border-radius: 4px;
 
@@ -178,7 +186,8 @@ export default class AppHeaderAuth extends Vue {
 
 	transition: background-color 0.1s;
 
-	&:hover {
+	&:hover,
+	&:focus {
 		background-color: $background-color-lv3;
 	}
 }

@@ -8,11 +8,11 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
-		<router-link
+		<app-button
 			v-if="$store.getters.isAdmin"
-			:to="{ name: 'BlogWritePost' }"
+			@click.stop="$router.push({ name: 'BlogWritePost' })"
 			class="write-post"
-		>글쓰기</router-link>
+		>글쓰기</app-button>
 		<app-header-auth />
 	</header>
 </template>
@@ -20,10 +20,11 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
+import AppButton from "@/components/app/button.vue"
 import AppHeaderAuth from "@/components/app/header/auth.vue";
 
 @Component({
-	components: { AppHeaderAuth }
+	components: { AppButton, AppHeaderAuth }
 })
 export default class AppHeader extends Vue {}
 </script>
@@ -34,6 +35,7 @@ export default class AppHeader extends Vue {}
 // Header styles
 .app-header {
 	display: flex;
+	align-items: center;
 
 	position: relative;
 	z-index: $z-index-header;
@@ -60,21 +62,21 @@ export default class AppHeader extends Vue {}
 		}
 	}
 	.write-post {
-		@include button;
-
-		height: fit-content;
 		margin-right: 8px;
-		padding: {
-			top: 3px;
-			bottom: 5px;
-			left: 12px;
-			right: 12px;
-		}
+		padding: 4px 12px;
 
 		border: 1px solid $background-color-lv3;
 		border-radius: 4px;
 
-		align-self: center;
+		transition: border-color 0.1s, background-color 0.1s;
+
+		&:hover,
+		&:focus {
+			$hover-color: rgba($background-color-lv2, 0.5);
+
+			border-color: $hover-color;
+			background-color: $hover-color;
+		}
 	}
 }
 </style>

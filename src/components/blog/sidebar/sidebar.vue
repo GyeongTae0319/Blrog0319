@@ -2,7 +2,7 @@
 	<div class="blog-sidebar">
 		<blog-sidebar-profile />
 		<hr>
-		<blog-sidebar-categories />
+		<blog-sidebar-category-list />
 	</div>
 </template>
 
@@ -10,12 +10,12 @@
 import { Vue, Component } from "vue-property-decorator";
 // Components //
 import BlogSidebarProfile from "@/components/blog/sidebar/profile.vue";
-import BlogSidebarCategories from "@/components/blog/sidebar/categories.vue";
+import BlogSidebarCategoryList from "@/components/blog/sidebar/category-list.vue";
 
 @Component({
 	components: {
 		BlogSidebarProfile,
-		BlogSidebarCategories
+		BlogSidebarCategoryList
 	}
 })
 export default class BlogSidebar extends Vue {}

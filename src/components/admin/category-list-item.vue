@@ -1,5 +1,9 @@
 <template>
+	<div v-if="true" class="admin-category-list-item">
+		수정 중
+	</div>
 	<div
+		v-else
 		:class="{
 			'admin-category-list-item': true,
 			'root': !(path != undefined && path.length > 0),
@@ -82,7 +86,7 @@ import ComponentAdminCategoryListItem from "@/components/admin/category-list-ite
 
 export class CategoryRemoveEvent {
 	posts: string[] = [];
-	child: StateBlogCategory[] = [];
+	childs: StateBlogCategory[] = [];
 	index!: number;
 }
 
@@ -109,15 +113,14 @@ export default class AdminCategoryListItem extends Vue {
 		this.categoryName = "" + this.item.name;
 		this.showRemovePopup = false;
 		this.item.child = this.item.child || [];
-		this.item.posts = this.item.posts || [];
+		this.item.post = this.item.post || [];
 		this.showChild = this.item.lock || false;
 	}
 
 	removeItem() {
 		this.showRemovePopup = false;
 		let event = new CategoryRemoveEvent;
-		if (this.item.posts) event.posts = event.posts.concat(this.item.posts);
-		if (this.item.child) event.child = event.child.concat(this.item.child);
+		if (this.item.post) event.posts = event.posts.concat(this.item.post);
 		event.index = this.path.pop() || 0;
 		this.$emit("remove", event);
 	}
@@ -139,29 +142,12 @@ export default class AdminCategoryListItem extends Vue {
 
 	// Child change
 	addNewChild() {
-		this.item.child.push({
-			name: "새로운 카테고리",
-			lock: false,
-			posts: [],
-			child: []
-		});
-		this.$forceUpdate();
-		this.showChild = true;
 	}
 	removeChild(event: CategoryRemoveEvent) {
-		this.item.posts = this.item.posts.concat(event.posts);
-		this.item.child.splice(event.index, 1);
-		this.item.child = this.item.child.concat(event.child);
-		this.childUpdated++;
-		this.$forceUpdate();
 	}
 
 	get getPostCount() {
-		let childPost = 0;
-		if (this.item.child) this.item.child.forEach((value) => {
-			if (value.posts) childPost += value.posts.length;
-		});
-		return (this.item.posts ? this.item.posts.length : 0) + childPost;
+		return 0;
 	}
 }
 </script>

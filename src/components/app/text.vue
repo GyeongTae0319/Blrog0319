@@ -26,17 +26,25 @@ export default class AppText extends Vue {
 		default: "line-single"
 	}) type!: "word" | "line-single" | "line-multiple";
 
-	isLoadded = false;
+	isLoadded: boolean = false;
+	checkText: number = -1;
 
 	created() {
-		var interval = setInterval(() => {
+		this.checkText = setInterval(() => {
 			if (this.$refs.text) {
 				if ((this.$refs.text as Element).innerHTML.replace(/\s/g, "") != "") {
 					this.isLoadded = true;
-					clearInterval(interval);
+					clearInterval(this.checkText);
+					this.checkText = -1;
 				}
-			} else clearInterval(interval);
+			} else {
+				clearInterval(this.checkText);
+				this.checkText = -1;
+			}
 		});
+	}
+	beforeDestroy() {
+		if (this.checkText != -1) clearInterval(this.checkText);
 	}
 }
 </script>

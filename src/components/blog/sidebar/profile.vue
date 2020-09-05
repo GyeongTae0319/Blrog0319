@@ -1,10 +1,7 @@
 <template>
 	<div class="blog-sidebar-profile">
-		<app-image
+		<app-profile-image
 			:src="$store.state.blog.owner.profileImage"
-			alt="프로필 사진"
-			objectfit="cover"
-			draggable="false"
 			class="profile-image"
 		/>
 		<div class="name">
@@ -18,25 +15,30 @@
 		<app-text type="line-multiple" class="desc">
 			{{ $store.state.blog.description }}
 		</app-text>
-		<router-link
+		<app-button-tag
 			v-if="$store.getters.isAdmin"
-			:to="{ name: 'AdminBasic' }"
 			class="edit-profile"
+			@click.stop="$router.push({ name: 'AdminBasic' })"
 		>
 			<i class="material-icons icon">edit</i>
-			<span class="tag">프로필 편집</span>
-		</router-link>
+			<template #tag>프로필 편집</template>
+		</app-button-tag>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import AppImage from "@/components/app/image.vue";
+import AppProfileImage from "@/components/app/image-profile.vue";
 import AppText from "@/components/app/text.vue";
+import AppButtonTag from "@/components/app/button-tag.vue";
 
 @Component({
-	components: { AppImage, AppText }
+	components: {
+		AppProfileImage,
+		AppText,
+		AppButtonTag
+	}
 })
 export default class BlogSidebarProfile extends Vue {}
 </script>
@@ -95,14 +97,22 @@ $profile-image-size: $sidebar-width - $sidebar-padding * 2;
 	font-size: 14px;
 }
 .edit-profile {
-	@include icon-button(
-		24px, 8px,
-		$background-color-lv2, $background-color-lv3,
-		4px, $background-color-lv1
-	);
-
 	position: absolute;
-	top: calc(#{$profile-image-size} - (24px + 8px * 2 + 4px * 2));
+	top: calc(#{$profile-image-size} - 48px);
 	right: 0;
+
+	width: 48px;
+	height: 48px;
+
+	border: 4px solid $background-color-lv1;
+	border-radius: 100%;
+
+	background-color: $background-color-lv2;
+
+	transition: background-color 0.1s;
+
+	&:hover {
+		background-color: $background-color-lv3;
+	}
 }
 </style>

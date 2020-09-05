@@ -18,6 +18,14 @@
 		<span class="line"></span>
 		<span class="line"></span>
 	</span>
+	<span
+		v-else-if="type === 'list'"
+		class="app-content-placeholder list"
+	>
+		<span class="line"></span>
+		<span class="line"></span>
+		<span class="line"></span>
+	</span>
 	<!-- Code box -->
 	<span
 		v-else-if="type === 'code'"
@@ -58,7 +66,7 @@ export default class AppContentPlaceholder extends Vue {
 	@Prop({
 		type: String,
 		default: "block"
-	}) type!: "block" | "word" | "line-single" | "line-multiple" | "code";
+	}) type!: "block" | "word" | "line-single" | "line-multiple" | "list" | "code";
 }
 </script>
 
@@ -93,8 +101,7 @@ export default class AppContentPlaceholder extends Vue {
 .word {
 	@include loader;
 
-	width: 40%;
-	min-width: 96px;
+	width: 3em;
 	height: 0.5em;
 	margin: 0.25em 0;
 
@@ -122,6 +129,40 @@ export default class AppContentPlaceholder extends Vue {
 			margin: 0.25em + 0.15em 0;
 
 			border-radius: 0.25em;
+		}
+	}
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+
+	@for $i from 1 through 3 {
+		.line:nth-child(#{$i}) {
+			display: flex;
+			margin: 0.25em + 0.15em 0;
+
+			&::before {
+				@include loader;
+				content: "";
+
+				width: 0.5em;
+				height: 0.5em;
+				margin-right: 0.5em;
+
+				border-radius: 0.25em;
+			}
+			&::after {
+				@include loader;
+				content: "";
+
+				width: 0;
+				max-width: percentage((random(35) + 65) * 0.01);
+				height: 0.5em;
+				flex-grow: 1;
+
+				border-radius: 0.25em;
+			}
 		}
 	}
 }

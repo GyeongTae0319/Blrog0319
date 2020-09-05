@@ -3,15 +3,15 @@
 		<span class="title">블로그 정보</span>
 		<div class="profile">
 			<div class="profile-image">
-				<app-image
+				<app-image-profile
 					:src="profileImage"
-					draggable="false"
-					objectfit="cover"
 					class="image"
 				/>
 				<label for="profileImageInput" class="change">
-					<i class="material-icons icon">photo_camera</i>
-					<span class="tag">사진 바꾸기</span>
+					<app-button-tag class="button">
+						<i class="material-icons icon">photo_camera</i>
+						<template #tag>사진 바꾸기</template>
+					</app-button-tag>
 					<input
 						hidden
 						type="file"
@@ -58,12 +58,14 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
 // Components //
-import AppImage from "@/components/app/image.vue";
+import AppImageProfile from "@/components/app/image-profile.vue";
+import AppButtonTag from "@/components/app/button-tag.vue";
 import AppLoadingSpinner from "@/components/app/loading-spinner.vue";
 
 @Component({
 	components: {
-		AppImage,
+		AppImageProfile,
+		AppButtonTag,
 		AppLoadingSpinner
 	}
 })
@@ -165,15 +167,29 @@ export default class AdminHome extends Vue {
 		}
 
 		.change {
-			@include icon-button(
-				24px, 8px,
-				$background-color-lv2, $background-color-lv3,
-				4px, $background-color
-			);
-
 			position: absolute;
 			bottom: 0;
 			right: 0;
+
+			width: 48px;
+			height: 48px;
+
+			.button {
+				width: 100%;
+				height: 100%;
+
+				border: 4px solid $background-color;
+				border-radius: 100%;
+
+				background-color: $background-color-lv2;
+
+				transition: background-color 0.1s;
+
+				&:hover,
+				&:focus {
+					background-color: $background-color-lv3;
+				}
+			}
 		}
 	}
 	.info {

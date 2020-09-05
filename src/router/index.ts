@@ -20,7 +20,7 @@ const routes: Array<RouteConfig> = [
 				)
 			},
 			{
-				path: "category/:index(\\d+)*",
+				path: "category/:id",
 				name: "BlogCategory",
 				component: () => import(
 					/* webpackChunkName: "blog-category" */
@@ -28,7 +28,7 @@ const routes: Array<RouteConfig> = [
 				)
 			},
 			{
-				path: "post/:index",
+				path: "post/:id",
 				name: "BlogPost",
 				component: () => import(
 					/* webpackChunkName: "blog-post" */

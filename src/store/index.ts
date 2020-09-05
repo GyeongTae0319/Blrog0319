@@ -20,8 +20,8 @@ interface BlogOwner {
 export interface StateBlogCategory {
 	name: string;
 	lock: boolean;
-	posts: string[];
-	childs: StateBlogCategory[];
+	post: string[];
+	child: string[];
 }
 interface StateBlog {
 	mainIconImage: string;
@@ -29,7 +29,6 @@ interface StateBlog {
 	description: string;
 	owner: BlogOwner;
 	category: { [key: string]: StateBlogCategory };
-	loadCategory: boolean;
 }
 interface DatabaseBlogInfo {
 	description: string;
@@ -61,8 +60,7 @@ const store: StoreOptions<StoreState> = {
 				nickname: "",
 				realname: ""
 			},
-			category: {},
-			loadCategory: false
+			category: {}
 		}
 	},
 	getters: {
@@ -78,6 +76,12 @@ const store: StoreOptions<StoreState> = {
 				name: state.auth.name,
 				email: state.auth.email
 			}
+		},
+		loadedBlogInfo: (state) => {
+			return state.blog.owner.nickname != "";
+		},
+		loadedCategory: (state) => {
+			return state.blog.category.root != undefined;
 		}
 	},
 	mutations: {

@@ -1,14 +1,13 @@
 <template>
-	<div class="admin-category">
-		<span class="title">블로그 홈</span>
-	</div>
+	<div class="admin-category"></div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import Test from "@/views/admin/basic.vue";
 
 @Component
-export default class AdminBlogHome extends Vue {}
+export default class AdminBlogHome extends Test {}
 </script>
 
 <style lang="scss" scoped></style>
