@@ -42,7 +42,7 @@ export default class AdminSidebar extends Vue {
 		"글 관리": [
 			{
 				to: { name: "AdminCategory" },
-				icon: "list",
+				icon: "account_tree",
 				name: "카테고리 수정",
 				desc: "카테고리 생성, 변경, 정렬 등"
 			}

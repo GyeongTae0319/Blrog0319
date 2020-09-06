@@ -7,19 +7,17 @@
 					:src="profileImage"
 					class="image"
 				/>
-				<label for="profileImageInput" class="change">
-					<app-button-tag class="button">
-						<i class="material-icons icon">photo_camera</i>
-						<template #tag>사진 바꾸기</template>
-					</app-button-tag>
-					<input
-						hidden
-						type="file"
-						accept="image/png"
-						id="profileImageInput"
-						@change="onChangeProfileImageImage"
-					>
-				</label>
+				<app-button-tag class="change" @click="changeProfileImage">
+					<i class="material-icons icon">photo_camera</i>
+					<template #tag>사진 바꾸기</template>
+				</app-button-tag>
+				<input
+					hidden
+					type="file"
+					accept="image/png"
+					ref="profileImageInput"
+					@change="onChangeProfileImageImage"
+				>
 			</div>
 			<div class="info">
 				<label class="nickname">
@@ -101,6 +99,10 @@ export default class AdminHome extends Vue {
 		}
 	}
 
+	changeProfileImage() {
+		let profileImageInput = this.$refs.profileImageInput as HTMLInputElement;
+		profileImageInput.click();
+	}
 	saveProfile() {
 		this.nowUploading = true;
 		let image = false, info = false;
@@ -174,21 +176,15 @@ export default class AdminHome extends Vue {
 			width: 48px;
 			height: 48px;
 
-			.button {
-				width: 100%;
-				height: 100%;
+			border: 4px solid $background-color;
+			border-radius: 100%;
 
-				border: 4px solid $background-color;
-				border-radius: 100%;
+			background-color: $background-color-lv2;
 
-				background-color: $background-color-lv2;
+			transition: background-color 0.1s;
 
-				transition: background-color 0.1s;
-
-				&:hover,
-				&:focus {
-					background-color: $background-color-lv3;
-				}
+			&:hover {
+				background-color: $background-color-lv3;
 			}
 		}
 	}

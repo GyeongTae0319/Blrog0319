@@ -95,11 +95,7 @@ const store: StoreOptions<StoreState> = {
 				state.auth.email = user.email || "";
 				state.auth.photo = user.photoURL || "";
 			} else {
-				state.auth.token =
-					state.auth.uid =
-					state.auth.name =
-					state.auth.email =
-					state.auth.photo = "";
+				state.auth.token = state.auth.uid = state.auth.name = state.auth.email = state.auth.photo = "";
 			}
 		},
 		setInfo(state, info: DatabaseBlogInfo) {

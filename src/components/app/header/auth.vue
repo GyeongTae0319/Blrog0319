@@ -29,11 +29,15 @@
 			>로그아웃</app-button>
 		</div>
 	</div>
-	<app-button
+	<app-button-tag
 		v-else
+		dir="down"
 		class="app-header-auth sign-in"
 		@click="signIn"
-	>로그인</app-button>
+	>
+		<i class="material-icons icon">login</i>
+		<template #tag>로그인</template>
+	</app-button-tag>
 </template>
 
 <script lang="ts">
@@ -41,10 +45,15 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
 // Components //
 import AppButton from "@/components/app/button.vue";
+import AppButtonTag from "@/components/app/button-tag.vue";
 import AppImageProfile from "@/components/app/image-profile.vue";
 
 @Component({
-	components: { AppButton, AppImageProfile }
+	components: {
+		AppButton,
+		AppButtonTag,
+		AppImageProfile
+	}
 })
 export default class AppHeaderAuth extends Vue {
 	showInfo: boolean = false;
@@ -80,9 +89,7 @@ export default class AppHeaderAuth extends Vue {
 // User info
 .user {
 	position: relative;
-
-	height: 100%;
-	padding: 8px;
+	margin-right: 12px;
 
 	.user-profile {
 		width: 32px;
@@ -107,7 +114,7 @@ export default class AppHeaderAuth extends Vue {
 		position: absolute;
 		z-index: 256;
 		top: calc(100% + var(--gap-top));
-		right: 12px;
+		right: 0;
 
 		padding: 32px;
 
@@ -124,7 +131,7 @@ export default class AppHeaderAuth extends Vue {
 		transition: opacity 0.15s, top 0.15s;
 
 		&.show {
-			--gap-top: 12px;
+			--gap-top: 20px;
 
 			opacity: 1;
 			pointer-events: inherit;
@@ -168,8 +175,7 @@ export default class AppHeaderAuth extends Vue {
 
 	transition: border-color 0.1s, background-color 0.1s;
 
-	&:hover,
-	&:focus {
+	&:hover {
 		$hover-color: rgba($background-color-lv2, 0.5);
 
 		border-color: $hover-color;
@@ -177,18 +183,15 @@ export default class AppHeaderAuth extends Vue {
 	}
 }
 .sign-in {
-	margin-right: 8px;
-	padding: 4px 10px;
+	margin-right: 12px;
+	padding: 4px;
 
 	border-radius: 4px;
 
-	background-color: $background-color-lv2;
-
 	transition: background-color 0.1s;
 
-	&:hover,
-	&:focus {
-		background-color: $background-color-lv3;
+	&:hover {
+		background-color: $background-color-lv2;
 	}
 }
 </style>

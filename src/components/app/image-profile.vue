@@ -4,6 +4,7 @@
 		alt="프로필 사진"
 		objectfit="cover"
 		draggable="false"
+		referrerpolicy="no-referrer"
 		class="app-image-profile"
 	/>
 </template>

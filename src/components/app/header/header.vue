@@ -8,11 +8,24 @@
 			>
 			<span class="title">Blrog: 블로의 블로그</span>
 		</router-link>
-		<app-button
-			v-if="$store.getters.isAdmin"
-			@click.stop="$router.push({ name: 'BlogWritePost' })"
-			class="write-post"
-		>글쓰기</app-button>
+		<div v-if="$store.getters.isAdmin" class="admin">
+			<app-button-tag
+				dir="down"
+				class="write-post"
+				@click="$router.push({ name: 'BlogWritePost' })"
+			>
+				<i class="material-icons icon">edit</i>
+				<template #tag>글쓰기</template>
+			</app-button-tag>
+			<app-button-tag
+				dir="down"
+				class="settings"
+				@click="$router.push({ name: 'AdminBasic' })"
+			>
+				<i class="material-icons icon">settings</i>
+				<template #tag>블로그 관리</template>
+			</app-button-tag>
+		</div>
 		<app-header-auth />
 	</header>
 </template>
@@ -20,11 +33,11 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 // Components //
-import AppButton from "@/components/app/button.vue"
+import AppButtonTag from "@/components/app/button-tag.vue"
 import AppHeaderAuth from "@/components/app/header/auth.vue";
 
 @Component({
-	components: { AppButton, AppHeaderAuth }
+	components: { AppButtonTag, AppHeaderAuth }
 })
 export default class AppHeader extends Vue {}
 </script>
@@ -61,21 +74,22 @@ export default class AppHeader extends Vue {}
 			margin-right: 16px;
 		}
 	}
-	.write-post {
-		margin-right: 8px;
-		padding: 4px 12px;
+	.admin {
+		display: flex;
+		gap: 8px;
 
-		border: 1px solid $background-color-lv3;
-		border-radius: 4px;
+		margin-right: 12px;
 
-		transition: border-color 0.1s, background-color 0.1s;
+		> * {
+			padding: 4px;
 
-		&:hover,
-		&:focus {
-			$hover-color: rgba($background-color-lv2, 0.5);
+			border-radius: 4px;
 
-			border-color: $hover-color;
-			background-color: $hover-color;
+			transition: background-color 0.1s;
+
+			&:hover {
+				background-color: $background-color-lv2;
+			}
 		}
 	}
 }

@@ -3,7 +3,7 @@
 		:disabled="disabled"
 		:type="type"
 		v-on="$listeners"
-		class="app-button app-button-tag"
+		:class="`app-button app-button-tag ${dir}`"
 	>
 		<slot>버튼</slot>
 		<span class="tag">
@@ -13,18 +13,28 @@
 </template>
 
 <script lang="ts">
-import { Component } from "vue-property-decorator";
+import { Component, Prop } from "vue-property-decorator";
 // Components //
 import AppButton from "@/components/app/button.vue";
 
 @Component
-export default class AppButtonTag extends AppButton {}
+export default class AppButtonTag extends AppButton {
+	@Prop({
+		type: String,
+		default: "up",
+		validator: (value) => {
+			return ["up", "right", "down", "left"].includes(value);
+		}
+	}) dir!: string;
+}
 </script>
 
 <style lang="scss" scoped>
 @import "../../assets/styles/variables";
 
 .app-button-tag {
+	$tag-leg-gap: 6px;
+
 	display: flex;
 	position: relative;
 
@@ -36,12 +46,39 @@ export default class AppButtonTag extends AppButton {}
 
 	cursor: pointer;
 
-	&:hover .tag,
-	&:focus .tag {
+	&:hover .tag {
 		--gap: 16px;
 
 		opacity: 1;
 		pointer-events: inherit;
+	}
+	&.up .tag {
+		bottom: calc(100% + var(--gap));
+
+		&::before {
+			bottom: -$tag-leg-gap;
+		}
+	}
+	&.right .tag {
+		left: calc(100% + var(--gap));
+
+		&::before {
+			left: -$tag-leg-gap;
+		}
+	}
+	&.down .tag {
+		top: calc(100% + var(--gap));
+
+		&::before {
+			top: -$tag-leg-gap;
+		}
+	}
+	&.left .tag {
+		right: calc(100% + var(--gap));
+
+		&::before {
+			right: -$tag-leg-gap;
+		}
 	}
 	.tag {
 		--gap: 12px;
@@ -51,7 +88,6 @@ export default class AppButtonTag extends AppButton {}
 
 		position: absolute;
 		z-index: $z-index-popup;
-		bottom: calc(100% + var(--gap));
 
 		width: max-content;
 		padding: 8px 12px;
@@ -69,7 +105,7 @@ export default class AppButtonTag extends AppButton {}
 		pointer-events: none;
 
 		filter: drop-shadow(0 0 12px rgba(0, 0, 0, 0.375));
-		transition: bottom 0.1s, opacity 0.1s;
+		transition: top 0.1s, opacity 0.1s, right 0.1s, opacity 0.1s, bottom 0.1s, opacity 0.1s, left 0.1s, opacity 0.1s;
 
 		&::before {
 			content: "";
@@ -78,10 +114,9 @@ export default class AppButtonTag extends AppButton {}
 
 			position: absolute;
 			z-index: -1;
-			bottom: -8px;
 
-			width: 16px;
-			height: 16px;
+			width: 12px;
+			height: 12px;
 
 			background-color: $background-color-lv2;
 
