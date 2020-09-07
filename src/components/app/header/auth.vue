@@ -31,7 +31,7 @@
 	</div>
 	<app-button-tag
 		v-else
-		dir="down"
+		dir="left"
 		class="app-header-auth sign-in"
 		@click="signIn"
 	>
@@ -89,7 +89,7 @@ export default class AppHeaderAuth extends Vue {
 // User info
 .user {
 	position: relative;
-	margin-right: 12px;
+	margin-right: 8px;
 
 	.user-profile {
 		width: 32px;
@@ -131,7 +131,7 @@ export default class AppHeaderAuth extends Vue {
 		transition: opacity 0.15s, top 0.15s;
 
 		&.show {
-			--gap-top: 20px;
+			--gap-top: 16px;
 
 			opacity: 1;
 			pointer-events: inherit;
@@ -183,7 +183,7 @@ export default class AppHeaderAuth extends Vue {
 	}
 }
 .sign-in {
-	margin-right: 12px;
+	margin-right: 8px;
 	padding: 4px;
 
 	border-radius: 4px;

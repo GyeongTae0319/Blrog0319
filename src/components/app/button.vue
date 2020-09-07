@@ -1,5 +1,22 @@
 <template>
+	<a
+		v-if="type === 'link'"
+		:href="to"
+		class="app-button"
+		v-on="$listeners"
+	>
+		<slot>열기</slot>
+	</a>
+	<router-link
+		v-else-if="type === 'route'"
+		:to="to"
+		class="app-button"
+		v-on="$listeners"
+	>
+		<slot>이동</slot>
+	</router-link>
 	<button
+		v-else
 		:disabled="disabled"
 		:type="type"
 		class="app-button"
@@ -18,13 +35,17 @@ export default class AppButton extends Vue {
 		type: String,
 		default: "button",
 		validator: (value) => {
-			return ["button", "menu", "reset", "submit"].includes(value);
+			return ["button", "menu", "reset", "submit", "link", "route"].includes(value);
 		}
-	}) type!: string;
+	}) type!: "button" | "menu" | "reset" | "submit" | "link" | "route";
 	@Prop({
 		type: Boolean,
 		default: false
 	}) disabled!: boolean;
+	@Prop({
+		type: [String, Object],
+		default: ""
+	}) to!: string | object;
 }
 </script>
 

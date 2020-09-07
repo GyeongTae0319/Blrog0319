@@ -17,8 +17,9 @@
 		</app-text>
 		<app-button-tag
 			v-if="$store.getters.isAdmin"
+			type="route"
+			:to="{ name: 'AdminBasic' }"
 			class="edit-profile"
-			@click.stop="$router.push({ name: 'AdminBasic' })"
 		>
 			<i class="material-icons icon">edit</i>
 			<template #tag>프로필 편집</template>

@@ -1,9 +1,32 @@
 <template>
+	<a
+		v-if="type === 'link'"
+		:href="to"
+		:class="`app-button app-button-tag ${dir}`"
+		v-on="$listeners"
+	>
+		<slot>버튼</slot>
+		<span class="tag">
+			<slot name="tag"></slot>
+		</span>
+	</a>
+	<router-link
+		v-else-if="type === 'route'"
+		:to="to"
+		:class="`app-button app-button-tag ${dir}`"
+		v-on="$listeners"
+	>
+		<slot>버튼</slot>
+		<span class="tag">
+			<slot name="tag"></slot>
+		</span>
+	</router-link>
 	<button
+		v-else
 		:disabled="disabled"
 		:type="type"
-		v-on="$listeners"
 		:class="`app-button app-button-tag ${dir}`"
+		v-on="$listeners"
 	>
 		<slot>버튼</slot>
 		<span class="tag">

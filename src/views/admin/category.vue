@@ -87,8 +87,6 @@ export default class AdminCategory extends Vue {
 	align-items: center;
 }
 .save {
-	@include button;
-
 	display: inline-block;
 
 	padding: {

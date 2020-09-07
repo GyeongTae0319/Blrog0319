@@ -47,7 +47,12 @@
 		</div>
 		<div class="save-group">
 			<app-loading-spinner :show="nowUploading" />
-			<button class="save" @click="saveProfile">저장하기</button>
+			<app-button
+				type="submit"
+				:disabled="nowUploading"
+				class="save"
+				@click="saveProfile"
+			>저장하기</app-button>
 		</div>
 	</div>
 </template>
@@ -57,12 +62,14 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import firebase from "firebase/app";
 // Components //
 import AppImageProfile from "@/components/app/image-profile.vue";
+import AppButton from "@/components/app/button.vue";
 import AppButtonTag from "@/components/app/button-tag.vue";
 import AppLoadingSpinner from "@/components/app/loading-spinner.vue";
 
 @Component({
 	components: {
 		AppImageProfile,
+		AppButton,
 		AppButtonTag,
 		AppLoadingSpinner
 	}
@@ -104,6 +111,8 @@ export default class AdminHome extends Vue {
 		profileImageInput.click();
 	}
 	saveProfile() {
+		if (this.nowUploading) return;
+
 		this.nowUploading = true;
 		let image = false, info = false;
 		if (this.profileImageChanged) {
@@ -251,19 +260,10 @@ export default class AdminHome extends Vue {
 	align-items: center;
 }
 .save {
-	@include button;
-
-	display: inline-block;
-
-	padding: {
-		top: 6px;
-		bottom: 8px;
-		left: 12px;
-		right: 12px;
-	}
+	padding: 6px 12px;
 
 	border: 1px solid $background-color-lv2;
-	border-radius: 4px;
+	border-radius: 6px;
 
 	&:hover {
 		background-color: $background-color-lv2;

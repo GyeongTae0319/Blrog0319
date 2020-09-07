@@ -10,17 +10,19 @@
 		</router-link>
 		<div v-if="$store.getters.isAdmin" class="admin">
 			<app-button-tag
+				type="route"
+				:to="{ name: 'BlogWritePost' }"
 				dir="down"
 				class="write-post"
-				@click="$router.push({ name: 'BlogWritePost' })"
 			>
 				<i class="material-icons icon">edit</i>
 				<template #tag>글쓰기</template>
 			</app-button-tag>
 			<app-button-tag
+				type="route"
+				:to="{ name: 'AdminBasic' }"
 				dir="down"
 				class="settings"
-				@click="$router.push({ name: 'AdminBasic' })"
 			>
 				<i class="material-icons icon">settings</i>
 				<template #tag>블로그 관리</template>

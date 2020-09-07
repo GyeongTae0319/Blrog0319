@@ -142,7 +142,7 @@ export default class BlogCategory extends Vue {
 		margin-bottom: 8px;
 		padding-bottom: 4px;
 
-		border-bottom: 3px solid $background-color-lv2;
+		border-bottom: 2px solid $background-color-lv2;
 
 		.name {
 			font-size: xx-large;

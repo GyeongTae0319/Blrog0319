@@ -4,8 +4,9 @@
 			<span class="title">📄 카테고리 목록</span>
 			<app-button-tag
 				v-if="$store.getters.isAdmin"
+				type="route"
+				:to="{ name: 'AdminCategory' }"
 				class="edit"
-				@click="$router.push({ name: 'AdminCategory' })"
 			>
 				<i class="material-icons icon">edit</i>
 				<template #tag>목록 편집</template>
@@ -45,8 +46,6 @@ export default class BlogSidebarCategoryList extends Vue {}
 		justify-content: space-between;
 
 		.edit {
-			@include icon-button(24px);
-
 			color: $text-color-white-desc;
 		}
 	}
