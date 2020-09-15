@@ -9,18 +9,21 @@ import { Vue, Component } from "vue-property-decorator";
 // Components //
 import EditorHeader from "@/components/editor/header.vue";
 
-interface DocBlock {
+interface PostBlock {
 	type: string;
-	value: string;
+	value: { [key: string]: any };
+}
+
+class EditorVue extends Vue {
+	blocks: PostBlock[] = [];
+	selected: number = 0;
 }
 
 @Component({
 	components: { EditorHeader }
 })
-export default class BlogWritePost extends Vue {
-	bus: Vue = new Vue();
-	// Document
-	document: DocBlock[] = [];
+export default class BlogEditor extends Vue {
+	bus: Vue = new EditorVue();
 
 	created() {
 		this.bus.$on("action", this.onAction);
