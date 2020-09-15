@@ -1,7 +1,7 @@
 <template>
 	<div class="blog-sidebar-category-list">
 		<div class="header">
-			<span class="title">📄 카테고리 목록</span>
+			<span class="title">카테고리 목록</span>
 			<app-button-tag
 				v-if="$store.getters.isAdmin"
 				type="route"

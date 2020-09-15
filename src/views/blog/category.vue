@@ -17,13 +17,21 @@
 				<app-content-placeholder v-else type="word" />
 			</template>
 		</div>
-		<div v-if="hasChild" class="child">
-			<blog-category-list-item
-				v-for="child in category.child"
-				:key="child"
-				:category="$store.state.blog.category[child]"
+		<template role="Child category list">
+			<div v-if="$store.getters.loadedCategory && hasChild" class="child">
+				<blog-category-list-item
+					v-for="child in category.child"
+					:key="child"
+					:category="$store.state.blog.category[child]"
+					:path="child"
+				/>
+			</div>
+			<app-content-placeholder
+				v-else-if="!$store.getters.loadedCategory || hasChild"
+				type="list"
+				class="child"
 			/>
-		</div>
+		</template>
 		<template role="Show post list">
 			<!-- List -->
 			<div v-if="getPostCount > 0" class="post-list">
@@ -44,7 +52,6 @@
 			</div>
 			<!-- No post -->
 			<div v-else class="post-loading">
-				<app-content-placeholder type="list" class="child" />
 				LOADING...
 			</div>
 		</template>
