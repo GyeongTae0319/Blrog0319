@@ -26,27 +26,27 @@ interface TextToolbarButtonData {
 })
 export default class EditorTextToolbar extends Vue {
 	buttons: { [key: string]: TextToolbarButtonData } = {
-		"toggle-bold": {
+		"format-bold": {
 			icon: "format_bold",
 			name: "굵기"
 		},
-		"toggle-italic": {
+		"format-italic": {
 			icon: "format_italic",
 			name: "기울이기"
 		},
-		"toggle-underline": {
+		"format-underline": {
 			icon: "format_underline",
 			name: "밑줄"
 		},
-		"toggle-strikethrough": {
+		"format-strikeThrough": {
 			icon: "format_strikethrough",
 			name: "취소선"
 		},
-		"toggle-supscript": {
+		"format-subscript": {
 			icon: "subscript",
 			name: "아래첨자"
 		},
-		"toggle-superscript": {
+		"format-superscript": {
 			icon: "superscript",
 			name: "위첨자"
 		}

@@ -5,30 +5,19 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 
-const types: string[] = [
-	"subheading",
-	"paragraph",
-	"quote",
-	"list",
-	"image",
-	"video",
-	"horizontal-rule",
-	"table",
-	"calendar",
-	"link",
-	"file"
-];
-
 @Component
 export default class EditorBlock extends Vue {
 	@Prop({
-		type: String,
+		type: Object,
 		required: true,
-		default: types[0],
-		validator: (value) => {
-			return types.includes(value);
-		}
-	}) type!: string;
+		default: () => {}
+	}) value!: { [key: string]: any };
+
+	focused: boolean = false;
+
+	onFocus() {
+		
+	}
 }
 </script>
 

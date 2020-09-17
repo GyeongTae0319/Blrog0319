@@ -2,7 +2,7 @@
 	<app-button-tag
 		class="editor-text-toolbar-button"
 		dir="down"
-		@click="$emit('action', action)"
+		@click.prevent="$emit('action', action)"
 	>
 		<i class="material-icons icon">{{ icon }}</i>
 		<template #tag>{{ name }}</template>

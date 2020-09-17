@@ -1,6 +1,25 @@
 <template>
-	<div class="blog-write-post">
-		<editor-header :bus="bus" />
+	<div
+		class="blog-editor"
+		@paste.prevent="pastePlainText"
+		@keydown.enter.exact.prevent="onEnter"
+		@keydown.shift.enter.exact.prevent="onEnter"
+		@keydown.ctrl.b.exact.prevent="format('bold')"
+		@keydown.ctrl.i.exact.prevent="format('italic')"
+		@keydown.ctrl.u.exact.prevent="format('underline')"
+	>
+		<editor-header :bus="bus" class="header" />
+		<div class="contents">
+			<div class="blocks">
+				<editor-post-block
+					v-for="(block, index) in blocks"
+					:key="`${index}_${block.type}`"
+					:type="block.type"
+					:value="block.value"
+				/>
+			</div>
+			<div class="sidebar"></div>
+		</div>
 	</div>
 </template>
 
@@ -8,6 +27,8 @@
 import { Vue, Component } from "vue-property-decorator";
 // Components //
 import EditorHeader from "@/components/editor/header.vue";
+import EditorPostBlock from "@/components/editor/post-block.vue";
+import EditorBlock from '@/components/editor/block/block.vue';
 
 interface PostBlock {
 	type: string;
@@ -15,35 +36,58 @@ interface PostBlock {
 }
 
 class EditorVue extends Vue {
-	blocks: PostBlock[] = [];
 	selected: number = 0;
 }
 
 @Component({
-	components: { EditorHeader }
+	components: {
+		EditorHeader,
+		EditorPostBlock
+	}
 })
 export default class BlogEditor extends Vue {
-	bus: Vue = new EditorVue();
+	bus: EditorVue = new EditorVue();
+	blocks: PostBlock[] = [];
+	images: string[] = [];
 
 	created() {
 		this.bus.$on("action", this.onAction);
 	}
 
 	// Actions //
-	onAction(action: string) {
+	onAction(action: string, value: string) {
 		if (action.startsWith("add-")) {
 			this.onAdd(action.slice("add-".length));
-		} else if (action.startsWith("toggle-")) {
-			this.onToggle(action.slice("toggle-".length));
+		} else if (action.startsWith("format-")) {
+			this.format(action.slice("toggle-".length), value || undefined);
 		}
 	}
 	// Add block
 	onAdd(type: string) {
 		console.log(`ADD: ${type}`);
+		this.blocks.push({
+			type: type,
+			value: {
+				content: "HELLO WORLD!"
+			}
+		});
 	}
 	// Toggle text styles
-	onToggle(type: string) {
-		console.log(`TOGGLE: ${type}`)
+	format(command: string, value: string | undefined = undefined) {
+		document.execCommand(command, false, value);
+	}
+	onEnter(event: KeyboardEvent) {
+		let selection = window.getSelection();
+		if (selection == null) return;
+
+		let text = "\n";
+		if (selection.focusOffset == selection.focusNode?.nodeValue?.length) {
+			text += "\n";
+		}
+		this.format("insertHTML", text);
+	}
+	pastePlainText(evenet: ClipboardEvent) {
+		this.format("insertHTML", evenet.clipboardData?.getData("text/plain") || "");
 	}
 	
 }
@@ -52,28 +96,68 @@ export default class BlogEditor extends Vue {
 <style lang="scss" scoped>
 @import "../../assets/styles/variables";
 
+.blog-editor {
+	padding-top: 98px;
+}
+
 .header {
-	.toolbar {
-		display: flex;
-		padding: 0 16px;
+	position: fixed;
+	top: $header-height;
+	left: 0;
 
-		border-bottom: 1px solid $background-color-lv2;
+	width: 100%;
+}
 
-		.button {
-			display: flex;
-			flex-direction: column;
-			gap: 4px;
+.contents {
+	display: flex;
+	height: 100%;
 
-			width: 48px;
-			height: 64px;
+	.blocks {
+		flex-grow: 1;
+	}
+	.sidebar {
+		width: 300px;
+		height: 100%;
 
-			.name {
-				font-size: small;
-			}
+		background-color: $background-color-lv1;
+	}
+}
 
-			&:hover {
-				color: $theme-color;
-			}
+.blocks {
+	height: 100%;
+	overflow: hidden auto;
+
+	&::v-deep [class|="editor-block"] {
+		padding: 30px;
+
+		border: 2px solid transparent;
+
+		white-space: pre-wrap;
+
+		// transition: border-color 0.1s;
+
+		b {
+			font-weight: bold;
+		}
+		i {
+			font-style: italic;
+		}
+		u {
+			text-decoration: underline;
+		}
+		strike {
+			text-decoration: line-through;
+		}
+		sub,
+		sup {
+			font-size: small;
+		}
+
+		&:hover {
+			border-color: rgba($theme-color, 0.5);
+		}
+		&:focus {
+			border-color: $theme-color;
 		}
 	}
 }
