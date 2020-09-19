@@ -6,13 +6,13 @@
 			:icon="data.icon"
 			:name="data.name"
 			:action="key"
-			@action="(action) => $emit('action', action)"
+			@action="(action) => bus.$emit('execute', action)"
 		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 // Components //
 import EditorTextToolbarButton from "@/components/editor/text-toolbar-button.vue";
 
@@ -25,30 +25,35 @@ interface TextToolbarButtonData {
 	components: { EditorTextToolbarButton }
 })
 export default class EditorTextToolbar extends Vue {
+	@Prop({
+		type: Vue,
+		required: true
+	}) bus!: Vue;
+
 	buttons: { [key: string]: TextToolbarButtonData } = {
-		"format-bold": {
+		"bold": {
 			icon: "format_bold",
 			name: "굵기"
 		},
-		"format-italic": {
+		"italic": {
 			icon: "format_italic",
 			name: "기울이기"
 		},
-		"format-underline": {
+		"underline": {
 			icon: "format_underline",
 			name: "밑줄"
 		},
-		"format-strikeThrough": {
+		"strikeThrough": {
 			icon: "format_strikethrough",
 			name: "취소선"
 		},
-		"format-subscript": {
-			icon: "subscript",
-			name: "아래첨자"
-		},
-		"format-superscript": {
+		"superscript": {
 			icon: "superscript",
 			name: "위첨자"
+		},
+		"subscript": {
+			icon: "subscript",
+			name: "아래첨자"
 		}
 	}
 }

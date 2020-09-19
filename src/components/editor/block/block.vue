@@ -8,15 +8,18 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 @Component
 export default class EditorBlock extends Vue {
 	@Prop({
+		type: Number,
+		required: true
+	}) id!: number;
+	@Prop({
 		type: Object,
 		required: true,
-		default: () => {}
 	}) value!: { [key: string]: any };
 
-	focused: boolean = false;
+	type: string = "block";
 
 	onFocus() {
-		
+		this.$emit("focus", this.type);
 	}
 }
 </script>

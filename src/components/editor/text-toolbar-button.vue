@@ -2,7 +2,7 @@
 	<app-button-tag
 		class="editor-text-toolbar-button"
 		dir="down"
-		@click.prevent="$emit('action', action)"
+		@click.prevent="$emit(action, value)"
 	>
 		<i class="material-icons icon">{{ icon }}</i>
 		<template #tag>{{ name }}</template>
@@ -13,24 +13,12 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 // Components //
 import AppButtonTag from "@/components/app/button-tag.vue";
+import EditorToolbarButton from '@/components/editor/toolbar-button.vue';
 
 @Component({
 	components: { AppButtonTag }
 })
-export default class EditorTextToolbarButton extends Vue {
-	@Prop({
-		type: String,
-		required: true
-	}) icon!: string;
-	@Prop({
-		type: String,
-		required: true
-	}) name!: string;
-	@Prop({
-		type: String,
-		required: true
-	}) action!: string;
-}
+export default class EditorTextToolbarButton extends EditorToolbarButton {}
 </script>
 
 <style lang="scss" scoped>

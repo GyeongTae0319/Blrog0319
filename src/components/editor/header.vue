@@ -1,7 +1,7 @@
 <template>
 	<div class="editor-header">
-		<editor-toolbar @action="onAction" />
-		<editor-text-toolbar @action="onAction" />
+		<editor-toolbar :bus="bus" />
+		<editor-text-toolbar :bus="bus" />
 	</div>
 </template>
 

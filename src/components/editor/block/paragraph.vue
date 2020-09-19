@@ -2,8 +2,6 @@
 	<div
 		class="editor-block-paragraph"
 		contenteditable="true"
-		@focus="focused = true"
-		@blur="focused = false"
 	>{{ content }}</div>
 </template>
 
@@ -29,10 +27,6 @@ export default class EditorBlockParagraph extends EditorBlock {
 		if (this.value.content === undefined) {
 			this.content = this.value.content = "\n";
 		}
-	}
-
-	format(command: string, value: string | undefined = undefined) {
-		if (this.focused) document.execCommand(command, false, value);
 	}
 
 	@Watch("this.value.content", {

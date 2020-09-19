@@ -1,7 +1,7 @@
 <template>
 	<app-button
 		class="editor-toolbar-button"
-		@click="$emit('action', action)"
+		v-on="$listeners"
 	>
 		<i class="material-icons icon">{{ icon }}</i>
 		<span class="name">{{ name }}</span>
@@ -25,10 +25,6 @@ export default class EditorToolbarButton extends Vue {
 		type: String,
 		required: true
 	}) name!: string;
-	@Prop({
-		type: String,
-		required: true
-	}) action!: string;
 }
 </script>
 

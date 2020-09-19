@@ -4,21 +4,22 @@
 		@paste.prevent="pastePlainText"
 		@keydown.enter.exact.prevent="onEnter"
 		@keydown.shift.enter.exact.prevent="onEnter"
-		@keydown.ctrl.b.exact.prevent="format('bold')"
-		@keydown.ctrl.i.exact.prevent="format('italic')"
-		@keydown.ctrl.u.exact.prevent="format('underline')"
+		@keydown.ctrl.b.exact.prevent="execute('bold')"
+		@keydown.ctrl.i.exact.prevent="execute('italic')"
+		@keydown.ctrl.u.exact.prevent="execute('underline')"
+		@keydown.alt.shift.53.exact.prevent="execute('strikeThrough')"
+		@keydown.ctrl.190.exact.prevent="execute('superscript')"
+		@keydown.ctrl.188.exact.prevent="execute('subscript')"
 	>
-		<editor-header :bus="bus" class="header" />
-		<div class="contents">
-			<div class="blocks">
-				<editor-post-block
-					v-for="(block, index) in blocks"
-					:key="`${index}_${block.type}`"
-					:type="block.type"
-					:value="block.value"
-				/>
-			</div>
-			<div class="sidebar"></div>
+		<editor-header :bus="editorVue" />
+		<div class="blocks">
+			<editor-post-block
+				v-for="block in blocks"
+				:key="block.id"
+				:id="block.id"
+				:type="block.type"
+				:value="block.value"
+			/>
 		</div>
 	</div>
 </template>
@@ -28,15 +29,11 @@ import { Vue, Component } from "vue-property-decorator";
 // Components //
 import EditorHeader from "@/components/editor/header.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
-import EditorBlock from '@/components/editor/block/block.vue';
 
 interface PostBlock {
+	id: number;
 	type: string;
 	value: { [key: string]: any };
-}
-
-class EditorVue extends Vue {
-	selected: number = 0;
 }
 
 @Component({
@@ -46,36 +43,47 @@ class EditorVue extends Vue {
 	}
 })
 export default class BlogEditor extends Vue {
-	bus: EditorVue = new EditorVue();
+	editorVue: Vue = new Vue();
 	blocks: PostBlock[] = [];
 	images: string[] = [];
+	title: string = "";
+	banner: number | null = null;
+	blockIdCounter = 0;
 
 	created() {
-		this.bus.$on("action", this.onAction);
+		this.editorVue.$on("addblock", this.addBlock);
+		this.editorVue.$on("execute", this.execute);
+
+		this.addBlock("heading", {
+			title: this.title,
+			banner: this.banner
+		});
 	}
 
 	// Actions //
-	onAction(action: string, value: string) {
-		if (action.startsWith("add-")) {
-			this.onAdd(action.slice("add-".length));
-		} else if (action.startsWith("format-")) {
-			this.format(action.slice("toggle-".length), value || undefined);
-		}
-	}
+	//
 	// Add block
-	onAdd(type: string) {
-		console.log(`ADD: ${type}`);
+	addBlock(type: string, value: { [key: string]: any } = {}) {
 		this.blocks.push({
+			id: ++this.blockIdCounter,
 			type: type,
-			value: {
-				content: "HELLO WORLD!"
-			}
+			value: value
 		});
 	}
-	// Toggle text styles
-	format(command: string, value: string | undefined = undefined) {
+	//
+	// Execute command
+	execute(command: string, value: string | undefined = undefined) {
 		document.execCommand(command, false, value);
 	}
+	//
+	// Paste plain text
+	pastePlainText(evenet: ClipboardEvent) {
+		this.execute("insertHTML", evenet.clipboardData?.getData("text/plain") || "");
+	}
+
+	// Triggers //
+	//
+	// Press enter
 	onEnter(event: KeyboardEvent) {
 		let selection = window.getSelection();
 		if (selection == null) return;
@@ -84,12 +92,8 @@ export default class BlogEditor extends Vue {
 		if (selection.focusOffset == selection.focusNode?.nodeValue?.length) {
 			text += "\n";
 		}
-		this.format("insertHTML", text);
+		this.execute("insertHTML", text);
 	}
-	pastePlainText(evenet: ClipboardEvent) {
-		this.format("insertHTML", evenet.clipboardData?.getData("text/plain") || "");
-	}
-	
 }
 </script>
 
@@ -97,68 +101,21 @@ export default class BlogEditor extends Vue {
 @import "../../assets/styles/variables";
 
 .blog-editor {
-	padding-top: 98px;
-}
+	display: flex;
+	flex-direction: column;
 
-.header {
-	position: fixed;
-	top: $header-height;
-	left: 0;
-
-	width: 100%;
+	.editor-header {
+		flex-shrink: 0;
+	}
 }
 
 .contents {
 	display: flex;
-	height: 100%;
-
-	.blocks {
-		flex-grow: 1;
-	}
-	.sidebar {
-		width: 300px;
-		height: 100%;
-
-		background-color: $background-color-lv1;
-	}
+	flex-grow: 1;
 }
 
 .blocks {
 	height: 100%;
 	overflow: hidden auto;
-
-	&::v-deep [class|="editor-block"] {
-		padding: 30px;
-
-		border: 2px solid transparent;
-
-		white-space: pre-wrap;
-
-		// transition: border-color 0.1s;
-
-		b {
-			font-weight: bold;
-		}
-		i {
-			font-style: italic;
-		}
-		u {
-			text-decoration: underline;
-		}
-		strike {
-			text-decoration: line-through;
-		}
-		sub,
-		sup {
-			font-size: small;
-		}
-
-		&:hover {
-			border-color: rgba($theme-color, 0.5);
-		}
-		&:focus {
-			border-color: $theme-color;
-		}
-	}
 }
 </style>
