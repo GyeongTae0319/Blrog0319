@@ -21,9 +21,8 @@ export default class EditorBlock extends Vue {
 	onFocus() {
 		this.$emit("focus", this.type);
 	}
+	onClickContainer() {
+		(this.$refs["mainInput"] as HTMLElement).focus();
+	}
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

@@ -28,3 +28,11 @@ export default class EditorHeader extends Vue {
 	}
 }
 </script>
+
+<style lang="scss" scoped>
+@import "../../assets/styles/variables";
+
+.editor-header {
+	background-color: $background-color;
+}
+</style>

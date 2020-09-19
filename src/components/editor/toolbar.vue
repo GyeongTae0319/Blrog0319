@@ -6,7 +6,7 @@
 				:key="key"
 				:icon="data.icon"
 				:name="data.name"
-				@click="(event) => bus.$emit('addblock', key)"
+				@click="bus.$emit('addblock', key)"
 			/>
 		</div>
 	</div>

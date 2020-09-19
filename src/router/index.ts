@@ -71,10 +71,10 @@ const routes: Array<RouteConfig> = [
 		]
 	},
 	{
-		path: "/editor",
-		name: "BlogPostEditor",
+		path: "/admin/editor",
+		name: "BlogEditor",
 		component: () => import(
-			/* webpackChunkName: "blog-write-post" */
+			/* webpackChunkName: "blog-editor" */
 			"@/views/blog/editor.vue"
 		)
 	}

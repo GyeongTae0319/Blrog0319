@@ -11,7 +11,7 @@
 		<div v-if="$store.getters.isAdmin" class="admin">
 			<app-button-tag
 				type="route"
-				:to="{ name: 'BlogPostEditor' }"
+				:to="{ name: 'BlogEditor' }"
 				dir="down"
 				class="write-post"
 			>

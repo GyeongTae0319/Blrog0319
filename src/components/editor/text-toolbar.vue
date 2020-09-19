@@ -5,8 +5,7 @@
 			:key="key"
 			:icon="data.icon"
 			:name="data.name"
-			:action="key"
-			@action="(action) => bus.$emit('execute', action)"
+			@click="bus.$emit('execute', key)"
 		/>
 	</div>
 </template>

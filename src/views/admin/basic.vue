@@ -107,7 +107,7 @@ export default class AdminHome extends Vue {
 	}
 
 	changeProfileImage() {
-		let profileImageInput = this.$refs.profileImageInput as HTMLInputElement;
+		let profileImageInput = this.$refs["profileImageInput"] as HTMLInputElement;
 		profileImageInput.click();
 	}
 	saveProfile() {

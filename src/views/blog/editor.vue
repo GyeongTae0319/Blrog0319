@@ -21,11 +21,12 @@
 				:value="block.value"
 			/>
 		</div>
+		<div class="guidline"></div>
 	</div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 // Components //
 import EditorHeader from "@/components/editor/header.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
@@ -34,6 +35,10 @@ interface PostBlock {
 	id: number;
 	type: string;
 	value: { [key: string]: any };
+}
+interface PostHeader {
+	title: string;
+	banner: string | null;
 }
 
 @Component({
@@ -44,20 +49,19 @@ interface PostBlock {
 })
 export default class BlogEditor extends Vue {
 	editorVue: Vue = new Vue();
+
+	header: PostHeader = {
+		title: "",
+		banner: null,
+	}
 	blocks: PostBlock[] = [];
-	images: string[] = [];
-	title: string = "";
-	banner: number | null = null;
 	blockIdCounter = 0;
 
 	created() {
 		this.editorVue.$on("addblock", this.addBlock);
 		this.editorVue.$on("execute", this.execute);
 
-		this.addBlock("heading", {
-			title: this.title,
-			banner: this.banner
-		});
+		this.addBlock("heading", this.header);
 	}
 
 	// Actions //
@@ -105,17 +109,39 @@ export default class BlogEditor extends Vue {
 	flex-direction: column;
 
 	.editor-header {
+		z-index: 1;
 		flex-shrink: 0;
+	}
+	.blocks {
+		position: relative;
+
+		flex-grow: 1;
+		overflow: hidden auto;
 	}
 }
 
-.contents {
-	display: flex;
-	flex-grow: 1;
-}
+.guidline {
+	position: fixed;
+	bottom: 0;
 
-.blocks {
+	width: 100%;
 	height: 100%;
-	overflow: hidden auto;
+
+	pointer-events: none;
+
+	&::before {
+		content: "";
+
+		display: block;
+		box-sizing: border-box;
+
+		width: 100%;
+		max-width: 902px;
+		height: 100%;
+		margin: 0 auto;
+
+		border: 1px dashed $background-color-lv2;
+		border-width: 0 1px;
+	}
 }
 </style>

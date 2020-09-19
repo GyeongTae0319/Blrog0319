@@ -112,7 +112,6 @@ body,
 	height: 100%;
 	overflow: hidden;
 }
-
 #app {
 	display: flex;
 
@@ -125,5 +124,23 @@ body,
 		height: 0;
 		flex-grow: 1;
 	}
+}
+
+// Reset html tags
+b {
+	font-weight: bold;
+}
+i {
+	font-style: italic;
+}
+u {
+	text-decoration: underline;
+}
+strike {
+	text-decoration: line-through;
+}
+sup,
+sub {
+	font-size: 0.75em;
 }
 </style>

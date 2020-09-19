@@ -2,7 +2,7 @@
 	<app-button-tag
 		class="editor-text-toolbar-button"
 		dir="down"
-		@click.prevent="$emit(action, value)"
+		v-on="$listeners"
 	>
 		<i class="material-icons icon">{{ icon }}</i>
 		<template #tag>{{ name }}</template>
