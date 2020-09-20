@@ -41,6 +41,13 @@ interface PostHeader {
 	banner: string | null;
 }
 
+interface Image {
+	value: string;
+	alt: string;
+	width: number;
+	height: number;
+}
+
 @Component({
 	components: {
 		EditorHeader,
@@ -49,6 +56,8 @@ interface PostHeader {
 })
 export default class BlogEditor extends Vue {
 	editorVue: Vue = new Vue();
+
+	images: Image[] = [];
 
 	header: PostHeader = {
 		title: "",
@@ -136,7 +145,7 @@ export default class BlogEditor extends Vue {
 		box-sizing: border-box;
 
 		width: 100%;
-		max-width: 902px;
+		max-width: $post-width-max + 2px;
 		height: 100%;
 		margin: 0 auto;
 

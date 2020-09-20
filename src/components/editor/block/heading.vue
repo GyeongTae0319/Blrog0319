@@ -24,15 +24,25 @@
 				@input="onInput"
 			></span>
 			<span v-if="blankTitle" class="placeholder">제목</span>
-			<!-- Change banner image button -->
-			<app-button-tag
-				dir="left"
-				class="banner-image-input"
-				@click="changeBannerImage"
-			>
-				<i class="material-icons">insert_photo</i>
-				<template #tag>배경 사진 바꾸기</template>
-			</app-button-tag>
+			<!-- Control banner image button -->
+			<div class="banner-image-control">
+				<app-button-tag
+					dir="down"
+					class="change"
+					@click.prevent.stop="changeBannerImage"
+				>
+					<i class="material-icons">insert_photo</i>
+					<template #tag>배경 바꾸기</template>
+				</app-button-tag>
+				<app-button-tag
+					dir="down"
+					class="remove"
+					@click.prevent.stop="removeBannerImage"
+				>
+					<i class="material-icons">delete</i>
+					<template #tag>배경 제거</template>
+				</app-button-tag>
+			</div>
 		</div>
 		<input
 			hidden
@@ -97,6 +107,10 @@ export default class EditorBlockHeading extends EditorBlock {
 	changeBannerImage() {
 		(this.$refs["bannerImageInput"] as HTMLInputElement).click();
 	}
+	removeBannerImage() {
+		(this.$refs["bannerImageInput"] as HTMLInputElement).value = "";
+		this.value.banner = null;
+	}
 
 	get blankTitle() {
 		return this.value.title.replaceAll(/\s/g, "") == "";
@@ -116,6 +130,7 @@ export default class EditorBlockHeading extends EditorBlock {
 	width: 100%;
 	height: 300px;
 
+	// Banner Imag //
 	.app-image {
 		position: absolute;
 		top: 0;
@@ -139,14 +154,24 @@ export default class EditorBlockHeading extends EditorBlock {
 			rgba(0, 0, 0, 0.5) 100%
 		);
 	}
+	// Control
+	.banner-image-control {
+		display: flex;
+		gap: 16px;
 
+		position: absolute;
+		top: 16px;
+		right: 16px;
+	}
+
+	// Title
 	.title {
 		display: flex;
 		align-items: flex-end;
 
 		position: relative;
 
-		max-width: 900px;
+		max-width: $post-width-max;
 		height: 100%;
 		margin: 0 auto;
 		padding: 16px 32px;
@@ -160,11 +185,6 @@ export default class EditorBlockHeading extends EditorBlock {
 			position: absolute;
 			color: $text-color-white-disable;
 		}
-	}
-	.banner-image-input {
-		position: absolute;
-		top: 16px;
-		right: 16px;
 	}
 
 	&.no-banner {
