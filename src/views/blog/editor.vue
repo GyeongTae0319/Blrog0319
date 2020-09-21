@@ -37,7 +37,9 @@
 					v-for="image in imageList"
 					:key="image.id"
 					:image="image"
+					:isthumbnail="thumbnail === image.id"
 					:bus="editorVue"
+					@click.prevent.stop="thumbnail = image.id"
 				/>
 			</div>
 		</div>
@@ -125,6 +127,8 @@ export default class BlogEditor extends Vue {
 		title: "",
 		banner: null,
 	}
+	// Thumbnail
+	thumbnail: number = -1;
 
 	showImageList: boolean = false;
 

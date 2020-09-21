@@ -6,9 +6,10 @@
 			objectfit="cover"
 			draggable="false"
 		/>
+		<span v-if="isthumbnail" class="thumbnail">대표</span>
 		<app-button
 			class="remove"
-			@click="bus.$emit('removeimage', image.id)"
+			@click.prevent.stop="bus.$emit('removeimage', image.id)"
 		>
 			<i class="material-icons">remove</i>
 		</app-button>
@@ -29,6 +30,10 @@ export default class EditorImage extends Vue {
 		type: Object,
 		required: true
 	}) image!: { [kye: string]: any };
+	@Prop({
+		type: Boolean,
+		default: false
+	}) isthumbnail!: boolean;
 	@Prop({
 		type: Vue,
 		required: true
@@ -55,6 +60,19 @@ export default class EditorImage extends Vue {
 		width: 100%;
 		height: 100%;
 	}
+	.thumbnail {
+		position: absolute;
+		top: 0;
+		left: 0;
+
+		padding: 2px 4px;
+
+		border-bottom-right-radius: 8px;
+
+		background-color: $theme-color;
+
+		font-size: small;
+	}
 	.remove {
 		visibility: hidden;
 
@@ -76,6 +94,10 @@ export default class EditorImage extends Vue {
 			width: 96px;
 			height: 96px;
 			margin: -4px;
+		}
+		.thumbnail {
+			top: -4px;
+			left: -4px;
 		}
 		.remove {
 			visibility: visible;
