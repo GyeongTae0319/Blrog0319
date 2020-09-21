@@ -37,6 +37,7 @@
 					v-for="image in imageList"
 					:key="image.id"
 					:image="image"
+					:bus="editorVue"
 				/>
 			</div>
 		</div>
