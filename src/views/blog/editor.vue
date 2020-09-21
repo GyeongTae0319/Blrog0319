@@ -128,19 +128,27 @@ export default class BlogEditor extends Vue {
 	showImageList: boolean = false;
 
 	created() {
+		// Actions //
+		// Block
 		this.editorVue.$on("addblock", this.addBlock);
 		this.editorVue.$on("getblock", this.getBlock);
+		this.editorVue.$on("removeblock", this.removeBlock);
+		// Image
 		this.editorVue.$on("addimage", this.addImage);
 		this.editorVue.$on("getimage", this.getImage);
+		this.editorVue.$on("removeimage", this.removeImage);
+		// Document
 		this.editorVue.$on("execute", this.execute);
+		// Layout
 		this.editorVue.$on("showimagelist", (show: boolean) => this.showImageList = show);
 
+		// Init post
 		this.addBlock("heading", this.heading);
 	}
 
 	// Actions //
 	//
-	// Add block
+	// Block
 	addBlock(type: string, value: { [key: string]: any } = {}) {
 		this.blockList.push({
 			id: ++this.blockIdCounter,
@@ -148,13 +156,21 @@ export default class BlogEditor extends Vue {
 			value: value
 		});
 	}
-	getBlock(id: number, get: (block: BlockData) => void = () => {}): BlockData {
-		let block = this.blockList.filter(value => value.id === id)[0];
+	getBlock(id: number, get: (block: BlockData) => void = () => {}): BlockData | null {
+		let block = this.blockList.find(value => value.id === id);
+		if (block == undefined) return null;
 		get(block);
 		return block;
 	}
+	removeBlock(id: number): boolean {
+		let index = this.blockList.findIndex(value => value.id === id);
+		if (index == -1) return false;
+		this.blockList.splice(index, 1);
+		this.editorVue.$emit("onremoveblock", id);
+		return true;
+	}
 	//
-	// Add image
+	// Image
 	addImage(file: File, success: (image: ImageData) => void = () => {}) {
 		if (file && ImageTypes.includes(file.type)) {
 			let fileReader = new FileReader();
@@ -178,10 +194,18 @@ export default class BlogEditor extends Vue {
 			}
 		} else console.log("[ERR] File error! <@/views/blog/editor.vue#addImage()>");
 	}
-	getImage(id: number, get: (image: ImageData) => void = () => {}): ImageData {
-		let image = this.imageList.filter(value => value.id === id)[0];
+	getImage(id: number, get: (image: ImageData) => void = () => {}): ImageData | null {
+		let image = this.imageList.find(value => value.id === id);
+		if (image == undefined) return null;
 		get(image);
 		return image;
+	}
+	removeImage(id: number): boolean {
+		let index = this.imageList.findIndex(value => value.id === id);
+		if (index == -1) return false;
+		this.imageList.splice(index, 1);
+		this.editorVue.$emit("onremoveimage", id);
+		return true;
 	}
 	//
 	// Execute command
