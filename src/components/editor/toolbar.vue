@@ -6,7 +6,14 @@
 				:key="key"
 				:icon="data.icon"
 				:name="data.name"
-				@click="bus.$emit('addblock', key)"
+				@click.stop="bus.$emit('addblock', key)"
+			/>
+		</div>
+		<div class="control">
+			<editor-toolbar-button
+				icon="all_inbox"
+				name="사진"
+				@click.stop="bus.$emit('showimagelist', true)"
 			/>
 		</div>
 	</div>

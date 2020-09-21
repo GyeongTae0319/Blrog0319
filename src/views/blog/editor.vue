@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="blog-editor"
-		@paste.prevent="pastePlainText"
+		@paste.prevent="onPasteText"
 		@keydown.enter.exact.prevent="onEnter"
 		@keydown.shift.enter.exact.prevent="onEnter"
 		@keydown.ctrl.b.exact.prevent="execute('bold')"
@@ -10,9 +10,37 @@
 		@keydown.alt.shift.53.exact.prevent="execute('strikeThrough')"
 		@keydown.ctrl.190.exact.prevent="execute('superscript')"
 		@keydown.ctrl.188.exact.prevent="execute('subscript')"
+		@click="showImageList = false"
 	>
 		<editor-header :bus="editorVue" />
-		<div class="blocks">
+		<div
+			:class="{
+				'image-list': true,
+				'show': showImageList
+			}"
+			@click.stop="showImageList = true"
+		>
+			<div class="header">
+				<span class="title">사진 목록</span>
+				<app-button @click.stop="showImageList = false">
+					<i class="material-icons">close</i>
+				</app-button>
+			</div>
+			<div class="list">
+				<app-button
+					class="add-image"
+					@click="onClickAddImage"
+				>
+					<i class="material-icons">add</i>
+				</app-button>
+				<editor-image
+					v-for="image in imageList"
+					:key="image.id"
+					:image="image"
+				/>
+			</div>
+		</div>
+		<div class="block-list">
 			<editor-post-block
 				v-for="block in blockList"
 				:key="block.id"
@@ -23,14 +51,24 @@
 			/>
 		</div>
 		<div class="guidline"></div>
+		<input
+			type="file"
+			accept="image/*"
+			multiple
+			hidden
+			ref="addImageInput"
+			@change="onChangeAddImageInput"
+		>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
 // Components //
+import AppButton from "@/components/app/button.vue";
 import EditorHeader from "@/components/editor/header.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
+import EditorImage from "@/components/editor/image.vue";
 
 // Interfaces //
 export interface BlockData {
@@ -40,10 +78,11 @@ export interface BlockData {
 }
 export interface BlockHeadingData {
 	title: string;
-	banner: string | null;
+	banner: number | null;
 }
 // Image
 export interface ImageData {
+	id: number;
 	value: string;
 	alt: string;
 	width: number;
@@ -64,8 +103,10 @@ const ImageTypes: string[] = [
 
 @Component({
 	components: {
+		AppButton,
 		EditorHeader,
-		EditorPostBlock
+		EditorPostBlock,
+		EditorImage
 	}
 })
 export default class BlogEditor extends Vue {
@@ -74,8 +115,9 @@ export default class BlogEditor extends Vue {
 
 	// Editor units
 	blockList: BlockData[] = [];
+	blockIdCounter: number = 0;
 	imageList: ImageData[] = [];
-	blockIdCounter = 0;
+	imageIdCounter: number = 0;
 
 	// Post heading
 	heading: BlockHeadingData = {
@@ -83,10 +125,15 @@ export default class BlogEditor extends Vue {
 		banner: null,
 	}
 
+	showImageList: boolean = false;
+
 	created() {
 		this.editorVue.$on("addblock", this.addBlock);
+		this.editorVue.$on("getblock", this.getBlock);
 		this.editorVue.$on("addimage", this.addImage);
+		this.editorVue.$on("getimage", this.getImage);
 		this.editorVue.$on("execute", this.execute);
+		this.editorVue.$on("showimagelist", (show: boolean) => this.showImageList = show);
 
 		this.addBlock("heading", this.heading);
 	}
@@ -101,9 +148,14 @@ export default class BlogEditor extends Vue {
 			value: value
 		});
 	}
+	getBlock(id: number, get: (block: BlockData) => void = () => {}): BlockData {
+		let block = this.blockList.filter(value => value.id === id)[0];
+		get(block);
+		return block;
+	}
 	//
 	// Add image
-	addImage(file: File, success: (image: ImageData) => void) {
+	addImage(file: File, success: (image: ImageData) => void = () => {}) {
 		if (file && ImageTypes.includes(file.type)) {
 			let fileReader = new FileReader();
 			fileReader.readAsDataURL(file);
@@ -112,6 +164,7 @@ export default class BlogEditor extends Vue {
 					let image = new Image();
 					image.onload = () => {
 						let data: ImageData = {
+							id: ++this.imageIdCounter,
 							value: image.src,
 							alt: "",
 							width: image.width,
@@ -125,18 +178,34 @@ export default class BlogEditor extends Vue {
 			}
 		} else console.log("[ERR] File error! <@/views/blog/editor.vue#addImage()>");
 	}
+	getImage(id: number, get: (image: ImageData) => void = () => {}): ImageData {
+		let image = this.imageList.filter(value => value.id === id)[0];
+		get(image);
+		return image;
+	}
 	//
 	// Execute command
 	execute(command: string, value: string | undefined = undefined) {
 		document.execCommand(command, false, value);
 	}
-	//
-	// Paste plain text
-	pastePlainText(evenet: ClipboardEvent) {
-		this.execute("insertHTML", evenet.clipboardData?.getData("text/plain") || "");
-	}
 
 	// Triggers //
+	//
+	// Add image
+	onClickAddImage(event: MouseEvent) {
+		(this.$refs["addImageInput"] as HTMLInputElement).click();
+	}
+	onChangeAddImageInput(event: InputEvent) {
+		let target = event.target as HTMLInputElement;
+		let fileList = (target.files as FileList);
+		for (let i = 0; i < fileList.length; i++) {
+			let file = fileList.item(i);
+			if (file == null) continue;
+			if (!ImageTypes.includes(file.type)) continue;
+			this.addImage(file);
+		}
+		target.value = "";
+	}
 	//
 	// Press enter
 	onEnter(event: KeyboardEvent) {
@@ -148,6 +217,11 @@ export default class BlogEditor extends Vue {
 			text += "\n";
 		}
 		this.execute("insertHTML", text);
+	}
+	//
+	// Paste text
+	onPasteText(evenet: ClipboardEvent) {
+		this.execute("insertHTML", evenet.clipboardData?.getData("text/plain") || "");
 	}
 }
 </script>
@@ -163,11 +237,70 @@ export default class BlogEditor extends Vue {
 		z-index: 1;
 		flex-shrink: 0;
 	}
-	.blocks {
+	.block-list {
 		position: relative;
 
 		flex-grow: 1;
 		overflow: hidden auto;
+	}
+}
+
+.image-list {
+	display: flex;
+	flex-direction: column;
+
+	position: fixed;
+	z-index: 2;
+	top: $header-height;
+	right: -336px;
+
+	height: calc(100% - #{$header-height});
+
+	background-color: $background-color-lv1;
+
+	transition: right 0.25s;
+
+	.header {
+		display: flex;
+		flex-shrink: 0;
+		justify-content: space-between;
+
+		width: 100%;
+		padding: 16px;
+
+		border-bottom: 1px solid $background-color-lv2;
+	}
+	.list {
+		display: grid;
+		grid-template-columns: repeat(3, 96px);
+		grid-template-rows: repeat(auto-fill, 96px);
+		gap: 8px;
+
+		flex-grow: 1;
+		padding: 16px;
+
+		overflow: hidden auto;
+
+		.add-image {
+			width: 100%;
+			height: 100%;
+
+			border: 2px dashed $background-color-lv3;
+			border-radius: 8px;
+
+			color: $background-color-lv3;
+
+			transition: border-color 0.1s, color 0.1s;
+
+			&:hover {
+				border-color: $background-color-lv4;
+				color: $background-color-lv4;
+			}
+		}
+	}
+
+	&.show {
+		right: 0;
 	}
 }
 
