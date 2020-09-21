@@ -14,11 +14,12 @@
 		<editor-header :bus="editorVue" />
 		<div class="blocks">
 			<editor-post-block
-				v-for="block in blocks"
+				v-for="block in blockList"
 				:key="block.id"
 				:id="block.id"
 				:type="block.type"
 				:value="block.value"
+				:bus="editorVue"
 			/>
 		</div>
 		<div class="guidline"></div>
@@ -31,22 +32,35 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 import EditorHeader from "@/components/editor/header.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
 
-interface PostBlock {
+// Interfaces //
+export interface BlockData {
 	id: number;
 	type: string;
 	value: { [key: string]: any };
 }
-interface PostHeader {
+export interface BlockHeadingData {
 	title: string;
 	banner: string | null;
 }
-
-interface Image {
+// Image
+export interface ImageData {
 	value: string;
 	alt: string;
 	width: number;
 	height: number;
 }
+
+const ImageTypes: string[] = [
+	"image/apng",
+	"image/bmp",
+	"image/gif",
+	"image/x-icon",
+	"image/jpeg",
+	"image/png",
+	"image/svg+xml",
+	"image/tiff",
+	"image/webp"
+];
 
 @Component({
 	components: {
@@ -55,33 +69,61 @@ interface Image {
 	}
 })
 export default class BlogEditor extends Vue {
+	// Event bus
 	editorVue: Vue = new Vue();
 
-	images: Image[] = [];
+	// Editor units
+	blockList: BlockData[] = [];
+	imageList: ImageData[] = [];
+	blockIdCounter = 0;
 
-	header: PostHeader = {
+	// Post heading
+	heading: BlockHeadingData = {
 		title: "",
 		banner: null,
 	}
-	blocks: PostBlock[] = [];
-	blockIdCounter = 0;
 
 	created() {
 		this.editorVue.$on("addblock", this.addBlock);
+		this.editorVue.$on("addimage", this.addImage);
 		this.editorVue.$on("execute", this.execute);
 
-		this.addBlock("heading", this.header);
+		this.addBlock("heading", this.heading);
 	}
 
 	// Actions //
 	//
 	// Add block
 	addBlock(type: string, value: { [key: string]: any } = {}) {
-		this.blocks.push({
+		this.blockList.push({
 			id: ++this.blockIdCounter,
 			type: type,
 			value: value
 		});
+	}
+	//
+	// Add image
+	addImage(file: File, success: (image: ImageData) => void) {
+		if (file && ImageTypes.includes(file.type)) {
+			let fileReader = new FileReader();
+			fileReader.readAsDataURL(file);
+			fileReader.onload = (event) => {
+				if (event.target) {
+					let image = new Image();
+					image.onload = () => {
+						let data: ImageData = {
+							value: image.src,
+							alt: "",
+							width: image.width,
+							height: image.height
+						};
+						this.imageList.push(data);
+						success(data);
+					}
+					image.src = event.target.result as string;
+				} else console.log("[ERR] Event target error! <@/views/blog/editor.vue#addImage()>");
+			}
+		} else console.log("[ERR] File error! <@/views/blog/editor.vue#addImage()>");
 	}
 	//
 	// Execute command

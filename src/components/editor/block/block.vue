@@ -15,6 +15,10 @@ export default class EditorBlock extends Vue {
 		type: Object,
 		required: true,
 	}) value!: { [key: string]: any };
+	@Prop({
+		type: Vue,
+		required: true
+	}) bus!: Vue;
 
 	type: string = "block";
 

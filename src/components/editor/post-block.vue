@@ -3,56 +3,69 @@
 		v-if="type === 'heading'"
 		:id="id"
 		:value="value"
+		:bus="bus"
 	/>
 	<editor-block-subheading
 		v-else-if="type === 'subheading'"
 		:id="id"
 		:value="value"
+		:bus="bus"
 	/>
 	<editor-block-paragraph
 		v-else-if="type === 'paragraph'"
 		:id="id"
 		:value="value"
+		:bus="bus"
 	/>
 	<editor-block-quote
 		v-else-if="type === 'quote'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-list
 		v-else-if="type === 'list'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-image
 		v-else-if="type === 'image'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-video
 		v-else-if="type === 'video'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-horizontal-rule
 		v-else-if="type === 'horizontal-rule'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-table
 		v-else-if="type === 'table'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-calendar
 		v-else-if="type === 'calendar'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-link
 		v-else-if="type === 'link'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-file
 		v-else-if="type === 'file'"
 		:id="id"
+		:bus="bus"
 	/>
 	<editor-block-missing
-		:id="id"
 		v-else
+		:id="id"
+		:bus="bus"
 	/>
 </template>
 
@@ -121,6 +134,10 @@ export default class EditorPostBlock extends Vue {
 		type: Object,
 		default: () => {}
 	}) value!: { [key: string]: any };
+	@Prop({
+		type: Vue,
+		required: true
+	}) bus!: Vue;
 }
 </script>
 

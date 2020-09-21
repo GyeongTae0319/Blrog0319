@@ -57,6 +57,7 @@
 <script lang="ts">
 import { Vue , Component } from "vue-property-decorator";
 import EditorBlock from '@/components/editor/block/block.vue';
+import { ImageData } from '@/views/blog/editor.vue';
 // Components //
 import AppImage from "@/components/app/image.vue";
 import AppButtonTag from "@/components/app/button-tag.vue";
@@ -72,7 +73,6 @@ const ImageTypes: string[] = [
 	"image/tiff",
 	"image/webp"
 ];
-const FunctionKeysRegex = /(F[0-9]{1,2}|Arrow.*|Control|Shift|Alt|Meta|Tab|Insert|Delete|Home|End|PageUp|PageDown|Escape|ScrollLock|Pause|NumLock|Backspace)/;
 
 @Component({
 	components: {
@@ -95,13 +95,9 @@ export default class EditorBlockHeading extends EditorBlock {
 	onChangeBannerImage(event: InputEvent) {
 		let target = event.target as HTMLInputElement;
 		let file = (target.files as FileList)[0];
-		if (file && ImageTypes.includes(file.type)) {
-			let fileReader = new FileReader();
-			fileReader.readAsDataURL(file);
-			fileReader.onload = (event) => {
-				this.value.banner = event.target?.result as string;
-			}
-		}
+		this.bus.$emit("addimage", file, (image: ImageData) => {
+			
+		});
 	}
 
 	changeBannerImage() {
