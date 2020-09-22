@@ -75,6 +75,7 @@ import EditorPostBlock from "@/components/editor/post-block.vue";
 import EditorImage from "@/components/editor/image.vue";
 
 // Interfaces //
+// Blocks
 export interface BlockData {
 	id: number;
 	type: string;
@@ -183,6 +184,7 @@ export default class BlogEditor extends Vue {
 		this.editorVue.$on("removeimage", this.removeImage);
 		// Document
 		this.editorVue.$on("execute", this.execute);
+		this.editorVue.$on("bind", this.bind);
 		// Layout
 		this.editorVue.$on("showimagelist", (show: boolean) => this.showImageList = show);
 
@@ -255,6 +257,11 @@ export default class BlogEditor extends Vue {
 	// Execute command
 	execute(command: string, value: string | undefined = undefined) {
 		document.execCommand(command, false, value);
+	}
+	//
+	// Bind contents
+	bind(type: string) {
+		console.log(window.getSelection());
 	}
 
 	// Triggers //

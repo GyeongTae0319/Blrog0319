@@ -10,13 +10,13 @@
 			/>
 		</div>
 		<hr>
-		<div class="insert">
+		<div class="bind">
 			<editor-toolbar-button-icon
-				v-for="(button, key) in insertList"
+				v-for="(button, key) in bindList"
 				:key="key"
 				:icon="button.icon"
 				:name="button.name"
-				@click.prevent.stop="bus.$emit('insert', key)"
+				@click.prevent.stop="bus.$emit('bind', key)"
 			/>
 		</div>
 		<hr>
@@ -29,6 +29,12 @@
 				@click.prevent.stop="bus.$emit('execute', key)"
 			/>
 		</div>
+		<hr>
+		<editor-toolbar-button-icon
+			icon="format_clear"
+			name="초기화"
+			@click.prevent.stop="bus.$emit('execute', 'removeFormat')"
+		/>
 	</div>
 </template>
 
@@ -73,7 +79,7 @@ export default class EditorToolbarText extends Vue {
 			name: "아래첨자"
 		}
 	};
-	insertList: { [key: string]: ToolbarButtonData } = {
+	bindList: { [key: string]: ToolbarButtonData } = {
 		"code": {
 			icon: "code",
 			name: "코드"

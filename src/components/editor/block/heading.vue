@@ -165,6 +165,8 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 		.placeholder {
 			position: absolute;
 			color: $text-color-white-disable;
+
+			pointer-events: none;
 		}
 	}
 
