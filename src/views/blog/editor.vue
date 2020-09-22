@@ -2,6 +2,7 @@
 	<div
 		class="blog-editor"
 		@paste.prevent="onPasteText"
+		@keydown.esc.prevent="showImageList = false"
 		@keydown.enter.exact.prevent="onEnter"
 		@keydown.shift.enter.exact.prevent="onEnter"
 		@keydown.ctrl.b.exact.prevent="execute('bold')"
@@ -82,6 +83,44 @@ export interface BlockData {
 export interface BlockHeadingData {
 	title: string;
 	banner: number | null;
+}
+export interface BlockSubheadingData {
+	content: string;
+	id: string;
+}
+export interface BlockParahraphData {
+	content: string;
+}
+export interface BlockQuoteData {
+	content: string;
+	source: string;
+	url: string | null;
+}
+export interface BlockListData {
+	content: string;
+}
+export interface BlockImageData {
+	type: "album" | "slide";
+	size: "screen" | "post"
+	value: ImageData[];
+}
+export interface BlockVideoData {
+	url: string;
+	size: "post" | "screen";
+}
+export interface BlockHorizontalRuleData {
+	type: number;
+	align: "left" | "center" | "right";
+}
+export interface BlockTableData {}
+export interface BlockcalendarData {}
+export interface BlockLinkData {
+	url: string;
+	type: "horizontal" | "vertical";
+}
+export interface BlockFileData {}
+export interface BlockMissingData {
+	type: string;
 }
 // Image
 export interface ImageData {

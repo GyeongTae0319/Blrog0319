@@ -8,19 +8,14 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 import EditorBlock from "@/components/editor/block/block.vue";
-import { component } from 'vue/types/umd';
+import { BlockParahraphData } from '@/views/blog/editor.vue';
 
 interface BlockData {
 	content: string;
 };
 
 @Component
-export default class EditorBlockParagraph extends EditorBlock {
-	@Prop({
-		type: Object,
-		required: true
-	}) value!: BlockData
-
+export default class EditorBlockParagraph extends EditorBlock<BlockParahraphData> {
 	content: string = "";
 
 	created() {

@@ -44,20 +44,13 @@
 				</app-button-tag>
 			</div>
 		</div>
-		<input
-			hidden
-			type="file"
-			accept="image/*"
-			ref="bannerImageInput"
-			@change="onChangeBannerImage"
-		>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue , Component } from "vue-property-decorator";
 import EditorBlock from '@/components/editor/block/block.vue';
-import { ImageData } from '@/views/blog/editor.vue';
+import { BlockHeadingData, ImageData } from '@/views/blog/editor.vue';
 // Components //
 import AppImage from "@/components/app/image.vue";
 import AppButtonTag from "@/components/app/button-tag.vue";
@@ -80,7 +73,7 @@ const ImageTypes: string[] = [
 		AppButtonTag
 	}
 })
-export default class EditorBlockHeading extends EditorBlock {
+export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 	type = "heading";
 	title: string = "";
 
@@ -92,19 +85,11 @@ export default class EditorBlockHeading extends EditorBlock {
 		let value = (event.target as HTMLSpanElement).innerText;
 		this.value.title = value;
 	}
-	onChangeBannerImage(event: InputEvent) {
-		let target = event.target as HTMLInputElement;
-		let file = (target.files as FileList)[0];
-		this.bus.$emit("addimage", file, (image: ImageData) => {
-			
-		});
-	}
 
 	changeBannerImage() {
-		(this.$refs["bannerImageInput"] as HTMLInputElement).click();
+		this.bus.$emit("getimage", (image: ImageData) => {});
 	}
 	removeBannerImage() {
-		(this.$refs["bannerImageInput"] as HTMLInputElement).value = "";
 		this.value.banner = null;
 	}
 

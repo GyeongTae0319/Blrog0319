@@ -6,7 +6,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
-export default class EditorBlock extends Vue {
+export default class EditorBlock<T> extends Vue {
 	@Prop({
 		type: Number,
 		required: true
@@ -14,7 +14,7 @@ export default class EditorBlock extends Vue {
 	@Prop({
 		type: Object,
 		required: true,
-	}) value!: { [key: string]: any };
+	}) value!: T;
 	@Prop({
 		type: Vue,
 		required: true
