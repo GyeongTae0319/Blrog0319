@@ -13,7 +13,7 @@
 		@keydown.ctrl.188.exact.prevent="execute('subscript')"
 		@click="showImageList = false"
 	>
-		<editor-header :bus="editorVue" />
+		<editor-toolbar :bus="editorVue" />
 		<div
 			:class="{
 				'image-list': true,
@@ -70,7 +70,7 @@
 import { Vue, Component, Watch } from "vue-property-decorator";
 // Components //
 import AppButton from "@/components/app/button.vue";
-import EditorHeader from "@/components/editor/header.vue";
+import EditorToolbar from "@/components/editor/toolbar.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
 import EditorImage from "@/components/editor/image.vue";
 
@@ -146,7 +146,7 @@ const ImageTypes: string[] = [
 @Component({
 	components: {
 		AppButton,
-		EditorHeader,
+		EditorToolbar,
 		EditorPostBlock,
 		EditorImage
 	}
@@ -301,9 +301,11 @@ export default class BlogEditor extends Vue {
 	display: flex;
 	flex-direction: column;
 
-	.editor-header {
+	.editor-toolbar {
 		z-index: 1;
 		flex-shrink: 0;
+
+		background-color: $background-color;
 	}
 	.block-list {
 		position: relative;

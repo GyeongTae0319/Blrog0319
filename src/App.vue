@@ -143,4 +143,8 @@ sup,
 sub {
 	font-size: 0.75em;
 }
+code {
+	background-color: rgba(#61afef, 0.25);
+	color: #61afef;
+}
 </style>

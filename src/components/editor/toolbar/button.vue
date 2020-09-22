@@ -1,8 +1,5 @@
 <template>
-	<app-button
-		class="editor-toolbar-button"
-		v-on="$listeners"
-	>
+	<app-button class="editor-toolbar-button" v-on="$listeners">
 		<i class="material-icons icon">{{ icon }}</i>
 		<span class="name">{{ name }}</span>
 	</app-button>
@@ -19,7 +16,7 @@ import AppButton from "@/components/app/button.vue";
 export default class EditorToolbarButton extends Vue {
 	@Prop({
 		type: String,
-		required: true,
+		required: true
 	}) icon!: string;
 	@Prop({
 		type: String,
@@ -29,15 +26,11 @@ export default class EditorToolbarButton extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/styles/variables";
+@import "../../../assets/styles/variables";
 
 .editor-toolbar-button {
-	display: flex;
 	flex-direction: column;
-	gap: 4px;
-
-	width: 48px;
-	height: 64px;
+	gap: 8px;
 
 	.name {
 		font-size: small;
