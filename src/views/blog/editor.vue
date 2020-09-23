@@ -261,7 +261,12 @@ export default class BlogEditor extends Vue {
 	//
 	// Bind contents
 	bind(type: string) {
-		console.log(window.getSelection());
+		let selection = window.getSelection();
+		if (selection == null) return;
+
+		let text = selection.toString();
+		this.execute("delete");
+		this.execute("insertHTML", `<code class="inline">${text}</code><span></span>`);
 	}
 
 	// Triggers //

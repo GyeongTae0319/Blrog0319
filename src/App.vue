@@ -143,8 +143,12 @@ sup,
 sub {
 	font-size: 0.75em;
 }
-code {
-	background-color: rgba(#61afef, 0.25);
+code.inline {
+	padding: 0 0.25em;
+
+	border-radius: 0.25em;
+
+	background-color: rgba(#61afef, 0.15);
 	color: #61afef;
 }
 </style>
