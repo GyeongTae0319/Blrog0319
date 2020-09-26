@@ -2,6 +2,7 @@
 	<div class="editor-toolbar">
 		<div class="top">
 			<editor-toolbar-block :bus="bus" />
+			<editor-toolbar-setting :bus="bus" />
 		</div>
 		<div class="bottom">
 			<editor-toolbar-text :bus="bus" />
@@ -13,6 +14,7 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 // Components //
 import EditorToolbarBlock from "@/components/editor/toolbar/block.vue";
+import EditorToolbarSetting from "@/components/editor/toolbar/setting.vue";
 import EditorToolbarText from "@/components/editor/toolbar/text.vue";
 
 export interface ToolbarButtonData {
@@ -23,6 +25,7 @@ export interface ToolbarButtonData {
 @Component({
 	components: {
 		EditorToolbarBlock,
+		EditorToolbarSetting,
 		EditorToolbarText
 	}
 })

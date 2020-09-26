@@ -2,7 +2,7 @@
 	<div
 		class="blog-editor"
 		@paste.prevent="onPasteText"
-		@keydown.esc.prevent="showImageList = false"
+		@keydown.esc.prevent="editorVue.$emit('showimagelist', false)"
 		@keydown.enter.exact.prevent="onEnter"
 		@keydown.shift.enter.exact.prevent="onEnter"
 		@keydown.ctrl.b.exact.prevent="execute('bold')"
@@ -11,58 +11,26 @@
 		@keydown.alt.shift.53.exact.prevent="execute('strikeThrough')"
 		@keydown.ctrl.190.exact.prevent="execute('superscript')"
 		@keydown.ctrl.188.exact.prevent="execute('subscript')"
-		@click="showImageList = false"
+		@click="editorVue.$emit('showimagelist', false)"
 	>
 		<editor-toolbar :bus="editorVue" />
-		<div
-			:class="{
-				'image-list': true,
-				'show': showImageList
-			}"
-			@click.stop="showImageList = true"
-		>
-			<div class="header">
-				<span class="title">사진 목록</span>
-				<app-button @click.stop="showImageList = false">
-					<i class="material-icons">close</i>
-				</app-button>
-			</div>
-			<div class="list">
-				<app-button
-					class="add-image"
-					@click="onClickAddImage"
-				>
-					<i class="material-icons">add</i>
-				</app-button>
-				<editor-image
-					v-for="image in imageList"
-					:key="image.id"
-					:image="image"
-					:isthumbnail="thumbnail === image.id"
-					:bus="editorVue"
-					@click.prevent.stop="thumbnail = image.id"
-				/>
-			</div>
-		</div>
+		<editor-image-list
+			:bus="editorVue"
+			:imagelist.sync="imageList"
+			:thumbnail.sync="thumbnail"
+			:imageidcounter.sync="imageIdCounter"
+		/>
 		<div class="block-list">
 			<editor-post-block
 				v-for="block in blockList"
 				:key="block.id"
 				:id="block.id"
-				:type="block.type"
-				:value="block.value"
+				:type.sync="block.type"
+				:value.sync="block.value"
 				:bus="editorVue"
 			/>
 		</div>
 		<div class="guidline"></div>
-		<input
-			type="file"
-			accept="image/*"
-			multiple
-			hidden
-			ref="addImageInput"
-			@change="onChangeAddImageInput"
-		>
 	</div>
 </template>
 
@@ -71,8 +39,8 @@ import { Vue, Component, Watch } from "vue-property-decorator";
 // Components //
 import AppButton from "@/components/app/button.vue";
 import EditorToolbar from "@/components/editor/toolbar.vue";
+import EditorImageList from "@/components/editor/image-list.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
-import EditorImage from "@/components/editor/image.vue";
 
 // Interfaces //
 // Blocks
@@ -131,8 +99,15 @@ export interface ImageData {
 	width: number;
 	height: number;
 }
+// Selection
+interface SelectionStyle {
+	isend: boolean;
+	style: {
+		[key: string]: boolean;
+	};
+}
 
-const ImageTypes: string[] = [
+export const ImageTypes: string[] = [
 	"image/apng",
 	"image/bmp",
 	"image/gif",
@@ -148,8 +123,8 @@ const ImageTypes: string[] = [
 	components: {
 		AppButton,
 		EditorToolbar,
-		EditorPostBlock,
-		EditorImage
+		EditorImageList,
+		EditorPostBlock
 	}
 })
 export default class BlogEditor extends Vue {
@@ -170,23 +145,22 @@ export default class BlogEditor extends Vue {
 	// Thumbnail
 	thumbnail: number = -1;
 
-	showImageList: boolean = false;
-
 	created() {
 		// Actions //
 		// Block
 		this.editorVue.$on("addblock", this.addBlock);
 		this.editorVue.$on("getblock", this.getBlock);
 		this.editorVue.$on("removeblock", this.removeBlock);
-		// Image
-		this.editorVue.$on("addimage", this.addImage);
-		this.editorVue.$on("getimage", this.getImage);
-		this.editorVue.$on("removeimage", this.removeImage);
 		// Document
 		this.editorVue.$on("execute", this.execute);
 		this.editorVue.$on("bind", this.bind);
-		// Layout
-		this.editorVue.$on("showimagelist", (show: boolean) => this.showImageList = show);
+
+		// Triggers //
+		this.editorVue.$on("onremoveimage", (id: number) => {
+			if (this.thumbnail === id) {
+				this.thumbnail = -1;
+			}
+		});
 
 		// Init post
 		this.addBlock("heading", this.heading);
@@ -216,44 +190,6 @@ export default class BlogEditor extends Vue {
 		return true;
 	}
 	//
-	// Image
-	addImage(file: File, success: (image: ImageData) => void = () => {}) {
-		if (file && ImageTypes.includes(file.type)) {
-			let fileReader = new FileReader();
-			fileReader.readAsDataURL(file);
-			fileReader.onload = (event) => {
-				if (event.target) {
-					let image = new Image();
-					image.onload = () => {
-						let data: ImageData = {
-							id: ++this.imageIdCounter,
-							value: image.src,
-							alt: "",
-							width: image.width,
-							height: image.height
-						};
-						this.imageList.push(data);
-						success(data);
-					}
-					image.src = event.target.result as string;
-				} else console.log("[ERR] Event target error! <@/views/blog/editor.vue#addImage()>");
-			}
-		} else console.log("[ERR] File error! <@/views/blog/editor.vue#addImage()>");
-	}
-	getImage(id: number, get: (image: ImageData) => void = () => {}): ImageData | null {
-		let image = this.imageList.find(value => value.id === id);
-		if (image == undefined) return null;
-		get(image);
-		return image;
-	}
-	removeImage(id: number): boolean {
-		let index = this.imageList.findIndex(value => value.id === id);
-		if (index == -1) return false;
-		this.imageList.splice(index, 1);
-		this.editorVue.$emit("onremoveimage", id);
-		return true;
-	}
-	//
 	// Execute command
 	execute(command: string, value: string | undefined = undefined) {
 		document.execCommand(command, false, value);
@@ -265,27 +201,10 @@ export default class BlogEditor extends Vue {
 		if (selection == null) return;
 
 		let text = selection.toString();
-		this.execute("delete");
-		this.execute("insertHTML", `<code class="inline">${text}</code><span></span>`);
+		this.execute("insertHTML", `<${type} class="inline">${text}</${type}>`);
 	}
 
 	// Triggers //
-	//
-	// Add image
-	onClickAddImage(event: MouseEvent) {
-		(this.$refs["addImageInput"] as HTMLInputElement).click();
-	}
-	onChangeAddImageInput(event: InputEvent) {
-		let target = event.target as HTMLInputElement;
-		let fileList = (target.files as FileList);
-		for (let i = 0; i < fileList.length; i++) {
-			let file = fileList.item(i);
-			if (file == null) continue;
-			if (!ImageTypes.includes(file.type)) continue;
-			this.addImage(file);
-		}
-		target.value = "";
-	}
 	//
 	// Press enter
 	onEnter(event: KeyboardEvent) {
@@ -324,65 +243,11 @@ export default class BlogEditor extends Vue {
 
 		flex-grow: 1;
 		overflow: hidden auto;
-	}
-}
 
-.image-list {
-	display: flex;
-	flex-direction: column;
-
-	position: fixed;
-	z-index: 2;
-	top: $header-height;
-	right: -336px;
-
-	height: calc(100% - #{$header-height});
-
-	background-color: $background-color-lv1;
-
-	transition: right 0.25s;
-
-	.header {
-		display: flex;
-		flex-shrink: 0;
-		justify-content: space-between;
-
-		width: 100%;
-		padding: 16px;
-
-		border-bottom: 1px solid $background-color-lv2;
-	}
-	.list {
-		display: grid;
-		grid-template-columns: repeat(3, 96px);
-		grid-template-rows: repeat(auto-fill, 96px);
-		gap: 8px;
-
-		flex-grow: 1;
-		padding: 16px;
-
-		overflow: hidden auto;
-
-		.add-image {
-			width: 100%;
-			height: 100%;
-
-			border: 2px dashed $background-color-lv3;
-			border-radius: 8px;
-
-			color: $background-color-lv3;
-
-			transition: border-color 0.1s, color 0.1s;
-
-			&:hover {
-				border-color: $background-color-lv4;
-				color: $background-color-lv4;
-			}
+		&::v-deep .placeholder {
+			color: $text-color-white-disable;
+			pointer-events: none;
 		}
-	}
-
-	&.show {
-		right: 0;
 	}
 }
 

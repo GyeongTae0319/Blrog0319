@@ -1,5 +1,5 @@
 <template>
-	<div class="editor-image" v-on="$listeners">
+	<div class="editor-image-list-image" v-on="$listeners">
 		<app-image
 			:src="image.value"
 			:alt="image.alt"
@@ -25,7 +25,7 @@ import AppButton from "@/components/app/button.vue";
 @Component({
 	components: { AppImage, AppButton }
 })
-export default class EditorImage extends Vue {
+export default class EditorImageListImage extends Vue {
 	@Prop({
 		type: Object,
 		required: true
@@ -44,7 +44,7 @@ export default class EditorImage extends Vue {
 <style lang="scss" scoped>
 @import "../../assets/styles/variables";
 
-.editor-image {
+.editor-image-list-image {
 	position: relative;
 
 	width: 96px;

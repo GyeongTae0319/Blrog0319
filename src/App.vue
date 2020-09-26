@@ -148,7 +148,7 @@ code.inline {
 
 	border-radius: 0.25em;
 
-	background-color: rgba(#61afef, 0.15);
+	background-color: rgba($background-color-lv2, 1);
 	color: #61afef;
 }
 </style>

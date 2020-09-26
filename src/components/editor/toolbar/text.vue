@@ -1,5 +1,7 @@
 <template>
 	<div class="editor-toolbar-text">
+		<editor-toolbar-text-color/>
+		<hr>
 		<div class="text-format">
 			<editor-toolbar-button-icon
 				v-for="(button, key) in formatList"
@@ -43,9 +45,13 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import { ToolbarButtonData } from "@/components/editor/toolbar.vue";
 // Components //
 import EditorToolbarButtonIcon from "@/components/editor/toolbar/button-icon.vue";
+import EditorToolbarTextColor from "@/components/editor/toolbar/text-color.vue";
 
 @Component({
-	components: { EditorToolbarButtonIcon }
+	components: {
+		EditorToolbarButtonIcon,
+		EditorToolbarTextColor
+	}
 })
 export default class EditorToolbarText extends Vue {
 	@Prop({

@@ -8,7 +8,7 @@
 	>
 		<template v-if="!blankBanner">
 			<app-image
-				:src="value.banner"
+				:src="banner"
 				objectfit="cover"
 				draggable="false"
 				class="banner"
@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { Vue , Component } from "vue-property-decorator";
+import { Vue , Component, Watch } from "vue-property-decorator";
 import EditorBlock from '@/components/editor/block/block.vue';
 import { BlockHeadingData, ImageData } from '@/views/blog/editor.vue';
 // Components //
@@ -75,29 +75,61 @@ const ImageTypes: string[] = [
 })
 export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 	type = "heading";
+
+	// Copy of prop
 	title: string = "";
+	banner: string = "";
 
 	created() {
 		this.title = this.value.title;
+
+		this.bus.$on("onremoveimage", (id: number) => {
+			if (this.value.banner === id) {
+				this.$set(this.value, "banner", null);
+			}
+		});
 	}
 
+	// On title input
 	onInput(event: InputEvent) {
 		let value = (event.target as HTMLSpanElement).innerText;
-		this.value.title = value;
+		this.$set(this.value, "title", value);
 	}
 
+	// Banner control
 	changeBannerImage() {
-		this.bus.$emit("getimage", (image: ImageData) => {});
+		this.bus.$emit("selectimage", (image: ImageData | null) => {
+			if (image == null) {
+				this.$set(this.value, "banner", null);
+				return;
+			}
+			this.$set(this.value, "banner", image.id);
+		});
 	}
 	removeBannerImage() {
-		this.value.banner = null;
+		this.$set(this.value, "banner", null);
 	}
 
-	get blankTitle() {
+	// Check value is blank
+	get blankTitle(): boolean {
 		return this.value.title.replaceAll(/\s/g, "") == "";
 	}
-	get blankBanner() {
+	get blankBanner(): boolean {
 		return this.value.banner == null;
+	}
+
+	// Check value change
+	@Watch("value.banner", {
+		deep: true
+	}) onChangeValue(value: BlockHeadingData) {
+		// Set banner value
+		this.bus.$emit("getimage", this.value.banner, (image: ImageData | undefined) => {
+			if (image == undefined) {
+				this.banner = "";
+				return;
+			}
+			this.banner = image.value;
+		});
 	}
 }
 </script>
@@ -157,16 +189,13 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 		margin: 0 auto;
 		padding: 16px 32px;
 
-		font-size: xx-large;
+		font-size: xxx-large;
 
 		.content {
 			width: 100%;
 		}
 		.placeholder {
 			position: absolute;
-			color: $text-color-white-disable;
-
-			pointer-events: none;
 		}
 	}
 
