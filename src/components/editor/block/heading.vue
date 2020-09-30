@@ -1,9 +1,6 @@
 <template>
 	<div
-		:class="{
-			'editor-block-heading': true,
-			'no-banner': blankBanner
-		}"
+		:class="classes"
 		@click="onClickContainer"
 	>
 		<template v-if="!blankBanner">
@@ -15,15 +12,19 @@
 			/>
 			<div class="image-overlay"></div>
 		</template>
-		<div class="title">
-			<span
-				contenteditable
-				v-text="title"
-				class="content"
-				ref="mainInput"
-				@input="onInput"
-			></span>
-			<span v-if="blankTitle" class="placeholder">제목</span>
+		<div class="block">
+			<div class="input title">
+				<h1
+					contenteditable
+					v-text="title"
+					class="content"
+					ref="mainInput"
+					@focus="onFocus"
+					@blur="onBlur"
+					@input="onInput"
+				/>
+				<span v-if="blankTitle" class="placeholder">제목</span>
+			</div>
 			<!-- Control banner image button -->
 			<div class="banner-image-control">
 				<app-button-tag
@@ -55,18 +56,6 @@ import { BlockHeadingData, ImageData } from '@/views/blog/editor.vue';
 import AppImage from "@/components/app/image.vue";
 import AppButtonTag from "@/components/app/button-tag.vue";
 
-const ImageTypes: string[] = [
-	"image/apng",
-	"image/bmp",
-	"image/gif",
-	"image/x-icon",
-	"image/jpeg",
-	"image/png",
-	"image/svg+xml",
-	"image/tiff",
-	"image/webp"
-];
-
 @Component({
 	components: {
 		AppImage,
@@ -76,7 +65,7 @@ const ImageTypes: string[] = [
 export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 	type = "heading";
 
-	// Copy of prop
+	// Copy of props
 	title: string = "";
 	banner: string = "";
 
@@ -110,6 +99,11 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 		this.$set(this.value, "banner", null);
 	}
 
+	get classes(): { [key: string]: boolean } {
+		return Object.assign({}, this.defaultClasses, {
+			"no-banner": this.blankBanner
+		});
+	}
 	// Check value is blank
 	get blankTitle(): boolean {
 		return this.value.title.replaceAll(/\s/g, "") == "";
@@ -138,10 +132,22 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 @import "../../../assets/styles/variables";
 
 .editor-block-heading {
-	position: relative;
-
 	width: 100%;
 	height: 300px;
+
+	.block {
+		height: 100%;
+
+		font-size: xxx-large;
+
+		.input {
+			position: absolute !important;
+			bottom: 16px;
+
+			width: 100%;
+			padding: 0 32px;
+		}
+	}
 
 	// Banner Imag //
 	.app-image {
@@ -175,28 +181,6 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 		position: absolute;
 		top: 16px;
 		right: 16px;
-	}
-
-	// Title
-	.title {
-		display: flex;
-		align-items: flex-end;
-
-		position: relative;
-
-		max-width: $post-width-max;
-		height: 100%;
-		margin: 0 auto;
-		padding: 16px 32px;
-
-		font-size: xxx-large;
-
-		.content {
-			width: 100%;
-		}
-		.placeholder {
-			position: absolute;
-		}
 	}
 
 	&.no-banner {

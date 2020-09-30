@@ -1,17 +1,32 @@
 <template>
 	<div
-		class="editor-block-subheading"
+		:class="defaultClasses"
 		@click="onClickContainer"
 	>
-		<div class="title">
-			<h2
-				contenteditable
-				v-text="content"
-				class="content"
-				ref="mainInput"
-				@input="onInputContent"
-			></h2>
-			<span v-if="blankContent" class="placeholder">소제목</span>
+		<div class="block">
+			<div class="input id" @click.stop>
+				<div
+					contenteditable
+					v-text="propId"
+					class="content"
+					@focus="onFocus"
+					@blur="onBlur"
+					@input="onInputId"
+				/>
+				<span v-if="blankId" class="placeholder">아이디</span>
+			</div>
+			<div class="input title">
+				<h2
+					contenteditable
+					v-text="content"
+					class="content"
+					ref="mainInput"
+					@focus="onFocus"
+					@blur="onBlur"
+					@input="onInputContent"
+				/>
+				<span v-if="blankContent" class="placeholder">소제목</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -25,7 +40,7 @@ import { BlockSubheadingData } from '@/views/blog/editor.vue';
 export default class EditorBlockSubheading extends EditorBlock<BlockSubheadingData> {
 	type = "subheading";
 
-	// Copy of prop
+	// Copy of props
 	content: string = "";
 	propId: string = "";
 
@@ -35,11 +50,16 @@ export default class EditorBlockSubheading extends EditorBlock<BlockSubheadingDa
 			this.$set(this.value, "id", "");
 		}
 		this.content = this.value.content;
+		this.propId = this.value.id;
 	}
 
 	onInputContent(event: InputEvent) {
 		let value = (event.target as HTMLHeadingElement).innerText;
 		this.$set(this.value, "content", value);
+	}
+	onInputId(event: InputEvent) {
+		let value = (event.target as HTMLSpanElement).innerText;
+		this.$set(this.value, "id", value);
 	}
 
 	get blankContent(): boolean {
@@ -55,27 +75,24 @@ export default class EditorBlockSubheading extends EditorBlock<BlockSubheadingDa
 @import "../../../assets/styles/variables";
 
 .editor-block-subheading {
+	position: relative;
+
 	padding: {
-		top: 32px;
+		top: 15px;
 		bottom: 16px;
 	}
 }
 
-.title {
-	position: relative;
-
-	max-width: $post-width-max;
-	margin: 0 auto;
+.block {
 	padding: 0 32px;
-
-	font-size: xx-large;
-
-	.content {
-		width: 100%;
+}
+.input {
+	&.title {
+		font-size: x-large;
 	}
-	.placeholder {
-		position: absolute;
-		bottom: 0;
+	&.id {
+		color: $text-color-white-desc;
+		font-size: small;
 	}
 }
 </style>

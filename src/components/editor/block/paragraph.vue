@@ -1,17 +1,21 @@
 <template>
 	<div
-		class="editor-block-paragraph"
+		:class="defaultClasses"
 		@click="onClickContainer"
 	>
-		<div class="paragraph">
-			<p
-				contenteditable
-				v-html="content"
-				class="content"
-				ref="mainInput"
-				@input="onInput"
-			></p>
-			<span v-if="blankContent" class="placeholder">본문</span>
+		<div class="block">
+			<div class="input">
+				<p
+					contenteditable
+					v-html="content"
+					class="content"
+					ref="mainInput"
+					@focus="onFocus"
+					@blur="onBlur"
+					@input="onInput"
+				/>
+				<span v-if="blankContent" class="placeholder">본문</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -29,7 +33,7 @@ interface BlockData {
 export default class EditorBlockParagraph extends EditorBlock<BlockParahraphData> {
 	type = "paragraph";
 
-	// Copy of prop
+	// Copy of props
 	content: string = "";
 
 	created() {
@@ -38,7 +42,7 @@ export default class EditorBlockParagraph extends EditorBlock<BlockParahraphData
 		}
 		this.content = this.value.content;
 	}
- 
+
 	onInput(event: InputEvent) {
 		let value = (event.target as HTMLParagraphElement).innerHTML;
 		this.$set(this.value, "content", value);
@@ -56,28 +60,17 @@ export default class EditorBlockParagraph extends EditorBlock<BlockParahraphData
 .editor-block-paragraph {
 	padding: 16px 0;
 
-	.paragraph {
-		position: relative;
-
-		max-width: $post-width-max;
-		margin: 0 auto;
+	.block {
 		padding: 0 32px;
 
 		.content {
-			width: 100%;
-			min-height: 1em;
-
 			white-space: pre;
-		}
-		.placeholder {
-			position: absolute;
-			top: 0;
 		}
 	}
 }
-
 .editor-block-subheading + .editor-block-paragraph,
-.editor-block-paragraph + .editor-block-paragraph {
+.editor-block-paragraph + .editor-block-paragraph,
+.editor-block-quote + .editor-block-paragraph {
 	padding-top: 0;
 }
 </style>

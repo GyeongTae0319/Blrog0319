@@ -20,51 +20,61 @@
 	<editor-block-quote
 		v-else-if="type === 'quote'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-list
 		v-else-if="type === 'list'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-image
 		v-else-if="type === 'image'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-video
 		v-else-if="type === 'video'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-horizontal-rule
 		v-else-if="type === 'horizontal-rule'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-table
 		v-else-if="type === 'table'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-calendar
 		v-else-if="type === 'calendar'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-link
 		v-else-if="type === 'link'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-file
 		v-else-if="type === 'file'"
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 	<editor-block-missing
 		v-else
 		:id="id"
+		:value="value"
 		:bus="bus"
 	/>
 </template>

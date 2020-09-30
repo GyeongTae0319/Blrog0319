@@ -1,5 +1,5 @@
 <template>
-	<div class="editor-block"></div>
+	<div :class="defaultClasses"></div>
 </template>
 
 <script lang="ts">
@@ -21,18 +21,35 @@ export default class EditorBlock<T> extends Vue {
 	}) bus!: Vue;
 
 	type: string = "block";
+	focus: boolean = false;
 
 	onFocus() {
-		this.$emit("focusblock", this.type);
+		this.focus = true;
 	}
 	onBlur() {
-		this.$emit("blurblock", this.type);
+		this.focus = false;
 	}
+
 	onClickContainer() {
 		(this.$refs["mainInput"] as HTMLElement).focus();
 	}
 	remove() {
 		this.$emit("removeblock", this.id);
+	}
+
+	get defaultClasses(): { [key: string]: boolean } {
+		let value: { [key: string]: boolean } = {};
+
+		// Default type class
+		value["editor-block"] = true;
+		if (this.type != "block") value[`editor-block-${this.type}`] = true;
+
+		// Is focus
+		Object.assign(value, {
+			"focus": this.focus
+		});
+
+		return value;
 	}
 }
 </script>

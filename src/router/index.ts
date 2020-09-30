@@ -88,7 +88,7 @@ const router = new VueRouter(
 	}
 );
 router.beforeEach((to, from, next) => {
-	if (to.fullPath.startsWith("/admin")) {
+	if (to.fullPath.startsWith("/admin") && false) {
 		setTimeout(() => {
 			if (!store.getters["isAdmin"]) {
 				if (from.fullPath.startsWith("/admin")) next({ name: "BlogHome" });

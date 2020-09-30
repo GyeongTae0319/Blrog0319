@@ -30,7 +30,6 @@
 				:bus="editorVue"
 			/>
 		</div>
-		<div class="guidline"></div>
 	</div>
 </template>
 
@@ -70,8 +69,8 @@ export interface BlockListData {
 }
 export interface BlockImageData {
 	type: "album" | "slide";
-	size: "screen" | "post"
-	value: ImageData[];
+	size: "image" | "post" | "screen";
+	value: number[];
 }
 export interface BlockVideoData {
 	url: string;
@@ -82,7 +81,7 @@ export interface BlockHorizontalRuleData {
 	align: "left" | "center" | "right";
 }
 export interface BlockTableData {}
-export interface BlockcalendarData {}
+export interface BlockCalendarData {}
 export interface BlockLinkData {
 	url: string;
 	type: "horizontal" | "vertical";
@@ -238,41 +237,63 @@ export default class BlogEditor extends Vue {
 
 		background-color: $background-color;
 	}
-	.block-list {
-		position: relative;
-
-		flex-grow: 1;
-		overflow: hidden auto;
-
-		&::v-deep .placeholder {
-			color: $text-color-white-disable;
-			pointer-events: none;
-		}
-	}
 }
 
-.guidline {
-	position: fixed;
-	bottom: 0;
+.block-list {
+	position: relative;
 
-	width: 100%;
-	height: 100%;
+	flex-grow: 1;
+	overflow: hidden auto;
 
-	pointer-events: none;
+	&::v-deep .editor-block {
+		position: relative;
 
-	&::before {
-		content: "";
+		.block {
+			position: relative;
 
-		display: block;
-		box-sizing: border-box;
+			max-width: $post-width-max;
+			margin: 0 auto;
 
-		width: 100%;
-		max-width: $post-width-max + 2px;
-		height: 100%;
-		margin: 0 auto;
+			transition: border-color 0.05s;
+		}
+		.input {
+			position: relative;
 
-		border: 1px dashed $background-color-lv2;
-		border-width: 0 1px;
+			.content {
+				width: 100%;
+			}
+			.placeholder {
+				position: absolute;
+				top: 0;
+
+				color: $text-color-white-disable;
+				pointer-events: none;
+			}
+		}
+
+		&::after {
+			content: "";
+
+			display: block;
+			position: absolute;
+			z-index: 2;
+			top: 0;
+			left: 0;
+
+			width: 100%;
+			height: 100%;
+
+			box-sizing: border-box;
+			border: 3px solid transparent;
+
+			pointer-events: none;
+		}
+		&:hover::after {
+			border-color: rgba($theme-color, 0.5);
+		}
+		&.focus::after {
+			border-color: $theme-color;
+		}
 	}
 }
 </style>
