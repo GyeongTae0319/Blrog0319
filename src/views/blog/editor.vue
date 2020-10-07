@@ -69,7 +69,7 @@ export interface BlockListData {
 }
 export interface BlockImageData {
 	type: "album" | "slide";
-	size: "image" | "post" | "screen";
+	size: "post" | "screen";
 	value: number[];
 }
 export interface BlockVideoData {

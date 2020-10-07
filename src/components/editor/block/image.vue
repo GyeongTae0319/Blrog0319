@@ -5,7 +5,7 @@
 	>
 		<div
 			tabindex="0" 
-			:class="['block', size]"
+			:class="['block', value.size]"
 			@focus="onFocus"
 			@blur="onBlur"
 			ref="mainInput"
@@ -17,7 +17,7 @@
 			>
 				<span class="text">사진 선택</span>
 			</app-button>
-			<div :class="['image-list', propType]">
+			<div :class="['image-list', value.type]">
 				<editor-block-image-object
 					v-for="image in imageList"
 					:key="image.id"
@@ -25,6 +25,26 @@
 					class="image"
 				/>
 			</div>
+			<template v-if="!isBlank">
+				<div class="control-size">
+					<app-button-tag
+						dir="down"
+						class="size-screen"
+						@click.stop.prevent="changeSize('screen')"
+					>
+						<i class="material-icons">fullscreen</i>
+						<template #tag>화면 너비</template>
+					</app-button-tag>
+					<app-button-tag
+						dir="down"
+						class="size-post"
+						@click.stop.prevent="changeSize('post')"
+					>
+						<i class="material-icons">view_array</i>
+						<template #tag>본문 너비</template>
+					</app-button-tag>
+				</div>
+			</template>
 		</div>
 	</div>
 </template>
@@ -35,12 +55,14 @@ import { BlockImageData, ImageData } from '@/views/blog/editor.vue';
 import EditorBlock from '@/components/editor/block/block.vue';
 // Components //
 import AppButton from "@/components/app/button.vue";
+import AppButtonTag from "@/components/app/button-tag.vue";
 import EditorBlockImageObject from "@/components/editor/block/image-object.vue";
 import AppImage from "@/components/app/image.vue";
 
 @Component({
 	components: {
 		AppButton,
+		AppButtonTag,
 		AppImage,
 		EditorBlockImageObject
 	}
@@ -51,14 +73,14 @@ export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 	// Copy of props
 	imageList: ImageData[] = [];
 	propType: "album" | "slide" = "album";
-	size: "image" | "post" | "screen" = "image";
+	size: "post" | "screen" = "post";
 
 	created() {
 		// Reset value
 		if (!(this.value.value && this.value.type && this.value.size)) {
 			this.$set(this.value, "value", []);
 			this.$set(this.value, "type", "album");
-			this.$set(this.value, "size", "image");
+			this.$set(this.value, "size", "post");
 		}
 
 		// Copy value
@@ -91,6 +113,10 @@ export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 	removeImage(index: number) {
 		this.value.value.splice(index, 1);
 		this.imageList.splice(index, 1);
+	}
+
+	changeSize(size: "screen" | "post") {
+		this.$set(this.value, "size", size);
 	}
 
 	updateImageDataList() {
@@ -138,29 +164,25 @@ export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 		}
 	}
 
-	.image {
+	.image-list {
+		width: 100%;
+	}
+
+	.control-size {
 		display: flex;
+		gap: 8px;
+
+		position: absolute;
+		top: 32px;
+		left: 32px;
+
+		padding: 8px;
+
+		background-color: rgba(#000000, 0.5);
 	}
 
-	&.image {
-		max-width: 100% !important;
-
-		.image {
-			width: auto;
-			height: auto;
-		}
-	}
-	&.post {
-		.image {
-			width: 100%;
-		}
-	}
 	&.screen {
 		max-width: 100% !important;
-
-		.image {
-			width: 100%;
-		}
 	}
 }
 </style>
