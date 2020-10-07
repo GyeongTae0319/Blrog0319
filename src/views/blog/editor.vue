@@ -232,7 +232,7 @@ export default class BlogEditor extends Vue {
 	flex-direction: column;
 
 	.editor-toolbar {
-		z-index: 1;
+		z-index: 4;
 		flex-shrink: 0;
 
 		background-color: $background-color;

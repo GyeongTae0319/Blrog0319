@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="editor-block-image"
+		:class="defaultClasses"
 		@click="onClickContainer"
 	>
 		<div
@@ -18,10 +18,10 @@
 				<span class="text">사진 선택</span>
 			</app-button>
 			<div :class="['image-list', propType]">
-				<app-image
+				<editor-block-image-object
 					v-for="image in imageList"
 					:key="image.id"
-					:src="image.value"
+					:image="image"
 					class="image"
 				/>
 			</div>
@@ -30,15 +30,20 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
+import { Vue, Component } from "vue-property-decorator";
 import { BlockImageData, ImageData } from '@/views/blog/editor.vue';
 import EditorBlock from '@/components/editor/block/block.vue';
 // Components //
 import AppButton from "@/components/app/button.vue";
+import EditorBlockImageObject from "@/components/editor/block/image-object.vue";
 import AppImage from "@/components/app/image.vue";
 
 @Component({
-	components: { AppButton, AppImage }
+	components: {
+		AppButton,
+		AppImage,
+		EditorBlockImageObject
+	}
 })
 export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 	type = "image";
@@ -49,39 +54,56 @@ export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 	size: "image" | "post" | "screen" = "image";
 
 	created() {
+		// Reset value
 		if (!(this.value.value && this.value.type && this.value.size)) {
 			this.$set(this.value, "value", []);
 			this.$set(this.value, "type", "album");
 			this.$set(this.value, "size", "image");
 		}
+
+		// Copy value
 		this.propType = this.value.type;
 		this.size = this.value.size;
-		this.getImageList();
-	}
 
-	getImageList() {
-		for (let i = 0; i < this.value.value.length; i++) {
-			this.bus.$emit("getimage", this.value.value[i], (image: ImageData) => {
-				this.imageList.push(image);
-			});
-		}
+		this.updateImageDataList();
+
+		// Check post image list change
+		this.bus.$on("onremoveimage", (id: number) => {
+			let index = this.value.value.findIndex(value => value === id);
+			if (index < 0) return;
+			this.value.value.splice(index, 1);
+			this.imageList.splice(index, 1);
+		});
 	}
 
 	onClickSelectImage() {
 		this.bus.$emit("selectimage", (image: ImageData | null) => {
 			if (image == null) return;
-			this.value.value.push(image.id);
+			this.addImage(image);
 		});
+	}
+
+	// Image list control
+	addImage(data: ImageData) {
+		let index = this.value.value.push(data.id) - 1;
+		this.imageList[index] = data;
+	}
+	removeImage(index: number) {
+		this.value.value.splice(index, 1);
+		this.imageList.splice(index, 1);
+	}
+
+	updateImageDataList() {
+		this.imageList = [];
+		for (let i = 0; i < this.value.value.length; i++) {
+			this.bus.$emit("getimage", this.value.value[i], (data: ImageData) => {
+				this.imageList[i] = data;
+			});
+		}
 	}
 
 	get isBlank(): boolean {
 		return this.value.value.length < 1;
-	}
-
-	@Watch("value.value", {
-		deep: true
-	}) onChangeImageList() {
-		this.getImageList();
 	}
 }
 </script>

@@ -22,12 +22,12 @@
 				:image="image"
 				:isthumbnail="thumbnail === image.id"
 				:bus="bus"
-				@click.prevent.stop="onClickImage(image)"
+				@dblclick.prevent.stop="onClickImage(image)"
 			/>
 		</div>
 		<div :class="{
 			'board': true,
-			'show': selectMode
+			'show': showImageList || selectMode
 		}"></div>
 		<input
 			type="file"
@@ -189,7 +189,7 @@ export default class EditorImageList extends Vue {
 	flex-direction: column;
 
 	position: fixed;
-	z-index: 2;
+	z-index: 8;
 	top: $header-height;
 	right: -336px;
 

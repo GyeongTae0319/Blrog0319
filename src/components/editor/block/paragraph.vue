@@ -64,7 +64,7 @@ export default class EditorBlockParagraph extends EditorBlock<BlockParahraphData
 		padding: 0 32px;
 
 		.content {
-			white-space: pre;
+			white-space: pre-wrap;
 		}
 	}
 }

@@ -4,7 +4,7 @@
 		v-if="type === 'word'"
 		class="app-content-placeholder word"
 	></span>
-	<!-- Single lien text -->
+	<!-- Single line text -->
 	<span
 		v-else-if="type === 'line-single'"
 		class="app-content-placeholder line-single"

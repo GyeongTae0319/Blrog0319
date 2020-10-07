@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="editor-block-quote"
+		:class="defaultClasses"
 		@click="onClickContainer"
 	>
 		<div class="block">

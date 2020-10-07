@@ -1,5 +1,11 @@
 <template>
-	<div class="editor-block-image-object"></div>
+	<div class="editor-block-image-object">
+		<app-image
+			:src="image.value"
+			:alt="image.alt"
+			draggable="false"
+		/>
+	</div>
 </template>
 
 <script lang="ts">
@@ -16,13 +22,11 @@ export default class EditorBlockImageObject extends Vue {
 		type: Object,
 		required: true
 	}) image!: ImageData;
-	@Prop({
-		type: Vue,
-		required: true
-	}) bus!: Vue;
 }
 </script>
 
 <style lang="scss" scoped>
-
+.editor-block-image-object {
+	display: flex;
+}
 </style>
