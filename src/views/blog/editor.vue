@@ -197,6 +197,7 @@ export default class BlogEditor extends Vue {
 		return block;
 	}
 	removeBlock(id: number): boolean {
+		console.log(id);
 		let index = this.blockList.findIndex(value => value.id === id);
 		if (index == -1) return false;
 		this.blockList.splice(index, 1);

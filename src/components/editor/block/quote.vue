@@ -2,6 +2,7 @@
 	<div
 		:class="defaultClasses"
 		@click="onClickContainer"
+		@keydown.ctrl.delete.exact.prevent="pressCtrlDelete"
 	>
 		<div class="block">
 			<div class="quote">
@@ -11,6 +12,8 @@
 						v-text="content"
 						class="content"
 						ref="mainInput"
+						@focus="onFocus"
+						@blur="onBlur"
 						@input="onInputContent"
 					/>
 					<span v-if="blankContent" class="placeholder">내용</span>
@@ -20,6 +23,8 @@
 						contenteditable
 						v-text="source"
 						class="content"
+						@focus="onFocus"
+						@blur="onBlur"
 						@input="onInputSource"
 					/>
 					<span v-if="blankSource" class="placeholder">출처</span>

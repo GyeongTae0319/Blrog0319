@@ -33,6 +33,9 @@ export default class EditorBlock<T> extends Vue {
 	onClickContainer() {
 		(this.$refs["mainInput"] as HTMLElement).focus();
 	}
+	pressCtrlDelete() {
+		if (this.focus) this.bus.$emit("removeblock", this.id);
+	}
 	remove() {
 		this.$emit("removeblock", this.id);
 	}

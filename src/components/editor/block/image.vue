@@ -2,6 +2,7 @@
 	<div
 		:class="defaultClasses"
 		@click="onClickContainer"
+		@keydown.ctrl.delete.exact.prevent="pressCtrlDelete"
 	>
 		<div
 			tabindex="0" 
