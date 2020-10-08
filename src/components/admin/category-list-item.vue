@@ -113,14 +113,14 @@ export default class AdminCategoryListItem extends Vue {
 		this.categoryName = "" + this.item.name;
 		this.showRemovePopup = false;
 		this.item.child = this.item.child || [];
-		this.item.post = this.item.post || [];
+		this.item.posts = this.item.posts || [];
 		this.showChild = this.item.lock || false;
 	}
 
 	removeItem() {
 		this.showRemovePopup = false;
 		let event = new CategoryRemoveEvent;
-		if (this.item.post) event.posts = event.posts.concat(this.item.post);
+		if (this.item.posts) event.posts = event.posts.concat(this.item.posts);
 		event.index = this.path.pop() || 0;
 		this.$emit("remove", event);
 	}

@@ -35,6 +35,11 @@
 		<template role="Show post list">
 			<!-- List -->
 			<div v-if="getPostCount > 0" class="post-list">
+				<blog-category-post
+					v-for="(post, key) in category.posts"
+					:key="key"
+					:postid="post"
+				/>
 				<div class="horizontal-list"></div>
 				<div class="vertical-list"></div>
 			</div>
@@ -66,19 +71,21 @@ import AppText from "@/components/app/text.vue";
 import AppImage from "@/components/app/image.vue";
 import AppContentPlaceholder from "@/components/app/content-placeholder.vue";
 import BlogCategoryListItem from "@/components/blog/category-list-item.vue";
+import BlogCategoryPost from "@/components/blog/category-post.vue";
 
 @Component({
 	components: {
 		AppText,
 		AppImage,
 		AppContentPlaceholder,
-		BlogCategoryListItem
+		BlogCategoryListItem,
+		BlogCategoryPost
 	}
 })
 export default class BlogCategory extends Vue {
 	category: StateBlogCategory = {
 		name: "",
-		post: [],
+		posts: [],
 		child: [],
 		lock: false
 	};
@@ -103,7 +110,9 @@ export default class BlogCategory extends Vue {
 	}
 	get getPostCount() {
 		if (!this.$store.getters.loadedCategory) return -1;
-		if (this.category.post) return this.category.post.length;
+		if (this.category.posts) {
+			return Object.keys(this.category.posts).length;
+		}
 		return 0;
 	}
 	get getChildPostCount() {
@@ -173,6 +182,12 @@ export default class BlogCategory extends Vue {
 		border-bottom: 1px solid $background-color-lv2;
 	}
 
+	.post-list {
+		display: flex;
+		gap: 16px;
+
+		flex-wrap: wrap;
+	}
 	.post-none {
 		display: flex;
 		gap: 16px;

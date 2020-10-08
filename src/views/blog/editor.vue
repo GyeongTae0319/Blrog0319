@@ -2,7 +2,7 @@
 	<div
 		class="blog-editor"
 		@paste.prevent="onPasteText"
-		@keydown.esc.prevent="editorVue.$emit('showimagelist', false)"
+		@keydown.esc.prevent="onEsc"
 		@keydown.enter.exact.prevent="onEnter"
 		@keydown.shift.enter.exact.prevent="onEnter"
 		@keydown.ctrl.b.exact.prevent="execute('bold')"
@@ -20,6 +20,12 @@
 			:thumbnail.sync="thumbnail"
 			:imageidcounter.sync="imageIdCounter"
 		/>
+		<editor-publish
+			:bus="editorVue"
+			:postid.sync="postId"
+			:postdesc.sync="postDesc"
+			:category.sync="category"
+		/>
 		<div class="block-list">
 			<editor-post-block
 				v-for="block in blockList"
@@ -35,11 +41,13 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
+import firebase, { database } from "firebase/app";
 // Components //
 import AppButton from "@/components/app/button.vue";
 import EditorToolbar from "@/components/editor/toolbar.vue";
 import EditorImageList from "@/components/editor/image-list.vue";
 import EditorPostBlock from "@/components/editor/post-block.vue";
+import EditorPublish from "@/components/editor/publish.vue";
 
 // Interfaces //
 // Blocks
@@ -123,7 +131,8 @@ export const ImageTypes: string[] = [
 		AppButton,
 		EditorToolbar,
 		EditorImageList,
-		EditorPostBlock
+		EditorPostBlock,
+		EditorPublish
 	}
 })
 export default class BlogEditor extends Vue {
@@ -135,6 +144,11 @@ export default class BlogEditor extends Vue {
 	blockIdCounter: number = 0;
 	imageList: ImageData[] = [];
 	imageIdCounter: number = 0;
+
+	// Post infomations
+	postId: string = "";
+	postDesc: string = "";
+	category: string = "";
 
 	// Post heading
 	heading: BlockHeadingData = {
@@ -153,6 +167,7 @@ export default class BlogEditor extends Vue {
 		// Document
 		this.editorVue.$on("execute", this.execute);
 		this.editorVue.$on("bind", this.bind);
+		this.editorVue.$on("publish", this.publish);
 
 		// Triggers //
 		this.editorVue.$on("onremoveimage", (id: number) => {
@@ -202,6 +217,66 @@ export default class BlogEditor extends Vue {
 		let text = selection.toString();
 		this.execute("insertHTML", `<${type} class="inline">${text}</${type}>`);
 	}
+	//
+	// Post
+	publish() {
+		this.editorVue.$emit("getimage", this.thumbnail, (image: ImageData | undefined) => {
+			let lCategory: boolean, lId: boolean, lData: boolean, lContents: boolean;
+			lCategory = lId = lData = lContents = false;
+			let goPost = () => {
+				if (lCategory && lId && lData && lContents) this.$router.push({
+					name: "BlogPost",
+					params: {
+						id: this.postId
+					}
+				});
+			};
+
+			firebase.database().ref(`category/${this.category}/posts`).push(this.postId, (error) => {
+				if (error) {
+					console.log(`Database error! <category/${this.category}/posts>`);
+					console.error(error);
+				} else {
+					lCategory = true;
+					goPost();
+				}
+			})
+
+			firebase.database().ref("posts/list").push(this.postId, (error) => {
+				if (error) {
+					console.log("Database error! <post/list>");
+					console.error(error);
+				} else {
+					lId = true;
+					goPost();
+				}
+			});
+
+			let data: object = {};
+			this.$set(data, "thumbnail", image ? image : "");
+			this.$set(data, "title", this.heading.title);
+			this.$set(data, "desc", this.postDesc);
+			firebase.database().ref(`posts/data/${this.postId}`).set(data, (error) => {
+				if (error) {
+					console.log(`Database error! <post/data/${this.postId}>`);
+					console.error(error);
+				} else {
+					lData = true;
+					goPost();
+				}
+			});
+
+			firebase.database().ref(`posts/contents/${this.postId}`).set(this.blockList, (error) => {
+				if (error) {
+					console.log(`Database error! <post/contents/${this.postId}>`);
+					console.error(error);
+				} else {
+					lContents = true;
+					goPost();
+				}
+			});
+		});
+	}
 
 	// Triggers //
 	//
@@ -215,6 +290,11 @@ export default class BlogEditor extends Vue {
 			text += "\n";
 		}
 		this.execute("insertHTML", text);
+	}
+	// Press esc
+	onEsc() {
+		this.editorVue.$emit("showimagelist", false);
+		this.editorVue.$emit("showpublish", false);
 	}
 	//
 	// Paste text

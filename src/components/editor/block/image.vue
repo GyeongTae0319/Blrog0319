@@ -17,12 +17,13 @@
 			>
 				<span class="text">사진 선택</span>
 			</app-button>
-			<div :class="['image-list', value.type]">
+			<div v-else :class="['image-list', value.type]">
 				<editor-block-image-object
-					v-for="image in imageList"
-					:key="image.id"
+					v-for="(image, index) in imageList"
+					:key="`${index}_${image.id}`"
 					:image="image"
 					class="image"
+					@remove="removeImage(index)"
 				/>
 			</div>
 			<template v-if="!isBlank">
@@ -42,6 +43,16 @@
 					>
 						<i class="material-icons">view_array</i>
 						<template #tag>본문 너비</template>
+					</app-button-tag>
+				</div>
+				<div class="control-image">
+					<app-button-tag
+						dir="down"
+						class="add-image"
+						@click="onClickSelectImage"
+					>
+						<i class="material-icons">image</i>
+						<template #tag>사진 추가</template>
 					</app-button-tag>
 				</div>
 			</template>
@@ -165,20 +176,29 @@ export default class EditorBlockImage extends EditorBlock<BlockImageData> {
 	}
 
 	.image-list {
+		display: flex;
+		gap: 4px;
+
 		width: 100%;
 	}
 
-	.control-size {
+	[class|="control"] {
 		display: flex;
 		gap: 8px;
 
 		position: absolute;
-		top: 32px;
-		left: 32px;
 
 		padding: 8px;
 
 		background-color: rgba(#000000, 0.5);
+	}
+	.control-size {
+		top: 32px;
+		left: 32px;
+	}
+	.control-image {
+		top: 80px;
+		left: 32px;
 	}
 
 	&.screen {

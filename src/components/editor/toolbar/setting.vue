@@ -8,6 +8,7 @@
 		<editor-toolbar-button
 			icon="article"
 			name="발행"
+			@click.prevent.stop="bus.$emit('showpublish', true)"
 		/>
 	</div>
 </template>

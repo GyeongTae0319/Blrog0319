@@ -20,7 +20,7 @@ interface BlogOwner {
 export interface StateBlogCategory {
 	name: string;
 	lock: boolean;
-	post: string[];
+	posts: string[];
 	child: string[];
 }
 interface StateBlog {
