@@ -26,14 +26,37 @@
 				</a>
 			</div>
 		</div>
+		<div class="post-list">
+			<blog-category-post
+				v-for="(post, key) in postList"
+				:key="key"
+				:postid="post"
+			/>
+		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import firebase from 'firebase/app';
+// Components //
+import BlogCategoryPost from "@/components/blog/category-post.vue";
 
-@Component
-export default class BlogHome extends Vue {}
+@Component({
+	components: {
+		BlogCategoryPost
+	}
+})
+export default class BlogHome extends Vue {
+	postList = {};
+	dataList = [];
+
+	created() {
+		firebase.database().ref("posts/list").once("value", (snapshot) => {
+			this.postList = snapshot.val();
+		});
+	}
+}
 </script>
 
 <style lang="scss" scoped>
@@ -87,5 +110,11 @@ $link-icon-size: 32px;
 			}
 		}
 	}
+}
+.post-list {
+	display: flex;
+	gap: 16px;
+
+	padding: 32px;
 }
 </style>
