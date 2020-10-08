@@ -115,6 +115,8 @@ $link-icon-size: 32px;
 	display: flex;
 	gap: 16px;
 
+	flex-wrap: wrap;
+
 	padding: 32px;
 }
 </style>

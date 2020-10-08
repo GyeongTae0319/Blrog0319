@@ -53,8 +53,13 @@ export default class PostBlockImage extends Vue {
 	display: flex;
 	gap: 4px;
 
-	&.screen {
-		max-width: 100% !important;
+	width: 100%;
+
+	.app-image {
+		flex-shrink: 1;
 	}
+}
+.screen .block {
+	max-width: 100% !important;
 }
 </style>
