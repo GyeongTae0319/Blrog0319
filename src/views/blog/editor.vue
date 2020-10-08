@@ -58,7 +58,7 @@ export interface BlockData {
 }
 export interface BlockHeadingData {
 	title: string;
-	banner: number | null;
+	banner: number;
 }
 export interface BlockSubheadingData {
 	content: string;
@@ -153,7 +153,7 @@ export default class BlogEditor extends Vue {
 	// Post heading
 	heading: BlockHeadingData = {
 		title: "",
-		banner: null,
+		banner: -1,
 	}
 	// Thumbnail
 	thumbnail: number = -1;
@@ -221,10 +221,10 @@ export default class BlogEditor extends Vue {
 	// Post
 	publish() {
 		this.editorVue.$emit("getimage", this.thumbnail, (image: ImageData | undefined) => {
-			let lCategory: boolean, lId: boolean, lData: boolean, lContents: boolean;
-			lCategory = lId = lData = lContents = false;
+			let lCategory: boolean, lId: boolean, lData: boolean, lContents: boolean, lImage: boolean;
+			lCategory = lId = lData = lContents = lImage = false;
 			let goPost = () => {
-				if (lCategory && lId && lData && lContents) this.$router.push({
+				if (lCategory && lId && lData && lContents && lImage) this.$router.push({
 					name: "BlogPost",
 					params: {
 						id: this.postId
@@ -266,15 +266,24 @@ export default class BlogEditor extends Vue {
 				}
 			});
 
-			firebase.database().ref(`posts/contents/${this.postId}`).set(this.blockList, (error) => {
+			firebase.database().ref(`posts/contents/${this.postId}/blocks`).set(this.blockList, (error) => {
 				if (error) {
-					console.log(`Database error! <post/contents/${this.postId}>`);
+					console.log(`Database error! <post/contents/${this.postId}/blocks>`);
 					console.error(error);
 				} else {
 					lContents = true;
 					goPost();
 				}
 			});
+			firebase.database().ref(`posts/contents/${this.postId}/images`).set(this.imageList, (error) => {
+				if (error) {
+					console.log(`Database error! <post/contents/${this.postId}/images>`);
+					console.error(error);
+				} else {
+					lImage = true;
+					goPost();
+				}
+			})
 		});
 	}
 

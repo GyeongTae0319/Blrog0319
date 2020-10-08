@@ -1,16 +1,23 @@
 <template>
-	<div class="post-block-subheading">
+	<div class="post-block-link">
 		<div class="block">
-			<span>{{ value.value.content }}</span>
+			<a target="_blank" :href="value.value.url">{{ value.value.url }}</a>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
+// Components //
+import AppImage from "@/components/app/image.vue";
+import { ImageData } from '@/views/blog/editor.vue';
 
-@Component
-export default class PostBlockSubheading extends Vue {
+@Component({
+	components: {
+		AppImage
+	}
+})
+export default class PostBlockLink extends Vue {
 	@Prop({
 		type: Object,
 		required: true
@@ -25,15 +32,12 @@ export default class PostBlockSubheading extends Vue {
 <style lang="scss" scoped>
 @import "../../../assets/styles/variables";
 
-.post-block-subheading {
-	padding: {
-		top: 15px;
-		bottom: 16px;
-	};
+.post-block-link {
+	padding: 16px 0;
 
 	.block {
 		padding: 0 32px;
-		font-size: x-large;
+		color: $theme-color;
 	}
 }
 </style>

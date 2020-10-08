@@ -89,14 +89,14 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 	changeBannerImage() {
 		this.bus.$emit("selectimage", (image: ImageData | null) => {
 			if (image == null) {
-				this.$set(this.value, "banner", null);
+				this.$set(this.value, "banner", -1);
 				return;
 			}
 			this.$set(this.value, "banner", image.id);
 		});
 	}
 	removeBannerImage() {
-		this.$set(this.value, "banner", null);
+		this.$set(this.value, "banner", -1);
 	}
 
 	get classes(): { [key: string]: boolean } {
@@ -109,7 +109,7 @@ export default class EditorBlockHeading extends EditorBlock<BlockHeadingData> {
 		return this.value.title.replaceAll(/\s/g, "") == "";
 	}
 	get blankBanner(): boolean {
-		return this.value.banner == null;
+		return this.value.banner < 0;
 	}
 
 	// Check value change

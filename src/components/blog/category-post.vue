@@ -9,11 +9,13 @@
 		class="blog-category-post"
 	>
 		<app-image
+			v-if="blankThumbnail"
 			:alt="post.thumbnail.alt"
 			draggable="false"
 			objectfit="cover"
 			:src="post.thumbnail.value"
 		/>
+		<div v-else class="app-image no-image"/>
 		<app-text type="word" class="title">{{ post.title }}</app-text>
 		<app-text type="line-multiple" class="desc">{{ post.desc }}</app-text>
 	</router-link>
@@ -56,6 +58,10 @@ export default class BlogCategoryPost extends Vue {
 			this.post = snapshot.val();
 		});
 	}
+
+	get blankThumbnail() {
+		return true && this.post.thumbnail;
+	}
 }
 </script>
 
@@ -74,6 +80,20 @@ export default class BlogCategoryPost extends Vue {
 		height: 256px;
 
 		border-radius: 8px;
+
+		&.no-image::before {
+			content: "사진 없음";
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			width: 100%;
+			height: 100%;
+
+			color: $text-color-white-disable;
+			text-align: center;
+		}
 	}
 	.title {
 		font-size: 20px;

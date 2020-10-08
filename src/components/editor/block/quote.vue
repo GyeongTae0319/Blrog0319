@@ -101,7 +101,7 @@ export default class EditorBlockQuote extends EditorBlock<BlockQuoteData> {
 		padding-bottom: 8px;
 
 		font-size: large;
-		white-space: pre;
+		white-space: pre-wrap;
 	}
 	&.source {
 		color: $text-color-white-desc;
